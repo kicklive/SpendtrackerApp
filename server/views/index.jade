@@ -1,0 +1,20 @@
+extends ../includes/layout
+block main-content
+    .container.container50
+        .navbar.navbar-default
+            .container
+                .navbar-header
+                    a.navbar-brand.text-center(href="/") SpendTracker 2018
+                ul.nav.navbar-nav
+                    li
+                        a(href="/") New Budget
+                    li
+                        a(href="/") Budget List                 
+                    li
+                        a(href="/") About                 
+        section.content
+            div(ng-view) 
+
+        
+        footer.containter.text-center
+            p &copy; 2018 Extra Overloud Productions

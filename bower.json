@@ -1,0 +1,25 @@
+{
+  "name": "spendtracker2018_2",
+  "description": "Spend Tracking application",
+  "main": "index.js",
+  "authors": [
+    "Darryl Payton"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "angular": "^1.6.8",
+    "angular-resource": "^1.6.8",
+    "angular-route": "^1.6.8",
+    "toastr": "^2.1.3",
+    "jquery-ui": "^1.12.1"
+  }
+}
