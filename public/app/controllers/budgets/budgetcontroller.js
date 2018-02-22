@@ -5,24 +5,27 @@
         .module('spendtrackerapp')
         .controller('budgetcontroller', StartBudget);
 
-    StartBudget.$inject = ['$scope', '$location', 'budgetservice'];
+    StartBudget.$inject = ['$scope', '$location', 'budgetservice', 'dataShare'];
 
-    function StartBudget($scope, $location, budgetservice) {
+    function StartBudget($scope, $location, budgetservice, dataShare) {
         $scope.ret = null;
         $scope.date = null;
         activate(budgetservice);
-        if ($scope.ret == null && $scope.date == null)
-            $location.path("/");
-        else
-            $location.path("/NewBudget");
 
-        function activate(budgetservice) {
+
+        function activate() {
             return budgetservice.getBudgetList().then(function(data) {
                 $scope.ret = {
                     data: data
                 };
                 // $scope.date='1/1/2018';
-                return $scope;
+                if ($scope.ret.data.data.length == 0) {
+                    $location.path("/");
+                } else {
+                    dataShare.sendData($scope.ret.data);
+                    $location.path("/ListBudgets");
+                }
+                // return $scope;
             });
         }
     }

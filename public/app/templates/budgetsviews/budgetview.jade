@@ -1,15 +1,21 @@
-.container(ng-controller='ViewBudgetController')
+.container.container100(ng-controller='ViewBudgetController')
     fieldset
         legend
             .row
-                .col.align-items-center.row-head-height-gray Start Date
-                .col.align-items-center.row-head-height-gray End Date
-                .col.align-items-center.row-head-height-gray Number of Days In Budget
-                .col.align-items-center.row-head-height-gray Budget Amount
-            .row.rowspace25
-                .col {{startDate}}
-                .col {{EndDate}}
-                .col 7
-                .col {{budgetAmount}}
-                input(type="hidden" name="budgetId" value="#{_id}")
+                .col-sm-3.align-items-center.row-head-height-gray Start Date
+                .col-sm-2.align-items-center.row-head-height-gray End Date
+                .col-sm-3.align-items-center.row-head-height-gray Days Left In Budget
+                .col-sm-2.align-items-center.row-head-height-gray Budget Amount
+                .col-sm-1.align-items-center.row-head-height-gray Status
+                .col-sm-1.align-items-center.row-head-height-gray 
+            
+                .row.rowspace25(ng-repeat="budget in budgets")   
+                    .col-sm-3.font10.paddingleft35  {{budget.BudgetStartDate|date:"MM/dd/yyyy"}}
+                    .col-sm-2.font10 {{budget.BudgetEndDate|date:"MM/dd/yyyy"}}
+                    .col-sm-3.font10.paddingleft70 {{findDiff(budget)}}
+                    .col-sm-2.font10.paddingleft35 {{budget.BudgetAmount|currency : "$" : 2}}
+                    .col-sm-1.font10.paddingleft10 open
+                    a.col-sm-1.font10(ng-href="/Details") Details
+
+       
                

@@ -10,15 +10,20 @@ angular.module("spendtrackerapp").config(function($routeProvider, $locationProvi
 
     $routeProvider.when('/ListBudgets', {
         templateUrl: '/partials/budgetsviews/budgetview',
-        controller:'ViewBudgetController'
-      
+        controller: 'ViewBudgetController'
+
     });
     $routeProvider.when('/NewBudget', {
         templateUrl: '/partials/budgetsviews/newbudget'
-   
+
 
     });
-   
+    $routeProvider.when('/splash', {
+        templateUrl: '/partials/budgetsviews/splash'
+
+
+    });
+
     //  $routeProvider.when('/NewBudget',{
     //     templateUrl:'/partials/budget/budgetView',
     //     controller:'budgetcontroller'
@@ -40,12 +45,23 @@ angular.module("spendtrackerapp").config(function($routeProvider, $locationProvi
     //     templateUrl:'templates/newtransactions.html',
     //     controller:'TransactionController'
     //});
-    $routeProvider.when('/splash', {
+    $routeProvider.when('/Home', {
         templateUrl: '/partials/budgetsviews/splash'
-
     });
     $routeProvider.when('/', {
-        templateUrl: '/partials/budgetsviews/splash'
+        //templateUrl: '/partials/budgetsviews/splash',
+        resolve: {
+            "check": function(budgetservice, $location) {
+                budgetservice.getBudgetList().then(function(data) {
+                    if (data.data.length > 0)
+                        $location.path("/ListBudgets")
+                    else {
+                        $location.path("/Home")
+                    }
+                });
+
+            }
+        }
 
     });
 });
