@@ -1,1 +1,15 @@
-sdgfds
+.container(ng-controller='ViewBudgetController')
+    fieldset
+        legend
+            .row
+                .col.align-items-center.row-head-height-gray Start Date
+                .col.align-items-center.row-head-height-gray End Date
+                .col.align-items-center.row-head-height-gray Number of Days In Budget
+                .col.align-items-center.row-head-height-gray Budget Amount
+            .row.rowspace25
+                .col {{startDate}}
+                .col {{EndDate}}
+                .col 7
+                .col {{budgetAmount}}
+                input(type="hidden" name="budgetId" value="#{_id}")
+               

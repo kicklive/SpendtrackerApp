@@ -1,11 +1,11 @@
-.container(ng-controlller="newbudgetcontroller")
-    form.form-horizontal(name=newBudget)
+.container(ng-controller="newbudgetcontroller")
+    form.form-horizontal(name="newBudget")
         fieldset
             ledgend New newBudget
                 .form-group
                     label.col-sm-2.control-label(for="startdate") Budget Begin 
                     .col-sm-6
-                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="stardate" datepkr="" style="width:150px")
+                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="startdate" datepkr="" style="width:150px")
                 .form-group
                     label.col-sm-2.control-label(for="enddate") Budget End
                     .col-sm-6
@@ -16,8 +16,7 @@
                         input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="budgetamt"  style="width:150px")
                 form-group
                     .col-md-10.col-md-offset-2
-                    
-                        button.btn.btn-primary(ng-click="AddBuget()", ng-disabled="signupForm.$invalid") Submit
+                        submit.btn.btn-primary(ng-click="addbudget()" ) Submit
                         &nbsp;
                         a.btn.btn-default(href="/") Cancel                        
                         

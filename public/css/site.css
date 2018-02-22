@@ -23,3 +23,10 @@ footer {
 p {
   border-top: 1px solid #d7e0e2;
 }
+.row-head-height-gray {
+  height: 75px;
+  background-color: #d0d0d0;
+}
+.rowspace25 {
+  height: 25px;
+}

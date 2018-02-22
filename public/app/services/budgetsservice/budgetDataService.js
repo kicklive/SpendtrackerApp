@@ -3,11 +3,11 @@
 
     angular
         .module('spendtrackerapp')
-        .factory('budgetservice', GetBudgetData);
+        .factory('budgetservice', BudgetData);
 
-    GetBudgetData.$inject = ['$http', '$q'];
+        BudgetData.$inject = ['$http', '$q'];
 
-    function GetBudgetData($http, $q) {
+    function BudgetData($http, $q) {
         var service = {
             getBudgetList: getData,
             saveBudget: saveBudgetData
@@ -28,18 +28,6 @@
                 console.error('Error ' + err);
             }
             return deferred.promise;
-
-
-
-            // httpPromise.then(function(data){
-            //     deferred.resolve(data);
-
-            // })
-            // .error(function(err){
-            //     console.error('Error '+err);
-
-            // });
-
         }
 
         function saveBudgetData(formData) {

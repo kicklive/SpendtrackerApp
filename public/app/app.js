@@ -10,13 +10,15 @@ angular.module("spendtrackerapp").config(function($routeProvider, $locationProvi
 
     $routeProvider.when('/ListBudgets', {
         templateUrl: '/partials/budgetsviews/budgetview',
-        controller: 'budgetcontroller'
+        controller:'ViewBudgetController'
+      
     });
     $routeProvider.when('/NewBudget', {
-        templateUrl: '/partials/budgetsviews/newbudget',
-        controller: 'newbudgetcontroller'
+        templateUrl: '/partials/budgetsviews/newbudget'
+   
 
     });
+   
     //  $routeProvider.when('/NewBudget',{
     //     templateUrl:'/partials/budget/budgetView',
     //     controller:'budgetcontroller'
