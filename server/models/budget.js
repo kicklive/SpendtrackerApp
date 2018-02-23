@@ -7,6 +7,6 @@ var BudgetSchema = new Schema({
     BudgetDuration: Number,
     BudgetType: String,
     WeekOf: String,
-    Transaction: [{ type: Schema.ObjectId, ref: "Transaction" }]
+    Transactions: [{ type: Schema.ObjectId, ref: "Transaction" }]
 });
 module.exports = mongoose.model("Budget", BudgetSchema);

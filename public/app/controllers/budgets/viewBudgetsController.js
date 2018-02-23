@@ -5,19 +5,17 @@
         .module('spendtrackerapp')
         .controller('ViewBudgetController', ViewBudgets)
 
-    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice'];
+    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter'];
 
-    function ViewBudgets($scope, dataShare, budgetservice) {
+    function ViewBudgets($scope, dataShare, budgetservice, $filter) {
 
         activate();
 
 
         function activate() {
             getData();
-
-
-
         }
+
         var budgetData = null;
 
         function getData() {
@@ -39,27 +37,17 @@
             }
             $scope.findDiff = function(budget) {
                 var todaysDate = new Date();
-                var fromDate = todaysDate;
-                fromDate = fromDate.setDate(fromDate.getDate() - 2);
-                var toDate = budget.BudgetEndDate;
+                var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
+
+                fromDate = fromDate.setDate(fromDate.getDate() - 1);
+                var toDate = new Date(budget.BudgetEndDate);
+                toDate = toDate.setHours(0, 0, 0, 0);
+
                 var x = null;
                 if (fromDate && toDate) {
-                    x = Math.round(Math.abs((new Date(fromDate).getTime() - new Date(toDate).getTime()) / (24 * 60 * 60 * 1000)));
-                    return x;
+                    return Math.round(Math.abs((new Date(fromDate).getTime() - new Date(toDate).getTime()) / (24 * 60 * 60 * 1000)));
                 }
             }
-
-            // function findDiff(fromDate, fromDate) {
-            //     if (fromDate && fromDate) {
-            //         return Math.round(Math.abs((new Date(fromDate).getTime() - new Date(toDate).getTime()) / (24 * 60 * 60 * 1000)));
-            //     }
-            // }
-
-
-
-
-
-
         }
 
 

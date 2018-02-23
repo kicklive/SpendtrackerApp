@@ -11,6 +11,16 @@ module.exports = function(app) {
             res.json(ret);
         });
     });
+
+
+    app.get("/data/getdetails/", function(req, res) {
+        Budget.findOne({ _id: req.query.id }).populate('Transactions').exec(function(err, ret) {
+            if (err)
+                res.send(err);
+            res.send(ret);
+        });
+    });
+
     app.get("/partials/*", function(req, res) {
         console.log('here');
         res.render("../../public/app/templates/" + req.params[0]);
@@ -20,7 +30,8 @@ module.exports = function(app) {
         NewBudget.create({
                 BudgetStartDate: req.body.startDate,
                 BudgetEndDate: req.body.endDate,
-                BudgetAmount: req.body.budgetAmt
+                BudgetAmount: req.body.budgetAmt,
+                BudgetStatus: "Open"
             },
             function(err, newBudget) {
                 if (err) {

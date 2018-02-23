@@ -1,0 +1,31 @@
+.container.panel
+    fieldset
+        .row
+            .col-sm-3
+                b Budget Dates: 
+            {{data.BudgetStartDate|date:"MM/dd/yyyy"}} to {{data.BudgetEndDate|date:"MM/dd/yyyy"}}
+        .row
+            .col-sm-4
+                b Days Left in Budget: 
+            {{findDiff(data)}}
+        .row
+            .col-sm-6
+                b Amount Remaining in Budget:
+            {{data.BudgetAmount|currency : "$" : 2}}
+        .row
+            .col-sm-6
+                b Budget Status:
+            {{data.BudgetStatus}}
+p 
+    b Transactions
+            .row    
+                .col-sm-6 
+                   b(ng-hide="ShowMsg()")  sfsddsadsada
+
+
+//-         if {{data.Transactions.length===0}}
+//-             .row    
+//-                 b here
+//-         else
+//-             .row
+//-                 b there
