@@ -30,6 +30,14 @@ angular.module("spendtrackerapp").controller("newbudgetcontroller",
 
     function NewBudget($scope, $location, budgetservice, notifierService, dataShare) {
         $scope.ret = null;
+        $scope.budgetType={
+            options:[
+                {id:'1', name:'Amex'},
+                {id:'2', name:'Visa'},
+                {id:'3', name:'Cash'},
+            ],
+            selectedOption:{id:'2', name:'Visa'}
+        }
         $scope.addbudget = function() {
             activate();
 
@@ -40,11 +48,13 @@ angular.module("spendtrackerapp").controller("newbudgetcontroller",
 
 
         function activate() {
+          
+
             $scope.newbudget = {
                 startDate: $scope.startdate,
                 endDate: $scope.enddate,
                 budgetAmt: $scope.budgetamt,
-
+                budgetType:$scope.budgetType.selectedOption
             };
             budgetservice.saveBudget($scope.newbudget).then(function(data) {
                 console.log('budget saved');

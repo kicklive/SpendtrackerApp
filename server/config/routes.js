@@ -31,7 +31,9 @@ module.exports = function(app) {
                 BudgetStartDate: req.body.startDate,
                 BudgetEndDate: req.body.endDate,
                 BudgetAmount: req.body.budgetAmt,
-                BudgetStatus: "Open"
+                BudgetStatus: "Open",
+                BudgetType:req.body.budgetType,
+                Transactions:NewBudget._id
             },
             function(err, newBudget) {
                 if (err) {
@@ -42,6 +44,28 @@ module.exports = function(app) {
                         res.send(err);
                     }
                     res.json(newBudgets);
+                });
+            });
+    });
+
+    app.post("/data/SaveTransaction", function(req, res) {
+        Transactions.create({
+            itemdescription: req.body.itemDesc,
+            itemprice: req.body.transAmt,
+            transdate: req.body.transDate,
+            store: req.body.store,
+            upc:req.body.upc,
+            transId:req.body.tranId
+            },
+            function(err, NewTrans) {
+                if (err) {
+                    res.send(err);
+                }
+                Transactions.find(function(err, NewTrans) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    res.json(NewTrans);
                 });
             });
     });
