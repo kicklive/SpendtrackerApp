@@ -53,3 +53,9 @@ p {
 .paddingleft10 {
   padding-left: 10px;
 }
+.labelfont {
+  font-size: 10pt;
+}
+.cellspacing5 {
+  border-spacing: 50px;
+}

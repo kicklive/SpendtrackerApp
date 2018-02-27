@@ -3,19 +3,30 @@
 
     angular
         .module('spendtrackerapp')
-        .factory('transactionfactory', factory);
+        .factory('transactionservice', Transactions);
 
-    factory.$inject = ['$http'];
+        Transactions.$inject = ['$http','$q'];
 
-    function transactionfactory($http) {
+    function Transactions($http,$q) {
         var service = {
-            getData: getData
+            addTransaction: AddTransaction
         };
 
         return service;
 
-        function getData($resource) {
+        function AddTransaction(formData) {
+            var deferred = $q.defer();
+            var httpPromise = $http.post("/data/SaveTransaction", formData);
+            httpPromise.then(success, failure);
 
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
          }
     }
 })();

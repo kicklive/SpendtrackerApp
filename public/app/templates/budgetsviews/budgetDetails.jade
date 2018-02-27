@@ -1,4 +1,4 @@
-.container.panel
+.container
     fieldset
         .row
             .col-sm-3
@@ -16,11 +16,16 @@
             .col-sm-6
                 b Budget Status:
             {{data.BudgetStatus}}
-p 
-    b Transactions
-            .row    
-                .col-sm-6 
-                   b(ng-hide="ShowMsg()")  sfsddsadsada
+hr            
+h4 Transactions
+    .row(ng-hide="ShowMsg()") 
+       .col-sm-12.offset-3
+            h3 There are no transactions for this budget.
+    .row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
+        .col-sm-6
+            a.btn.btn-primary.pull-right(ng-click="CreateNewTrans()") Create New Transaction
 
 
 //-         if {{data.Transactions.length===0}}

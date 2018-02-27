@@ -14,9 +14,13 @@
                     label.col-sm-2.control-label(for="budgetamt") Budget Amount
                     .col-sm-6
                         input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="budgetamt"  style="width:150px")
+                 .form-group
+                    label.col-sm-2.control-label(for="budgettype") Budget Type
+                    .col-sm-6
+                        select.form-control(name="budgettype", type="select", ng-options="option.name for option in budgetType.options track by option.id" ng-model="budgetType.selectedOption" style="width:150px")
                 form-group
                     .col-md-10.col-md-offset-2
-                        submit.btn.btn-primary(ng-click="addbudget()" ) Submit
+                        submit.btn.btn-primary(ng-click="addbudget()") Submit
                         &nbsp;
                         a.btn.btn-default(href="/") Cancel                        
                         
@@ -24,16 +28,3 @@
 
 
 
-
-//- .container
-//-     .well.well50
-//-         form.form-horizontal(name=newBudget)
-//-             fieldset
-//-                 ledgend New newBudget
-//-                 .form-group
-//-                     .row
-//-                         label.col.control-label.text-left(for="startdate") Budget Begin
-//-                     .row
-//-                          input.col-sm-2.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="date" datepkr="" style="width:150px")
-                   
-                       

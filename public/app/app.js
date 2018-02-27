@@ -24,11 +24,10 @@ angular.module("spendtrackerapp").config(function($routeProvider, $locationProvi
         controller: 'BudgetDetailsController',
     });
 
-    //  $routeProvider.when('/NewBudget',{
-    //     templateUrl:'/partials/budget/budgetView',
-    //     controller:'budgetcontroller'
-
-    // });
+     $routeProvider.when('/NewTransaction/:budgetId',{
+        templateUrl:'/partials/transactionsviews/NewTransaction',
+        controller:'NewTransactionController'
+     });
     //  $routeProvider.when('/EditBudget',{
     //     templateUrl:'templates/editbudget.html',
     //     controller:'BudgetController'
