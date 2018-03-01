@@ -32,8 +32,8 @@ module.exports = function(app) {
                 BudgetEndDate: req.body.endDate,
                 BudgetAmount: req.body.budgetAmt,
                 BudgetStatus: "Open",
-                BudgetType:req.body.budgetType,
-                Transactions:NewBudget._id
+                BudgetType: req.body.budgetCCType
+
             },
             function(err, newBudget) {
                 if (err) {
@@ -50,12 +50,12 @@ module.exports = function(app) {
 
     app.post("/data/SaveTransaction", function(req, res) {
         Transactions.create({
-            itemdescription: req.body.itemDesc,
-            itemprice: req.body.transAmt,
-            transdate: req.body.transDate,
-            store: req.body.store,
-            upc:req.body.upc,
-            transId:req.body.tranId
+                itemdescription: req.body.itemDesc,
+                itemprice: req.body.transAmt,
+                transdate: req.body.transDate,
+                store: req.body.store,
+                upc: req.body.upc,
+                BudgetId: req.body.budgetId
             },
             function(err, NewTrans) {
                 if (err) {
@@ -65,6 +65,12 @@ module.exports = function(app) {
                     if (err) {
                         res.send(err);
                     }
+                    NewBudget.Transactions.push(NewTrans);
+                    NewBudget.save(function(err, ret) {
+                        if (err) {
+                            res.send(err);
+                        }
+                    })
                     res.json(NewTrans);
                 });
             });

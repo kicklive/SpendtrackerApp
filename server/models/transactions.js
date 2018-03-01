@@ -1,12 +1,13 @@
-var mongoose=require("mongoose");
-var Schema=mongoose.Schema;
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
- var TransactionSchema=new Schema({
+var TransactionSchema = new Schema({
     tranId: Schema.ObjectId,
-    transdate:Date,
-    store:String,
-    upc:Number,
-    itemprice:Number,
-    itemdescription:String
- });
-module.exports=mongoose.model("Transaction",TransactionSchema);
+    transdate: Date,
+    store: String,
+    upc: Number,
+    itemprice: Number,
+    itemdescription: String,
+    BudgetId: { type: Schema.ObjectId, ref: "Budgets" }
+});
+module.exports = mongoose.model("Transaction", TransactionSchema);

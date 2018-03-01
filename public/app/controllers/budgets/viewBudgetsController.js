@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('ViewBudgetController', ViewBudgets)
 
-    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter'];
+    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter', 'STConstants'];
 
-    function ViewBudgets($scope, dataShare, budgetservice, $filter) {
+    function ViewBudgets($scope, dataShare, budgetservice, $filter, ) {
 
         activate();
 
@@ -21,7 +21,7 @@
         function getData() {
             $scope.$on('data_shared', function() {
                 budgetData = dataShare.getData();
-                $scope.budgets = budgetData.data
+                $scope.budgets = budgetData.data;
                 console.log("first budget");
                 //  $scope._id=data[1]._id,
                 //  $scope.startDate=data[1].BudgetStartDate,
@@ -48,6 +48,7 @@
                     return Math.round(Math.abs((new Date(fromDate).getTime() - new Date(toDate).getTime()) / (24 * 60 * 60 * 1000)));
                 }
             }
+            $scope.CCtype
         }
 
 
