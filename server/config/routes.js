@@ -14,7 +14,9 @@ module.exports = function(app) {
 
 
     app.get("/data/getdetails/", function(req, res) {
-        Budget.findOne({ _id: req.query.id }).populate('Transactions').exec(function(err, ret) {
+        Budget.findOne({
+            _id: req.query.id
+        }).populate('Transactions').exec(function(err, ret) {
             if (err)
                 res.send(err);
             res.send(ret);
@@ -49,30 +51,48 @@ module.exports = function(app) {
     });
 
     app.post("/data/SaveTransaction", function(req, res) {
+        var xx = null;
+        console.log('dfsddas');
         Transactions.create({
                 itemdescription: req.body.itemDesc,
                 itemprice: req.body.transAmt,
                 transdate: req.body.transDate,
                 store: req.body.store,
-                upc: req.body.upc,
-                BudgetId: req.body.budgetId
+                upc: req.body.upc
+                    //BudgetId: req.body.budgetId
             },
             function(err, NewTrans) {
                 if (err) {
                     res.send(err);
                 }
-                Transactions.find(function(err, NewTrans) {
-                    if (err) {
-                        res.send(err);
+                NewBudget.findOne({
+                    _id: req.body.budgetId,
+                    function(err, ret) {
+                        ret.Transactions.push(NewTrans);
+                        ret.save(function(err, ret) {
+                            if (err) {
+                                res.send(err);
+                                console.log('err here')
+                            }
+                            console.log(ret.Transactions);
+                        });
                     }
-                    NewBudget.Transactions.push(NewTrans);
-                    NewBudget.save(function(err, ret) {
-                        if (err) {
-                            res.send(err);
-                        }
-                    })
-                    res.json(NewTrans);
                 });
+
+                // Transactions.find(function(err, NewTrans) {
+                //     if (err) {
+                //         res.send(err);
+                //     }
+
+
+                res.json(NewTrans);
+
+
+
+
+
+
+
             });
     });
 

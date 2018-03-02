@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var TransactionSchema = new Schema({
-    tranId: Schema.ObjectId,
     transdate: Date,
     store: String,
     upc: Number,
