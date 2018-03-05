@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require("mongoose").set('debug', true);
 var Schema = mongoose.Schema;
 
 var TransactionSchema = new Schema({
@@ -7,6 +7,5 @@ var TransactionSchema = new Schema({
     upc: Number,
     itemprice: Number,
     itemdescription: String,
-    BudgetId: { type: Schema.ObjectId, ref: "Budgets" }
 });
 module.exports = mongoose.model("Transaction", TransactionSchema);
