@@ -1,4 +1,4 @@
-angular.module("spendtrackerapp", ["ngResource", "ngRoute"]);
+angular.module("spendtrackerapp", ["ngResource", "ngRoute", "ui.router"]);
 
 angular.module("spendtrackerapp").config(function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
@@ -24,10 +24,16 @@ angular.module("spendtrackerapp").config(function($routeProvider, $locationProvi
         controller: 'BudgetDetailsController',
     });
 
-     $routeProvider.when('/NewTransaction/:budgetId',{
-        templateUrl:'/partials/transactionsviews/NewTransaction',
-        controller:'NewTransactionController'
-     });
+    $routeProvider.when('/NewTransaction/:budgetId', {
+        templateUrl: '/partials/transactionsviews/NewTransaction',
+        controller: 'NewTransactionController'
+    });
+
+    $routeProvider.when('/Transaction/:transId', {
+        templateUrl: '/partials/transactionsviews/NewTransaction',
+        controller: 'NewTransactionController'
+    });
+
     //  $routeProvider.when('/EditBudget',{
     //     templateUrl:'templates/editbudget.html',
     //     controller:'BudgetController'

@@ -2,10 +2,10 @@ var Budget = require('../models/budget.js');
 var NewBudget = require('../models/newbudget.js');
 var Transactions = require('../models/transactions.js');
 
-module.exports = function (app) {
-    app.get("/data/budgetlist", function (req, res) {
+module.exports = function(app) {
+    app.get("/data/budgetlist", function(req, res) {
         console.log('heree');
-        Budget.find(function (err, ret) {
+        Budget.find(function(err, ret) {
             if (err)
                 res.send(err);
             res.json(ret);
@@ -13,22 +13,33 @@ module.exports = function (app) {
     });
 
 
-    app.get("/data/getdetails/", function (req, res) {
+    app.get("/data/getdetails/", function(req, res) {
         Budget.findOne({
             _id: req.query.id
-        }).populate('Transactions').exec(function (err, ret) {
+        }).populate('Transactions').exec(function(err, ret) {
             if (err)
                 res.send(err);
             res.send(ret);
         });
     });
+    app.get("/data/gettrandetails/", function(req, res) {
+        console.log(req.query.id)
+        Transactions.findOne({
+            _id: req.query.id
+        }, function(err, data) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(data);
+        });
+    });
 
-    app.get("/partials/*", function (req, res) {
+    app.get("/partials/*", function(req, res) {
         console.log('here');
         res.render("../../public/app/templates/" + req.params[0]);
     });
 
-    app.post("/data/SaveBudget", function (req, res) {
+    app.post("/data/SaveBudget", function(req, res) {
         NewBudget.create({
                 BudgetStartDate: req.body.startDate,
                 BudgetEndDate: req.body.endDate,
@@ -37,11 +48,11 @@ module.exports = function (app) {
                 BudgetType: req.body.budgetCCType
 
             },
-            function (err, newBudget) {
+            function(err, newBudget) {
                 if (err) {
                     res.send(err);
                 }
-                NewBudget.find(function (err, newBudgets) {
+                NewBudget.find(function(err, newBudgets) {
                     if (err) {
                         res.send(err);
                     }
@@ -50,7 +61,7 @@ module.exports = function (app) {
             });
     });
 
-    app.post("/data/SaveTransaction", function (req, res) {
+    app.post("/data/SaveTransaction", function(req, res) {
         var xx = null;
         console.log('dfsddas');
         Transactions.create({
@@ -59,9 +70,9 @@ module.exports = function (app) {
                 transdate: req.body.transDate,
                 store: req.body.store,
                 upc: req.body.upc
-                //BudgetId: req.body.budgetId
+                    //BudgetId: req.body.budgetId
             },
-            function (err, NewTrans) {
+            function(err, NewTrans) {
                 if (err) {
                     res.send(err);
                 }
@@ -69,10 +80,10 @@ module.exports = function (app) {
                 NewBudget.findOne({
                         _id: req.body.budgetId
                     },
-                    function (err, ret) {
+                    function(err, ret) {
                         //console.log('HEEEERREE');
                         ret.Transactions.push(NewTrans);
-                        ret.save(function (err, ret) {
+                        ret.save(function(err, ret) {
                             if (err) {
                                 res.send(err);
                                 console.log('err here')
@@ -84,14 +95,14 @@ module.exports = function (app) {
             });
     });
 
-    app.put("/data/updatestatus/", function (req, res) {
+    app.put("/data/updatestatus/", function(req, res) {
         NewBudget.update({
             _id: req.query.id
         }, {
             $set: {
                 BudgetStatus: 'Closed'
             }
-        }, function (err, ret) {
+        }, function(err, ret) {
             if (err) {
                 res.send(err);
                 console.log('err here')
@@ -104,7 +115,7 @@ module.exports = function (app) {
     //have to set up static routing to our public directory for stylus config
 
     //catchall route
-    app.get('*', function (req, res) {
+    app.get('*', function(req, res) {
         //testing mongo, add mongoMessage
         res.render('index');
     });
