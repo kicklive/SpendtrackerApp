@@ -1,38 +1,42 @@
 {
-  "name": "spendtracker2018_2",
-  "version": "1.0.0",
-  "description": "Spend Tracking application",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": "6.9.x",
-    "npm": "3.10.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kicklive/spendtracker2018.git"
-  },
-  "author": "Darryl Payton",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kicklive/spendtracker2018/issues"
-  },
-  "homepage": "https://github.com/kicklive/spendtracker2018#readme",
-  "dependencies": {
-    "angularjs-datepicker": "^2.1.23",
-    "body-parser": "^1.18.2",
-    "bower": "^1.8.2",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "jade": "^1.11.0",
-    "jquery-ui": "^1.12.1",
-    "mongoose": "^5.0.6",
-    "morgan": "^1.9.0",
-    "stylus": "^0.54.5"
-  },
-  "devDependencies": {
-    "bower": "^1.8.2"
-  }
+    "name": "spendtracker2018_2",
+    "version": "1.0.0",
+    "description": "Spend Tracking application",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "engines": {
+        "node": "6.9.x",
+        "npm": "3.10.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kicklive/spendtrackerapp.git"
+
+    },
+    "author": "Darryl Payton",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kicklive/spendtrackerapp/issues"
+
+    },
+
+    "homepage": "https://github.com/kicklive/spendtrackerapp#readme",
+    "dependencies": {
+        "angular-ui": "^1.0.0",
+        "angularjs-datepicker": "^2.1.23",
+        "body-parser": "^1.18.2",
+        "bower": "^1.8.2",
+        "express": "^4.16.2",
+        "express-session": "^1.15.6",
+        "jade": "^1.11.0",
+        "jquery-ui": "^1.12.1",
+        "mongoose": "^5.0.6",
+        "morgan": "^1.9.0",
+        "stylus": "^0.54.5"
+    },
+    "devDependencies": {
+        "bower": "^1.8.2"
+    }
 }

@@ -1,45 +1,82 @@
-(function(){
+(function() {
     'use strict';
 
     angular
         .module('spendtrackerapp')
         .controller('NewTransactionController', CreateTransaction)
 
-        CreateTransaction.$inject = ['$scope','$location','transactionservice','notifierService','$route'];
+    CreateTransaction.$inject = ['$scope', '$location', 'transactionservice', 'notifierService', '$route', '$filter', '$stateParams', '$state'];
 
-    function CreateTransaction($scope,$location, transactionservice, notifierService,$route) {
+    function CreateTransaction($scope, $location, transactionservice, notifierService, $route, $filter, $stateParams, $state) {
 
         activate();
 
-        function activate() { 
+        function activate() {
             //var tranId=$scope.id;
-            $scope.id=$route.current.pathParams.budgetId;
-            $scope.ClearForm=function(){
-                $scope.transamt='';
-                $scope.transdate='',
-                $scope.upc='';
-                $scope.itemDescription='';
-                $scope.store='';
+            // $scope.id = $route.current.pathParams.budgetId;
+            if ($stateParams.transId) {
+                transactionservice.GetTransactionData($stateParams.transId).then(function(data) {
+                    if (data.data == null) {
+                        notifierService.error = "There was an retrieving data. Contact Administrator."
+                    } else {
+                        $scope.transdate = $filter('date')(data.data.transdate, "MM/dd/yyyy");
+                        $scope.transamt = parseFloat(data.data.itemprice).toFixed(2);
+                        $scope.upc = data.data.upc;
+                        $scope.store = data.data.store;
+                        $scope.itemDescription = data.data.itemdescription;
+                    }
+                });
             }
-            $scope.AddTransaction=function(){
-                 $scope.newTransaction={
-                    transAmt:$scope.transamt,
-                    upc:$scope.upc,
-                    transDate:$scope.transdate,
-                    itemDesc:$scope.itemDescription,
-                    store:$scope.store,
-                    tranId:$scope.id
+            $scope.ClearForm = function() {
+                $scope.transamt = '';
+                $scope.transdate = '',
+                    $scope.upc = '';
+                $scope.itemDescription = '';
+                $scope.store = '';
+            }
+            $scope.AddTransaction = function() {
+                $scope.newTransaction = {
+                    transAmt: $scope.transamt,
+                    upc: $scope.upc,
+                    transDate: $scope.transdate,
+                    itemDesc: $scope.itemDescription,
+                    store: $scope.store,
+                    //budgetId: $scope.id
+                    budgetId: $stateParams.budgetId
                 }
-                transactionservice.addTransaction($scope.newTransaction).then(function(data){
+                transactionservice.addTransaction($scope.newTransaction).then(function(data) {
                     if (data == null) {
                         notifierService.error = "There was an issue saving this transaction. Contact Administrator."
                     } else {
-                       // dataShare.sendData(data);
-                        $location.path("/Details/"+$scope.id);
+                        // dataShare.sendData(data);
+                        //$location.path("/Details/" + $scope.id);
+                        //$location.path("/Details/" + $stateParams.budgetId);
+                        $state.go("details", { budgetId: $stateParams.budgetId });
                         notifierService.notify = "Transaction saved successfully";
                     }
 
                 });
+            }
+            $scope.DeleteTransaction = function() {
+                transactionservice.DeletTransaction($stateParams.transId).then(function(ret) {
+                    if (ret == "success") {
+                        notifierService.notify = "Transaction deleted successfully";
+                        $state.go("details", { budgetId: $stateParams.budgetId });
+                        //$location.path("/Details/" + $stateParams.budgetId);
+                    }
+
+                })
+            }
+            $scope.SaveEditedTransaction = function() {
+                transactionservice.SaveTransaction($stateParams.transId).then(function(ret) {
+                    if (ret == "success") {
+                        // $location.path("/Details/" + $route.current.pathParams.budgetId);
+                        $state.go("details", { budgetId: $stateParams.budgetId });
+                        notifierService.notify = "Transaction updated successfully";
+                    }
+
+                })
+
             }
 
         }

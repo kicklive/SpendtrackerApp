@@ -10,10 +10,9 @@
                     .col-md-4
                         label.labelfont.text-left.paddingleft10(for="transamt") Transaction Amount 
                         input.form-control.col-sm-12(name="transamt", type="text", ng-model="transamt" style="width:150px")
-
-                    .col-md-4
-                        label.labelfont.text-left.paddingleft10(for="transamt") UPC 
-                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" style="width:150px")
+                    .col-md-2
+                        label.labelfont.text-left.paddingleft10(for="upc") UPC 
+                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" style="width:160px")
              .row.align-items-start
                 .form-group
                     .col-md-12
@@ -28,7 +27,9 @@
             .row.align-items-start
                 form-group
                         .col-md-12.col.text-right
-                            submit.btn.btn-primary(ng-click="AddTransaction()") Submit
+                            a.btn.btn-primary(ng-click="AddTransaction()") Submit
+                            &nbsp;
+                            submit.btn.btn-primary(ng-click="DeleteTransaction()") Delete
                             &nbsp;
                             a.btn.btn-default(ng-click="ClearForm()") Cancel                          
                    

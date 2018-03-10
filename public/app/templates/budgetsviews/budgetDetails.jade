@@ -10,12 +10,16 @@
             {{findDiff(data)}}
         .row
             .col-sm-6
-                b Amount Remaining in Budget:
+                b Budget Amount:
             {{data.BudgetAmount|currency : "$" : 2}}
         .row
             .col-sm-6
                 b Budget Status:
             {{data.BudgetStatus}}
+        .row
+            .col-sm-6
+                b Budget Type:
+            {{data.BudgetType}}
 hr            
 h4 Transactions
     .row(ng-hide="ShowMsg()") 
@@ -24,8 +28,42 @@ h4 Transactions
     .row&nbsp;
     .row&nbsp;
     .row&nbsp;
+
+    .row(ng-show="ShowMsg()") 
+        b.col-sm-3.align-items-center.row-head-height-blue Transaction Date
+        b.col-sm-2.align-items-center.row-head-height-blue UPC
+        b.col-sm-2.align-items-center.row-head-height-blue Amount
+        b.col-sm-3.align-items-center.row-head-height-blue Item Description
+        b.col-sm-2.align-items-center.row-head-height-blue Store
+
+    .row(ng-repeat="trans in data.Transactions")
+        a.col-sm-3.align-items-center.row-head(ui-sref="transaction({transId:trans._id,budgetId:data._id})"){{trans.transdate|date:"MM/dd/yyyy"}}
+        .col-sm-2.align-items-center.row-head {{trans.upc}}
+        .col-sm-2.align-items-center.row-head {{trans.itemprice|currency : "$" : 2}}
+        .col-sm-3.align-items-center.row-head {{trans.itemdescription}}
+        .col-sm-2.align-items-center.row-head {{trans.store}}
+    .row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
+    .row.font10
+        b.col-sm-10.text-right Budget Amount:
+        .col-sm-2.text-right {{data.BudgetAmount|currency : "$" : 2}}
+    .row.font10
+        b.col-sm-10.text-right Transaction Total:
+        .col-sm-2.text-right {{data.Transactions|sumByKey:'itemprice'|currency : "$" : 2}}
+    .row.font10
+        b.col-sm-10.text-right Remaining Budget Amount:
+        .col-sm-2.text-right {{data.BudgetAmount-(data.Transactions|sumByKey:'itemprice')|currency : "$" : 2}}
+
+   row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
+    .row&nbsp;
         .col-sm-6
-            a.btn.btn-primary.pull-right(ng-click="CreateNewTrans()") Create New Transaction
+            a.btn.btn-primary.pull-right(ng-click="CreateNewTrans()" ng-show="ShowButton()") Create New Transaction
+            a.btn.btn-default.pull-right(ui-sref="listbudgets") Back 
 
 
 //-         if {{data.Transactions.length===0}}

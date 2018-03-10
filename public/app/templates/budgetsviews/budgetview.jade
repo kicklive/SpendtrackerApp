@@ -14,8 +14,10 @@
                     .col-sm-2.font10 {{budget.BudgetEndDate|date:"MM/dd/yyyy"}}
                     .col-sm-3.font10.paddingleft70 {{findDiff(budget)}}
                     .col-sm-2.font10.paddingleft35 {{budget.BudgetAmount|currency : "$" : 2}}
-                    .col-sm-1.font10.paddingleft10 open
-                    a.col-sm-1.font10(href="/Details/{{budget._id}}") Details
+                    .col-sm-1.font10.paddingleft10 {{budget.BudgetStatus}}
+                    a.col-sm-1.font10(ui-sref="details({budgetId:budget._id})") Details
+    .row.rowspace10
+                     a.btn.btn-primary.pull-right(ui-sref="newbudget") Create New Budget
 
        
                

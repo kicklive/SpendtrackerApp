@@ -11,7 +11,8 @@
         var service = {
             getBudgetList: getData,
             saveBudget: saveBudgetData,
-            getBudgetDetails: GetBudgetDetails
+            getBudgetDetails: GetBudgetDetails,
+            updateStatus:UpdateBudgetStatus
         };
 
         return service;
@@ -50,6 +51,21 @@
         function GetBudgetDetails(budgetId) {
             var deferred = $q.defer();
             var httpPromise = $http.get("/data/getdetails/", { params: { id: budgetId } });
+            httpPromise.then(success, failure);
+
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
+
+        function UpdateBudgetStatus(budgetId){
+            var deferred = $q.defer();
+            var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
             httpPromise.then(success, failure);
 
             function success(data) {

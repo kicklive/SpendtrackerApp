@@ -1,15 +1,17 @@
-(function(){
+(function() {
     'use strict';
 
     angular
         .module('spendtrackerapp')
         .factory('transactionservice', Transactions);
 
-        Transactions.$inject = ['$http','$q'];
+    Transactions.$inject = ['$http', '$q'];
 
-    function Transactions($http,$q) {
+    function Transactions($http, $q) {
         var service = {
-            addTransaction: AddTransaction
+            addTransaction: AddTransaction,
+            GetTransactionData: GetTransData,
+            SaveTransaction: SaveModifiedTrans
         };
 
         return service;
@@ -27,6 +29,38 @@
                 console.error('Error ' + err);
             }
             return deferred.promise
-         }
+        }
+
+        function GetTransData(tranId) {
+            var deferred = $q.defer();
+            var httpPromise = $http.get("/data/gettrandetails/", { params: { id: tranId } });
+            httpPromise.then(success, failure);
+
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
+
+        function SaveModifiedTrans(tranId) {
+            var deferred = $q.defer();
+            var httpPromise = $http.get("/data/updatetransaction/", { params: { id: tranId } });
+            httpPromise.then(success, failure);
+
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
+
+
     }
 })();

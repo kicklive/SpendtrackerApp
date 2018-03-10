@@ -34,6 +34,19 @@ p {
   vertical-align: middle;
   padding: top right bottom left 0px;
 }
+.row-head-height-blue {
+  height: 20px;
+  background-color: LightBlue;
+  font-size: 10pt;
+  vertical-align: bottom;
+  padding-top: 3px;
+}
+.row-head {
+  height: 20px;
+  font-size: 10pt;
+  vertical-align: middle;
+  padding-top: 15px;
+}
 .rowspace25 {
   height: 25px;
 }

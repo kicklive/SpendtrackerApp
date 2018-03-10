@@ -1,26 +1,27 @@
 .container(ng-controller="newbudgetcontroller")
-    form.form-horizontal(name="newBudget")
+    form.form-horizontal(name="newBudgetForm" ng-submit="addbudget()")
         fieldset
             ledgend New newBudget
                 .form-group
-                    label.col-sm-2.control-label(for="startdate") Budget Begin 
+                    label.col-sm-2.control-label(for="formData.startdate") Budget Begin 
                     .col-sm-6
-                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="startdate" datepkr="" style="width:150px")
+                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="formData.startdate" datepkr="" style="width:150px")
                 .form-group
                     label.col-sm-2.control-label(for="enddate") Budget End
                     .col-sm-6
-                        input.form-control(name="enddate", type="text",placeholder="Budget End Date" ng-model="enddate" datepkr="" style="width:150px")
+                        input.form-control(name="enddate", type="text",placeholder="Budget End Date" ng-model="formData.enddate" datepkr="" style="width:150px")
                 .form-group
                     label.col-sm-2.control-label(for="budgetamt") Budget Amount
                     .col-sm-6
-                        input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="budgetamt"  style="width:150px")
+                        input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="formData.budgetamt"  style="width:150px")
                  .form-group
                     label.col-sm-2.control-label(for="budgettype") Budget Type
                     .col-sm-6
-                        select.form-control(name="budgettype", type="select", ng-options="option.name for option in budgetType.options track by option.id" ng-model="budgetType.selectedOption" style="width:150px")
+                        select.form-control(name="budgettype", type="select", ng-options="option.name for option in budgetType.options track by option.id" ng-model="formData.budgetType.selectedOption" style="width:150px")
                 form-group
                     .col-md-10.col-md-offset-2
-                        submit.btn.btn-primary(ng-click="addbudget()") Submit
+                        //- a.btn.btn-primary(ng-click="addbudget()") Submit
+                        button.btn.btn-primary(type="submit") Submit
                         &nbsp;
                         a.btn.btn-default(href="/") Cancel                        
                         
