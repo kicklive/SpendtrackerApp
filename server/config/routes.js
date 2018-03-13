@@ -89,8 +89,8 @@ module.exports = function(app, config) {
             });
     });
 
-    app.put("/data/updatestatus/", function(req, res) {
-        NewBudget.update({
+    app.put("/data/updatetransaction/", function(req, res) {
+        Transactions.update({
             _id: req.query.id
         }, {
             $set: {
@@ -112,20 +112,22 @@ module.exports = function(app, config) {
 
     });
 
-    app.put("/data/updatetransaction/", function(req, res) {
-        Transactions.update({
-            _id: req.query.id
-        }, {
-            $set: {
-                BudgetStatus: 'Closed'
-            }
-        }, function(err, ret) {
-            if (err) {
-                res.send(err);
-                console.log('err here')
-            }
-            console.log(ret);
-        });
+    app.put("/data/updatestatus/:id", function(req, res) {
+        console.log("heeeeeereeX-->" + req.params.id);
+        NewBudget.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    BudgetStatus: 'Closed'
+                }
+            }, {
+                new: true
+            },
+            function(err, ret) {
+                if (err) {
+                    res.send(err);
+                    console.log('err here')
+                }
+                res.send(ret);
+            });
 
     });
 

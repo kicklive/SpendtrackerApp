@@ -24,8 +24,9 @@
                     $scope.data = data.data;
                     $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
                     storageservice.setObj('details', $scope.data)
-                    if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0) {
-                        budgetservice.updateStatus($stateParams.budgetId).then(function() {
+                    if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
+                        budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
+                            $scope.data.BudgetStatus = updateData.BudgetStatus;
                             $scope.ShowButton = function() {
                                 return false;
                             }
@@ -35,8 +36,9 @@
             } else {
                 $scope.data = storageservice.get($stateParams.budgetId, 'empty');
                 $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
-                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0) {
-                    budgetservice.updateStatus($stateParams.budgetId).then(function() {
+                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
+                    budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
+                        $scope.data.BudgetStatus = updateData.BudgetStatus;
                         $scope.ShowButton = function() {
                             return false;
                         }
@@ -59,6 +61,7 @@
                         //         return false;
                         //     }
                         // });
+                        return 0
                     } else {
                         $scope.ShowButton = function() {
                             return true;

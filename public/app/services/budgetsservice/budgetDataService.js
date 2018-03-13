@@ -12,7 +12,7 @@
             getBudgetList: getData,
             saveBudget: saveBudgetData,
             getBudgetDetails: GetBudgetDetails,
-            updateStatus:UpdateBudgetStatus
+            updateStatus: UpdateBudgetStatus
         };
 
         return service;
@@ -63,9 +63,10 @@
             return deferred.promise
         }
 
-        function UpdateBudgetStatus(budgetId){
+        function UpdateBudgetStatus(budgetId) {
             var deferred = $q.defer();
-            var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
+            //var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
+            var httpPromise = $http.put("/data/updatestatus/" + budgetId, );
             httpPromise.then(success, failure);
 
             function success(data) {
