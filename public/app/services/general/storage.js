@@ -55,12 +55,14 @@
         }
 
         function setObject(key, value) {
-            $window.localStorage[key] = JSON.stringify(value);
+            // $window.localStorage[key] = JSON.stringify(value);
+            $window.localStorage[key] = value;
         }
 
         function getObject(key, defaultValue) {
             if ($window.localStorage[key] != undefined) {
-                return JSON.parse($window.localStorage[key]);
+                // return JSON.parse($window.localStorage[key]);
+                return $window.localStorage[key];
             } else {
                 return defaultValue || false;
             }
