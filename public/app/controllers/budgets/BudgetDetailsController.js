@@ -20,14 +20,15 @@
                 return false;
             }
             $scope.ShowLink = function() {
-                var retStatus = true;
-                if (budgetStatus == 'Closed')
-                    retStatus = false;
-                return retStatus;
-            }
-            if (storageservice.get('budgetid', 'empty') == 'empty')
-                storageservice.set('budgetid', $stateParams.budgetId);
-            //stateparm is empty on refresh. find a different key
+                    var retStatus = true;
+                    if (budgetStatus == 'Closed')
+                        retStatus = false;
+                    return retStatus;
+                }
+                // storageservice.clear();
+                // if (storageservice.get('budgetid', 'empty') == 'empty')
+                //     storageservice.set('budgetid', $stateParams.budgetId);
+                //stateparm is empty on refresh. find a different key
             if (storageservice.getObj(storageservice.get('budgetid', 'empty'), 'empty') == 'empty') {
                 budgetservice.getBudgetDetails($stateParams.budgetId).then(function(data) {
                     $scope.data = data.data;
@@ -46,7 +47,7 @@
             } else {
                 $scope.data = storageservice.get(storageservice.get('budgetid', 'empty'), 'empty');
                 // $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
-                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
+                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && $scope.data.BudgetStatus == "Open") {
                     budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
                         $scope.data.BudgetStatus = updateData.BudgetStatus;
                         $scope.ShowButton = function() {

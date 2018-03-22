@@ -29,6 +29,11 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
             params: {
                 budgetId: null
             },
+            // resolve: {
+            //     "reset": function(storageservice) {
+            //         storageservice.clear();
+            //     }
+            // },
             templateUrl: '/partials/budgetsviews/budgetDetails',
             controller: 'BudgetDetailsController',
         })
