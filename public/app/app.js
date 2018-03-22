@@ -35,7 +35,8 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         .state('newtransaction', {
             url: '/NewTransaction',
             params: {
-                transId: null
+                transId: null,
+                budgetId:null
             },
             templateUrl: '/partials/transactionsviews/NewTransaction',
             controller: 'NewTransactionController'

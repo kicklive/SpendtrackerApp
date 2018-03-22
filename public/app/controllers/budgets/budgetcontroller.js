@@ -14,19 +14,19 @@
 
 
         function activate() {
-            return budgetservice.getBudgetList().then(function(data) {
-                $scope.ret = {
-                    data: data
-                };
-                // $scope.date='1/1/2018';
-                if ($scope.ret.data.data.length == 0) {
-                    $location.path("/");
-                } else {
-                    dataShare.sendData($scope.ret.data);
-                    $location.path("/ListBudgets");
-                }
-                // return $scope;
-            });
+            // return budgetservice.getBudgetList().then(function(data) {
+            //     $scope.ret = {
+            //         data: data
+            //     };
+            //     // $scope.date='1/1/2018';
+            //     if ($scope.ret.data.data.length == 0) {
+            //         $location.path("/");
+            //     } else {
+            //         dataShare.sendData($scope.ret.data);
+            //         $location.path("/ListBudgets");
+            //     }
+            //     // return $scope;
+            // });
         }
     }
 })();

@@ -52,23 +52,31 @@
 
         function getData(key, defaultValue) {
             return $window.localStorage[key] || defaultValue || false;
+        //    console.log($window.localStorage[key]);
+        //     if ($window.localStorage[key] != undefined) {
+        //         return JSON.parse($window.localStorage[key]);
+        //         //return $window.localStorage[key];
+        //     } else {
+        //         return defaultValue || false;
+        //     }
         }
 
         function setObject(key, value) {
-            // $window.localStorage[key] = JSON.stringify(value);
-            $window.localStorage[key] = value;
+             $window.localStorage[key] = JSON.stringify(value);
+            //$window.localStorage[key] = value;
         }
 
         function getObject(key, defaultValue) {
+            console.log('sdfsfs='+$window.localStorage[key]);
             if ($window.localStorage[key] != undefined) {
-                // return JSON.parse($window.localStorage[key]);
-                return $window.localStorage[key];
+                return JSON.parse($window.localStorage[key]);
+                //return $window.localStorage[key];
             } else {
                 return defaultValue || false;
             }
         }
 
-        function removeItem() {
+        function removeItem(key) {
             $window.localStorage.removeItem(key);
         }
 

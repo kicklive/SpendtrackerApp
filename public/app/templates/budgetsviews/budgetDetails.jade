@@ -24,7 +24,7 @@ hr
 h4 Transactions
     .row(ng-hide="ShowMsg()") 
        .col-sm-12.offset-3
-            h3 There are no transactions for this budget.
+            h3 {{data.msg}}
     .row&nbsp;
     .row&nbsp;
     .row&nbsp;
@@ -39,8 +39,8 @@ h4 Transactions
     .row(ng-repeat="trans in data.Transactions")
  
         //a.col-sm-3.align-items-center.row-head(ui-sref="{{(data.BudgetStatus=='Closed')?transaction({transId:trans._id,budgetId:data._id}):transaction({transId:trans._id,budgetId:data._id}) }}"    ){{trans.transdate|date:"MM/dd/yyyy"}}
-        a.col-sm-3.align-items-center.row-head(ng-show="ShowLink()" ui-sref="transaction({transId:trans._id,budgetId:data._id})" ){{trans.transdate|date:"MM/dd/yyyy"}}
-        .col-sm-3.align-items-center.row-head(ng-hide="ShowLink()"){{trans.transdate|date:"MM/dd/yyyy"}}
+        a.col-sm-3.align-items-center.row-head(ng-show="ShowLink(data.BudgetStatus)" ui-sref="transaction({transId:trans._id,budgetId:data._id})" ){{trans.transdate|date:"MM/dd/yyyy"}}
+        .col-sm-3.align-items-center.row-head(ng-hide="ShowLink(data.BudgetStatus)"){{trans.transdate|date:"MM/dd/yyyy"}}
         //hide-link( ui-sref="transaction({transId:trans._id,budgetId:data._id})" ){{trans.transdate|date:"MM/dd/yyyy"}}
         //hide-link(xxx="{{data.BudgetStatus}}")
         //hide-link="{{data.BudgetStatus}}"

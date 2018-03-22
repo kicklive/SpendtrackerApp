@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -10,53 +10,71 @@
     function BudgetDetails($scope, $route, budgetservice, $location, STConstants, $stateParams, $state, storageservice) {
         $scope.data = {};
         var budgetStatus;
-
+        // storageservice.clear();
         activate();
 
         function activate() {
             var date = new Date();
             var fDate = new Date(date.setHours(0, 0, 0, 0));
-            $scope.ShowButton = function() {
+            $scope.ShowButton = function () {
                 return false;
             }
-            $scope.ShowLink = function() {
+            $scope.ShowLink = function (v) {
                 var retStatus = true;
-                if (budgetStatus == 'Closed')
+                if (v == 'Closed')
                     retStatus = false;
                 return retStatus;
             }
-            if (storageservice.get('budgetid', 'empty') == 'empty')
+            // storageservice.clear();
+            var budgId = null;
+            if ($stateParams.budgetId != null) {
+                storageservice.remove('budgetid');
                 storageservice.set('budgetid', $stateParams.budgetId);
+                budgId = $stateParams.budgetId;
+            } else {
+                budgId = storageservice.get('budgetid', 'empty');
+            }
+
+
+
+
+
             //stateparm is empty on refresh. find a different key
-            if (storageservice.getObj(storageservice.get('budgetid', 'empty'), 'empty') == 'empty') {
-                budgetservice.getBudgetDetails($stateParams.budgetId).then(function(data) {
+
+
+            if (storageservice.getObj(budgId, 'empty') == 'empty') {
+                budgetservice.getBudgetDetails(budgId).then(function (data) {
                     $scope.data = data.data;
                     $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
-                    budgetStatus = $scope.data.BudgetStatus;
-                    storageservice.setObj($stateParams.budgetId, $scope.data);
+                    $scope.budgetStatus = $scope.data.BudgetStatus;
+                    if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
+                        $scope.data.msg = "There are no transactions for this budget."
+                    storageservice.setObj(budgId, $scope.data);
                     if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
-                        budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
+                        budgetservice.updateStatus($stateParams.budgetId).then(function (updateData) {
                             $scope.data.BudgetStatus = updateData.BudgetStatus;
-                            $scope.ShowButton = function() {
+                            $scope.ShowButton = function () {
                                 return false;
                             }
                         });
                     }
                 });
             } else {
-                $scope.data = storageservice.get(storageservice.get('budgetid', 'empty'), 'empty');
-                // $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
-                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
-                    budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
+                $scope.data = storageservice.getObj(budgId, 'empty');
+                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && $scope.data.BudgetStatus == "Open") {
+                    budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function (updateData) {
                         $scope.data.BudgetStatus = updateData.BudgetStatus;
-                        $scope.ShowButton = function() {
+                        if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
+                            $scope.data.msg = "There are no transactions for this budget."
+                        $scope.ShowButton = function () {
                             return false;
                         }
                     });
                 }
             }
 
-            $scope.findDiff = function(d) {
+
+            $scope.findDiff = function (d) {
                 var todaysDate = new Date();
                 var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
 
@@ -66,14 +84,9 @@
 
                 if (fromDate && toDate) {
                     if (Math.round((new Date(fromDate).getTime() - new Date(toDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0) {
-                        // budgetservice.updateStatus($route.current.pathParams.budgetId).then(function(){
-                        //     $scope.ShowButton=function(){
-                        //         return false;
-                        //     }
-                        // });
                         return 0
                     } else {
-                        $scope.ShowButton = function() {
+                        $scope.ShowButton = function () {
                             return true;
                         }
                     }
@@ -81,7 +94,7 @@
                 }
 
             }
-            $scope.ShowMsg = function() {
+            $scope.ShowMsg = function () {
                 var hasData = false;
                 if ($scope.data.Transactions != null) {
                     if ($scope.data.Transactions.length > 0)
@@ -89,9 +102,11 @@
                 }
                 return hasData;
             }
-            $scope.CreateNewTrans = function() {
+            $scope.CreateNewTrans = function () {
                 // $location.path('/NewTransaction/' + $stateParams.budgetId)
-                $state.go('newtransaction', { budgetId: $stateParams.budgetId })
+                $state.go('newtransaction', {
+                    budgetId: budgId
+                })
             }
 
             function CheckStatus(d) {
