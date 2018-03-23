@@ -48,7 +48,7 @@
 
         function SaveModifiedTrans(tranId) {
             var deferred = $q.defer();
-            var httpPromise = $http.get("/data/updatetransaction/", { params: { id: tranId } });
+            var httpPromise = $http.put("/data/updatetransaction/" + tranId);
             httpPromise.then(success, failure);
 
             function success(data) {

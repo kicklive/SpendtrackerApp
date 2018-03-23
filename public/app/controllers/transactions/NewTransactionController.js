@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('NewTransactionController', CreateTransaction)
 
-    CreateTransaction.$inject = ['$scope', '$location', 'transactionservice', 'notifierService', '$route', '$filter', '$stateParams', '$state','storageservice'];
+    CreateTransaction.$inject = ['$scope', '$location', 'transactionservice', 'notifierService', '$route', '$filter', '$stateParams', '$state', 'storageservice'];
 
-    function CreateTransaction($scope, $location, transactionservice, notifierService, $route, $filter, $stateParams, $state,storageservice) {
+    function CreateTransaction($scope, $location, transactionservice, notifierService, $route, $filter, $stateParams, $state, storageservice) {
 
         activate();
 
@@ -27,14 +27,14 @@
                     }
                 });
             }
-            $scope.budgetId= $stateParams.budgetId
+            $scope.budgetId = $stateParams.budgetId
             $scope.ClearForm = function() {
                 $scope.transamt = '';
                 $scope.transdate = '',
                     $scope.upc = '';
                 $scope.itemDescription = '';
                 $scope.store = '';
-               
+
             }
             $scope.AddTransaction = function() {
                 $scope.newTransaction = {
@@ -46,19 +46,35 @@
                     //budgetId: $scope.id
                     budgetId: $stateParams.budgetId
                 }
-                transactionservice.addTransaction($scope.newTransaction).then(function(data) {
-                    if (data == null) {
-                        notifierService.error = "There was an issue saving this transaction. Contact Administrator."
-                    } else {
-                        // dataShare.sendData(data);
-                        //$location.path("/Details/" + $scope.id);
-                        //$location.path("/Details/" + $stateParams.budgetId);
-                        storageservice.clear();
-                        $state.go("details", { budgetId: $stateParams.budgetId });
-                        notifierService.notify = "Transaction saved successfully";
-                    }
+                if ($stateParams.transId != undefined && $stateParams.transId != null) {
 
-                });
+                    transactionservice.SaveTransaction($stateParams.transId).then(function(ret) {
+                        if (ret == "success") {
+                            storageservice.clear();
+                            // $location.path("/Details/" + $route.current.pathParams.budgetId);
+                            $state.go("details", { budgetId: $stateParams.budgetId });
+                            notifierService.notify = "Transaction updated successfully";
+                        }
+
+                    })
+
+
+                } else {
+                    transactionservice.addTransaction($scope.newTransaction).then(function(data) {
+                        if (data == null) {
+                            notifierService.error = "There was an issue saving this transaction. Contact Administrator."
+                        } else {
+                            // dataShare.sendData(data);
+                            //$location.path("/Details/" + $scope.id);
+                            //$location.path("/Details/" + $stateParams.budgetId);
+                            storageservice.clear();
+                            $state.go("details", { budgetId: $stateParams.budgetId });
+                            notifierService.notify = "Transaction saved successfully";
+                        }
+
+                    });
+                }
+
             }
             $scope.DeleteTransaction = function() {
                 transactionservice.DeletTransaction($stateParams.transId).then(function(ret) {
@@ -71,18 +87,7 @@
 
                 })
             }
-            $scope.SaveEditedTransaction = function() {
-                transactionservice.SaveTransaction($stateParams.transId).then(function(ret) {
-                    if (ret == "success") {
-                        storageservice.clear();
-                        // $location.path("/Details/" + $route.current.pathParams.budgetId);
-                        $state.go("details", { budgetId: $stateParams.budgetId });
-                        notifierService.notify = "Transaction updated successfully";
-                    }
 
-                })
-
-            }
 
         }
     }

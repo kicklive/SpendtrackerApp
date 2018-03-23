@@ -89,10 +89,10 @@ module.exports = function(app, config) {
             });
     });
 
-    app.put("/data/updatetransaction/", function(req, res) {
-        Transactions.update({
-            _id: req.query.id
-        }, {
+    app.put("/data/updatetransaction/:id", function(req, res) {
+        console.log("updated id=" + req.params.id)
+        console.log("update field id=" + req.body.store)
+        Transactions.findByIdAndUpdate(req.params.id, {
             $set: {
                 itemdescription: req.body.itemDesc,
                 itemprice: req.body.transAmt,
