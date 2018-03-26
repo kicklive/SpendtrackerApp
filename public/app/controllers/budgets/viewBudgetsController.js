@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('ViewBudgetController', ViewBudgets)
 
-    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter', 'STConstants'];
+    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter', 'STConstants','storageservice'];
 
-    function ViewBudgets($scope, dataShare, budgetservice, $filter, ) {
+    function ViewBudgets($scope, dataShare, budgetservice, $filter,STConstants,storageservice ) {
 
         activate();
 
@@ -19,27 +19,43 @@
         var budgetData = null;
 
         function getData() {
-            $scope.$on('data_shared', function() {
-                budgetData = dataShare.getData();
-                $scope.budgets = budgetData.data;
-                if ($scope.budgets.BudgetStatus != "Closed")
-                    $scope.budgets.BudgetStatus = (CheckStatus($scope.budgets) != null ? "Closed" : $scope.budgets.BudgetStatus);
-                console.log("sss");
-                //  $scope._id=data[1]._id,
-                //  $scope.startDate=data[1].BudgetStartDate,
-                //  $scope.endDate=data[1].BudgetEndDate,
-                //  $scope.budgetAmount=data[1].BudgetAmount
-            });
-            $scope.$emit('initiateEvent', null);
-            if (budgetData == null) {
+            if(storageservice.getObj('budgets', 'empty')=='empty'){
                 budgetservice.getBudgetList().then(function(data) {
                     $scope.budgets = data.data
+                    storageservice.setObj('budgets',data.data);
                     console.log('aaa=' + $scope.budgets[0].BudgetStatus);
                     if ($scope.budgets[0].BudgetStatus != "Closed")
                         $scope.budgets[0].BudgetStatus = (CheckStatus($scope.budgets[0]) != null ? "Closed" : $scope.budgets[0].BudgetStatus);
                     console.log("second budget");
-                });
+                }); 
+            }else{
+                $scope.budgets=storageservice.getObj('budgets','empty');
+                if ($scope.budgets.BudgetStatus != "Closed")
+                $scope.budgets.BudgetStatus = (CheckStatus($scope.budgets) != null ? "Closed" : $scope.budgets.BudgetStatus);
             }
+
+
+            // $scope.$on('data_shared', function() {
+            //     budgetData = dataShare.getData();
+            //     $scope.budgets = budgetData.data;
+            //     if ($scope.budgets.BudgetStatus != "Closed")
+            //         $scope.budgets.BudgetStatus = (CheckStatus($scope.budgets) != null ? "Closed" : $scope.budgets.BudgetStatus);
+            //     console.log("sss");
+            //     //  $scope._id=data[1]._id,
+            //     //  $scope.startDate=data[1].BudgetStartDate,
+            //     //  $scope.endDate=data[1].BudgetEndDate,
+            //     //  $scope.budgetAmount=data[1].BudgetAmount
+            // });
+            // $scope.$emit('initiateEvent', null);
+            // if (budgetData == null) {
+            //     budgetservice.getBudgetList().then(function(data) {
+            //         $scope.budgets = data.data
+            //         console.log('aaa=' + $scope.budgets[0].BudgetStatus);
+            //         if ($scope.budgets[0].BudgetStatus != "Closed")
+            //             $scope.budgets[0].BudgetStatus = (CheckStatus($scope.budgets[0]) != null ? "Closed" : $scope.budgets[0].BudgetStatus);
+            //         console.log("second budget");
+            //     });
+            // }
 
             $scope.findDiff = function(budget) {
 

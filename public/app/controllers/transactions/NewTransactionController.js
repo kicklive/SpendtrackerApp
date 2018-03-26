@@ -43,12 +43,12 @@
                     transDate: $scope.transdate,
                     itemDesc: $scope.itemDescription,
                     store: $scope.store,
-                    //budgetId: $scope.id
+                    transId:$stateParams.transId,
                     budgetId: $stateParams.budgetId
                 }
                 if ($stateParams.transId != undefined && $stateParams.transId != null) {
 
-                    transactionservice.SaveTransaction($stateParams.transId).then(function(ret) {
+                    transactionservice.SaveTransaction($scope.newTransaction).then(function(ret) {
                         if (ret == "success") {
                             storageservice.clear();
                             // $location.path("/Details/" + $route.current.pathParams.budgetId);
