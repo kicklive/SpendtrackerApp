@@ -1,6 +1,7 @@
 var Budget = require('../models/budget.js');
 var NewBudget = require('../models/newbudget.js');
 var Transactions = require('../models/transactions.js');
+var nb=null;
 
 module.exports = function(app) {
     app.get("/data/budgetlist", function(req, res) {
@@ -43,6 +44,7 @@ module.exports = function(app) {
                     if (err) {
                         res.send(err);
                     }
+                    nb=newBudgets;
                     res.json(newBudgets);
                 });
             });
