@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('newbudgetcontroller', NewBudget)
 
-    NewBudget.$inject = ['$scope', '$location', 'budgetservice', 'notifierService', 'dataShare'];
+    NewBudget.$inject = ['$scope', '$location', 'budgetservice', 'notifierService', 'dataShare','storageservice'];
 
-    function NewBudget($scope, $location, budgetservice, notifierService, dataShare) {
+    function NewBudget($scope, $location, budgetservice, notifierService, dataShare,storageservice) {
         $scope.ret = null;
         $scope.budgetType = {
             options: [
@@ -34,6 +34,7 @@
 
                     notifierService.error = "There was an issue saving this budget. Contact Administrator."
                 } else {
+                    storageservice.remove("budgets");
                     dataShare.sendData(data);
                     $location.path("/ListBudgets");
                     notifierService.notify = "Budget saved successfully";

@@ -49,7 +49,7 @@
                 if ($stateParams.transId != undefined && $stateParams.transId != null) {
 
                     transactionservice.SaveTransaction($scope.newTransaction).then(function(ret) {
-                        if (ret == "success") {
+                        if (ret.data == "success") {
                             storageservice.clear();
                             // $location.path("/Details/" + $route.current.pathParams.budgetId);
                             $state.go("details", { budgetId: $stateParams.budgetId });
