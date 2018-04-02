@@ -13,6 +13,7 @@
 
 
         function activate() {
+            //storageservice.clear();
             getData();
         }
 
@@ -30,8 +31,11 @@
                 }); 
             }else{
                 $scope.budgets=storageservice.getObj('budgets','empty');
-                if ($scope.budgets.BudgetStatus != "Closed")
-                $scope.budgets.BudgetStatus = (CheckStatus($scope.budgets) != null ? "Closed" : $scope.budgets.BudgetStatus);
+                for(var i=0;i<$scope.budgets.length;i++){
+                    if ($scope.budgets[i].BudgetStatus != "Closed")
+                        $scope.budgets[i].BudgetStatus = (CheckStatus($scope.budgets[i]) != null ? "Closed" : $scope.budgets[i].BudgetStatus);
+                }
+                
             }
 
 
