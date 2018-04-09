@@ -66,7 +66,7 @@
                 var todaysDate = new Date();
                 var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
 
-                fromDate = fromDate.setDate(fromDate.getDate() - 1);
+                fromDate = fromDate.setDate(fromDate.getDate());
                 var toDate = new Date(budget.BudgetEndDate);
                 toDate = toDate.setHours(0, 0, 0, 0);
 
@@ -96,7 +96,7 @@
                 var todaysDate = new Date();
                 var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
 
-                fromDate = fromDate.setDate(fromDate.getDate() - 1);
+                fromDate = fromDate.setDate(fromDate.getDate());
                 var toDate = new Date(d.BudgetEndDate);
                 toDate = toDate.setHours(0, 0, 0, 0);
 

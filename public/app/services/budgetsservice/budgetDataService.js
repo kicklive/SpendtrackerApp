@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .factory('budgetservice', BudgetData);
 
-    BudgetData.$inject = ['$http', '$q'];
+    BudgetData.$inject = ['$http', '$q','storageservice'];
 
-    function BudgetData($http, $q) {
+    function BudgetData($http, $q,storageservice) {
         var service = {
             getBudgetList: getData,
             saveBudget: saveBudgetData,
@@ -18,6 +18,7 @@
         return service;
 
         function getData() {
+            storageservice.clear()
             var deferred = $q.defer();
             var httpPromise = $http.get('/data/budgetlist');
             httpPromise.then(success, failure);

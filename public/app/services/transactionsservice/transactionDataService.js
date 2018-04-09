@@ -11,7 +11,8 @@
         var service = {
             addTransaction: AddTransaction,
             GetTransactionData: GetTransData,
-            SaveTransaction: SaveModifiedTrans
+            SaveTransaction: SaveModifiedTrans,
+            DeletTrans:DeleteTransaction
         };
 
         return service;
@@ -60,7 +61,20 @@
             }
             return deferred.promise
         }
+        function DeleteTransaction(tranId) {
+            var deferred = $q.defer();
+            var httpPromise = $http.get("/data/deletetransaction",{ params: { id: tranId } });
+            httpPromise.then(success, failure);
 
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
 
     }
 })();

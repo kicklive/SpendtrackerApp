@@ -53,10 +53,12 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         .state('startpage', {
             url: '/',
             resolve: {
-                "check": function(budgetservice, $location) {
+                "check": function(budgetservice, $location,storageservice) {
                     budgetservice.getBudgetList().then(function(data) {
-                        if (data.data.length > 0)
+                        if (data.data.length > 0){
+                            storageservice.setObj('budgets',data.data);
                             $location.path("/ListBudgets")
+                        }
                         else {
                             $location.path("/Home")
                         }

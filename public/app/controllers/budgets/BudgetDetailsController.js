@@ -50,7 +50,7 @@
                     if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
                         $scope.data.msg = "There are no transactions for this budget."
                     
-                    if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 1 && data.data.BudgetStatus == "Open") {
+                    if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
                         budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
                             $scope.data.BudgetStatus = updateData.BudgetStatus;
                             $scope.ShowButton = function() {
@@ -62,7 +62,7 @@
                 });
             } else {
                 $scope.data = storageservice.getObj(budgId, 'empty');
-                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 1 && $scope.data.BudgetStatus == "Open") {
+                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >=0 && $scope.data.BudgetStatus == "Open") {
                     budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
                        
                         if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
@@ -80,7 +80,7 @@
                 var todaysDate = new Date();
                 var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
 
-                fromDate = fromDate.setDate(fromDate.getDate() - 1);
+                fromDate = fromDate.setDate(fromDate.getDate());
                 var toDate = new Date(d.BudgetEndDate);
                 toDate = toDate.setHours(0, 0, 0, 0);
 
@@ -117,7 +117,7 @@
                 var todaysDate = new Date();
                 var fromDate = new Date(todaysDate.setHours(0, 0, 0, 0));
 
-                fromDate = fromDate.setDate(fromDate.getDate() - 1);
+                fromDate = fromDate.setDate(fromDate.getDate());
                 var toDate = new Date(d.BudgetEndDate);
                 toDate = toDate.setHours(0, 0, 0, 0);
 

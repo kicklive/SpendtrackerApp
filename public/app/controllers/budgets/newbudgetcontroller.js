@@ -32,12 +32,12 @@
                 console.log('budget saved');
                 if (data == null) {
 
-                    notifierService.error = "There was an issue saving this budget. Contact Administrator."
+                    notifierService.error("There was an issue saving this budget. Contact Administrator.")
                 } else {
                     storageservice.remove("budgets");
                     dataShare.sendData(data);
                     $location.path("/ListBudgets");
-                    notifierService.notify = "Budget saved successfully";
+                    notifierService.notify("Budget saved successfully");
                 }
 
             });

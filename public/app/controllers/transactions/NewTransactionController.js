@@ -17,7 +17,7 @@
             if ($stateParams.transId) {
                 transactionservice.GetTransactionData($stateParams.transId).then(function(data) {
                     if (data.data == null) {
-                        notifierService.error = "There was an retrieving data. Contact Administrator."
+                        notifierService.error("There was an retrieving data. Contact Administrator.");
                     } else {
                         $scope.transdate = $filter('date')(data.data.transdate, "MM/dd/yyyy");
                         $scope.transamt = parseFloat(data.data.itemprice).toFixed(2);
@@ -53,7 +53,7 @@
                             storageservice.clear();
                             // $location.path("/Details/" + $route.current.pathParams.budgetId);
                             $state.go("details", { budgetId: $stateParams.budgetId });
-                            notifierService.notify = "Transaction updated successfully";
+                            notifierService.notify("Transaction updated successfully");
                         }
 
                     })
@@ -62,14 +62,14 @@
                 } else {
                     transactionservice.addTransaction($scope.newTransaction).then(function(data) {
                         if (data == null) {
-                            notifierService.error = "There was an issue saving this transaction. Contact Administrator."
+                            notifierService.error("There was an issue saving this transaction. Contact Administrator.");
                         } else {
                             // dataShare.sendData(data);
                             //$location.path("/Details/" + $scope.id);
                             //$location.path("/Details/" + $stateParams.budgetId);
                             storageservice.clear();
                             $state.go("details", { budgetId: $stateParams.budgetId });
-                            notifierService.notify = "Transaction saved successfully";
+                            notifierService.notify("Transaction saved successfully");
                         }
 
                     });
@@ -77,12 +77,16 @@
 
             }
             $scope.DeleteTransaction = function() {
-                transactionservice.DeletTransaction($stateParams.transId).then(function(ret) {
-                    if (ret == "success") {
-                        notifierService.notify = "Transaction deleted successfully";
+                transactionservice.DeletTrans($stateParams.transId).then(function(ret) {
+                    if (ret.data == "success") {
+                        storageservice.remove($stateParams.budgetId)
+                        notifierService.notify("Transaction deleted successfully");
                         storageservice.clear();
                         $state.go("details", { budgetId: $stateParams.budgetId });
                         //$location.path("/Details/" + $stateParams.budgetId);
+                    }
+                    else{
+                        notifierService.error("There was a problem deleting this record. Contact Administrator "+ret.message);
                     }
 
                 })
