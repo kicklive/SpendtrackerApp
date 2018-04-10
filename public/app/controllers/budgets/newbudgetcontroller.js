@@ -28,6 +28,7 @@
 
 
         function activate() {
+            
             budgetservice.saveBudget($scope.formData).then(function(data) {
                 console.log('budget saved');
                 if (data == null) {

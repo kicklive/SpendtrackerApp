@@ -12,11 +12,11 @@
                         input.form-control.col-sm-12(name="transamt", type="text", ng-model="transamt" style="width:150px")
                     .col-md-2
                         label.labelfont.text-left.paddingleft10(for="upc") UPC 
-                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" style="width:160px")
+                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" ng-keydown="EvalUPC()" style="width:160px")
              .row.align-items-start
                 .form-group
                     .col-md-12
-                        label.labelfont.text-left.paddingleft10(for="itestoremDescription") Store 
+                        label.labelfont.text-left.paddingleft10(for="store") Store 
                         input.form-control(name="store", ng-model='store' style="width:300px")
             .row.align-items-start
                 .form-group

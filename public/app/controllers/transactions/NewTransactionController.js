@@ -91,6 +91,14 @@
 
                 })
             }
+            $scope.EvalUPC=function(){
+                if($scope.upc.length===12){
+                    itemservice.GetItem($scope.upc).then(function(ret){
+                        $scope.itemDescription=ret.data.itemDescription;
+                        $scope.transamt=ret.data.transamt;
+                    });
+                }
+            }
 
 
         }
