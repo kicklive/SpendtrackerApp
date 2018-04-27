@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('NewTransactionController', CreateTransaction)
 
-    CreateTransaction.$inject = ['$scope', '$location', 'transactionservice', 'notifierService', '$route', '$filter', '$stateParams', '$state', 'storageservice'];
+    CreateTransaction.$inject = ['$scope', '$location', 'transactionservice', 'notifierService', '$route', '$filter', '$stateParams', '$state', 'storageservice', 'itemservice'];
 
-    function CreateTransaction($scope, $location, transactionservice, notifierService, $route, $filter, $stateParams, $state, storageservice) {
+    function CreateTransaction($scope, $location, transactionservice, notifierService, $route, $filter, $stateParams, $state, storageservice, itemservice) {
 
         activate();
 
@@ -43,7 +43,7 @@
                     transDate: $scope.transdate,
                     itemDesc: $scope.itemDescription,
                     store: $scope.store,
-                    transId:$stateParams.transId,
+                    transId: $stateParams.transId,
                     budgetId: $stateParams.budgetId
                 }
                 if ($stateParams.transId != undefined && $stateParams.transId != null) {
@@ -84,19 +84,23 @@
                         storageservice.clear();
                         $state.go("details", { budgetId: $stateParams.budgetId });
                         //$location.path("/Details/" + $stateParams.budgetId);
-                    }
-                    else{
-                        notifierService.error("There was a problem deleting this record. Contact Administrator "+ret.message);
+                    } else {
+                        notifierService.error("There was a problem deleting this record. Contact Administrator " + ret.message);
                     }
 
                 })
             }
-            $scope.EvalUPC=function(){
-                if($scope.upc.length===12){
-                    itemservice.GetItem($scope.upc).then(function(ret){
-                        $scope.itemDescription=ret.data.itemDescription;
-                        $scope.transamt=ret.data.transamt;
+            $scope.EvalUPC = function() {
+                if ($scope.upc.length === 12) {
+                    itemservice.GetItem($scope.upc).then(function(ret) {
+                        if (ret.data != null) {
+                            $scope.itemDescription = ret.data.itemdescription;
+                            $scope.transamt = ret.data.itemprice;
+                            $scope.disabled = true;
+                        }
                     });
+                } else {
+                    $scope.disabled = false;
                 }
             }
 

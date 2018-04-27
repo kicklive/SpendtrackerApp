@@ -5,7 +5,7 @@
         .module('spendtrackerapp')
         .factory('itemservice', Items);
 
-        Items.$inject = ['$http', '$q'];
+    Items.$inject = ['$http', '$q'];
 
     function Items($http, $q) {
         var service = {
@@ -46,7 +46,7 @@
 
         function SaveModifiedTrans(formData) {
             var deferred = $q.defer();
-            var httpPromise = $http.put("/data/updatetransaction",formData);
+            var httpPromise = $http.put("/data/updatetransaction", formData);
             httpPromise.then(success, failure);
 
             function success(data) {
@@ -58,9 +58,25 @@
             }
             return deferred.promise
         }
+
         function DeleteTransaction(tranId) {
             var deferred = $q.defer();
-            var httpPromise = $http.get("/data/deletetransaction",{ params: { id: tranId } });
+            var httpPromise = $http.get("/data/deletetransaction", { params: { id: tranId } });
+            httpPromise.then(success, failure);
+
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
+
+        function SearchForItem(upc) {
+            var deferred = $q.defer();
+            var httpPromise = $http.get("/data/itemsearch", { params: { id: upc } });
             httpPromise.then(success, failure);
 
             function success(data) {

@@ -20,6 +20,7 @@
                 return false;
             }
             $scope.ShowLink = function(v) {
+                    console.log('show link--> ' + v);
                     var retStatus = true;
                     if (v == 'Closed')
                         retStatus = false;
@@ -49,7 +50,7 @@
                     $scope.budgetStatus = $scope.data.BudgetStatus;
                     if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
                         $scope.data.msg = "There are no transactions for this budget."
-                    
+
                     if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
                         budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
                             $scope.data.BudgetStatus = updateData.BudgetStatus;
@@ -62,9 +63,9 @@
                 });
             } else {
                 $scope.data = storageservice.getObj(budgId, 'empty');
-                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >=0 && $scope.data.BudgetStatus == "Open") {
+                if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && $scope.data.BudgetStatus == "Open") {
                     budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
-                       
+
                         if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
                             $scope.data.msg = "There are no transactions for this budget."
                         $scope.ShowButton = function() {
