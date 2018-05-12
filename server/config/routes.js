@@ -2,6 +2,7 @@ var Budget = require('../models/budget.js');
 var NewBudget = require('../models/newbudget.js');
 var Transactions = require('../models/transactions.js');
 var Product = require('../models/product.js');
+var nodedate = require("node-datetime");
 
 module.exports = function(app, config) {
     app.get("/data/budgetlist", function(req, res) {
@@ -186,6 +187,27 @@ module.exports = function(app, config) {
                 res.send(ret);
             });
 
+    });
+
+    app.put("/data/updatestatusall/", function(req, res) {
+        var bulk = NewBudget.collection.initializeOrderedBulkOp();
+        console.log("bulk==>" + bulk);
+        var dt = nodedate.create()
+
+        bulk.find({ "BudgetAmount": { $lt: dt.getTime() } }).update({
+            $set: {
+                BudgetStatus: 'Closed'
+            }
+        });
+        bulk.execute(function(err, ret) {
+            if (err) {
+                console.log("bulk err==>" + err);
+                //res.send(err);
+                console.log('err in bulk update')
+            } else {
+                res.send("success");
+            }
+        });
     });
 
     app.get("/data/deletetransaction", function(req, res) {

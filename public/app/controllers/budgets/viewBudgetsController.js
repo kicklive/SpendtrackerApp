@@ -5,37 +5,38 @@
         .module('spendtrackerapp')
         .controller('ViewBudgetController', ViewBudgets)
 
-    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter', 'STConstants','storageservice'];
+    ViewBudgets.$inject = ['$scope', 'dataShare', 'budgetservice', '$filter', 'STConstants', 'storageservice'];
 
-    function ViewBudgets($scope, dataShare, budgetservice, $filter,STConstants,storageservice ) {
+    function ViewBudgets($scope, dataShare, budgetservice, $filter, STConstants, storageservice) {
 
         activate();
 
-
         function activate() {
-            //storageservice.clear();
+            // storageservice.clear();
+            $scope.title = "SpendTracker";
             getData();
+            console.log();
         }
 
         var budgetData = null;
 
         function getData() {
-            if(storageservice.getObj('budgets', 'empty')=='empty'){
+            if (storageservice.getObj('budgets', 'empty') == 'empty') {
                 budgetservice.getBudgetList().then(function(data) {
                     $scope.budgets = data.data
-                    storageservice.setObj('budgets',data.data);
+                    storageservice.setObj('budgets', data.data);
                     console.log('aaa=' + $scope.budgets[0].BudgetStatus);
-                    if ($scope.budgets[0].BudgetStatus != "Closed")
-                        $scope.budgets[0].BudgetStatus = (CheckStatus($scope.budgets[0]) != null ? "Closed" : $scope.budgets[0].BudgetStatus);
+                    // if ($scope.budgets[0].BudgetStatus != "Closed")
+                    //     $scope.budgets[0].BudgetStatus = (CheckStatus($scope.budgets[0]) != null ? "Closed" : $scope.budgets[0].BudgetStatus);
                     console.log("second budget");
-                }); 
-            }else{
-                $scope.budgets=storageservice.getObj('budgets','empty');
-                for(var i=0;i<$scope.budgets.length;i++){
-                    if ($scope.budgets[i].BudgetStatus != "Closed")
-                        $scope.budgets[i].BudgetStatus = (CheckStatus($scope.budgets[i]) != null ? "Closed" : $scope.budgets[i].BudgetStatus);
+                });
+            } else {
+                $scope.budgets = storageservice.getObj('budgets', 'empty');
+                for (var i = 0; i < $scope.budgets.length; i++) {
+                    // if ($scope.budgets[i].BudgetStatus != "Closed")
+                    //     $scope.budgets[i].BudgetStatus = (CheckStatus($scope.budgets[i]) != null ? "Closed" : $scope.budgets[i].BudgetStatus);
                 }
-                
+
             }
 
 

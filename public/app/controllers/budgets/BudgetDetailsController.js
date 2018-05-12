@@ -10,7 +10,7 @@
     function BudgetDetails($scope, $route, budgetservice, $location, STConstants, $stateParams, $state, storageservice) {
         $scope.data = {};
         var budgetStatus;
-        // storageservice.clear();
+        //storageservice.clear();
         activate();
 
         function activate() {

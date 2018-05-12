@@ -13,15 +13,12 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/kicklive/spendtrackerapp.git"
-
     },
     "author": "Darryl Payton",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/kicklive/spendtrackerapp/issues"
-
     },
-
     "homepage": "https://github.com/kicklive/spendtrackerapp#readme",
     "dependencies": {
         "angular-ui": "^1.0.0",
@@ -37,6 +34,15 @@
         "stylus": "^0.54.5"
     },
     "devDependencies": {
-        "bower": "^1.8.2"
+        "bower": "^1.8.2",
+        "gulp": "^3.9.1",
+        "gulp-shell": "^0.6.5",
+        "jasmine": "^3.1.0",
+        "jasmine-core": "^3.1.0",
+        "karma": "^2.0.2",
+        "karma-html-detailed-reporter": "^1.1.21",
+        "karma-jasmine": "^1.1.2",
+        "karma-phantomjs-launcher": "^1.0.4",
+        "phantomjs": "^2.1.7"
     }
 }

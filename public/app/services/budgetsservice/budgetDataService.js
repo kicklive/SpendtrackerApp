@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .factory('budgetservice', BudgetData);
 
-    BudgetData.$inject = ['$http', '$q','storageservice'];
+    BudgetData.$inject = ['$http', '$q', 'storageservice'];
 
-    function BudgetData($http, $q,storageservice) {
+    function BudgetData($http, $q, storageservice) {
         var service = {
             getBudgetList: getData,
             saveBudget: saveBudgetData,
@@ -24,6 +24,7 @@
             httpPromise.then(success, failure);
 
             function success(data) {
+                CheckStatus();
                 deferred.resolve(data);
             }
 
@@ -68,6 +69,22 @@
             var deferred = $q.defer();
             //var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
             var httpPromise = $http.put("/data/updatestatus/" + budgetId, );
+            httpPromise.then(success, failure);
+
+            function success(data) {
+                deferred.resolve(data);
+            }
+
+            function failure(err) {
+                console.error('Error ' + err);
+            }
+            return deferred.promise
+        }
+
+        function CheckStatus() {
+            var deferred = $q.defer();
+            //var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
+            var httpPromise = $http.put("/data/updatestatusall/");
             httpPromise.then(success, failure);
 
             function success(data) {
