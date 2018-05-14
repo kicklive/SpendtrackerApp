@@ -1,5 +1,4 @@
 {
-    "directory": "public/vendor",
-    "proxy": "http://amweb.ey.net:8080",
-    "https-proxy": "http://amweb.ey.net:8443"
+    "directory": "public/vendor"
+  
 }
