@@ -16,13 +16,21 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             '../../vendor/angular/angular.js',
-            '../../vendor/angular/angular-*.js',
+
+            'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.15/angular-ui-router.min.js',
             '../../vendor/angular-route/angular-route.js',
             '../../vendor/angular-ui/build/angular-ui.js',
-            '../../vendor/angular-ui-router/release/angular-route.js',
-			'../../vendor/angular-resource/angular-resource.js',
+
+
+            '../../vendor/angular-resource/angular-resource.js',
             '../../vendor/angular-mocks/angular-mocks.js',
+
+
             '../app.js',
+            '../services/general/*.js',
+            '../services/budgetsservice/*.js',
+            '../services/transactionsservice/*.js',
+            '../controllers/budgets/viewBudgetsController.js',
             'unit/*js'
         ],
 
