@@ -14,10 +14,11 @@
         function activate() {
             // storageservice.clear();
             $scope.title = "SpendTracker";
+            //var vm = this;
+            //vm.title = "SpendTracker";
             getData();
             console.log();
         }
-
         var budgetData = null;
 
         function getData() {

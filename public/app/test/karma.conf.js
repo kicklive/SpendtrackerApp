@@ -30,6 +30,7 @@ module.exports = function(config) {
             '../services/general/*.js',
             '../services/budgetsservice/*.js',
             '../services/transactionsservice/*.js',
+            '../filters/*.js',
             '../controllers/budgets/viewBudgetsController.js',
             'unit/*js'
         ],
