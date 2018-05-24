@@ -36,7 +36,7 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
             url: '/NewTransaction',
             params: {
                 transId: null,
-                budgetId:null
+                budgetId: null
             },
             templateUrl: '/partials/transactionsviews/NewTransaction',
             controller: 'NewTransactionController'
@@ -52,14 +52,26 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         })
         .state('startpage', {
             url: '/',
+            params: { d: null },
+            controller: 'ViewBudgetController',
             resolve: {
-                "check": function(budgetservice, $location,storageservice) {
+                "check": function(budgetservice, $location, storageservice) {
+                    if (storageservice.get('status', null) != new Date()) {
+                        budgetservice.budgetStatus().then(function(ret) {
+                            if (ret === 'success') {
+                                storageservice.set('status', new Date());
+                            }
+                        });
+                    }
+
                     budgetservice.getBudgetList().then(function(data) {
-                        if (data.data.length > 0){
-                            storageservice.setObj('budgets',data.data);
+                        if (data.data.length > 0) {
+                            d = data;
+                            storageservice.setObj('budgets', data.data);
                             $location.path("/ListBudgets")
-                        }
-                        else {
+                                //$state.go('listbudgets', { data: data });
+                        } else {
+                            //$state.go('home');
                             $location.path("/Home")
                         }
                     });

@@ -3,9 +3,9 @@
 
     angular
         .module('spendtrackerapp')
-        .factory('budgetservice', BudgetData);
+        .factory('budgetservicespec', BudgetData);
 
-    BudgetData.$inject = ['$http', '$q', 'storageservice'];
+    BudgetData.$inject = ['$http', '$q', 'storageservicespec'];
 
     function BudgetData($http, $q, storageservice) {
         var service = {
@@ -20,20 +20,33 @@
         return service;
 
         function getData() {
-            storageservice.clear()
-            var deferred = $q.defer();
-            var httpPromise = $http.get('/data/budgetlist');
-            var d;
-            httpPromise.then(success, failure);
+            var itemList = [{
+                id: 1,
+                itemdesc: 'aaa',
+                itemprice: 5
+            }, {
+                id: 2,
+                itemdesc: 'bbb',
+                itemprice: 3
+            }, {
+                id: 3,
+                itemdesc: 'ccc',
+                itemprice: 7
+            }, {
+                id: 4,
+                itemdesc: 'ddd',
+                itemprice: 12
+            }];
+            sucess(itemList);
 
-            function success(data) {
+            function success(itemList) {
                 // CheckStatus();
-                d = data;
+                d = itemList;
                 deferred.resolve(d);
             }
 
-            function failure(err) {
-                console.error('Error ' + err);
+            function failure() {
+                console.error('Error');
                 deferred.reject();
             }
             return deferred.promise;
@@ -89,15 +102,15 @@
         function CheckStatus() {
             var deferred = $q.defer();
             //var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
-            var httpPromise = $http.put("/data/updatestatusall/");
-            httpPromise.then(success, failure);
 
-            function success(data) {
-                deferred.resolve(data);
+            success();
+
+            function success() {
+                deferred.resolve("success");
             }
 
-            function failure(err) {
-                console.error('Error ' + err);
+            function failure() {
+                console.error('Error');
             }
             return deferred.promise
         }
