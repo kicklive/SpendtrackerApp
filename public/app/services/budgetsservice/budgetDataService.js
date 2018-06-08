@@ -9,11 +9,11 @@
 
     function BudgetData($http, $q, storageservice) {
         var service = {
-            getBudgetList: getData,
-            saveBudget: saveBudgetData,
+            //getBudgetList: getData,
+            //   saveBudget: saveBudgetData,
             getBudgetDetails: GetBudgetDetails,
-            updateStatus: UpdateBudgetStatus,
-            budgetStatus: CheckStatus
+            //   updateStatus: UpdateBudgetStatus,
+            //budgetStatus: CheckStatus
 
         };
 

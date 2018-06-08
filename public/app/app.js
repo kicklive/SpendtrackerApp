@@ -55,15 +55,19 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
             params: { d: null },
             controller: 'ViewBudgetController',
             resolve: {
-                "check": function(budgetservice, $location, storageservice) {
-                    if (storageservice.get('status', null) != new Date()) {
+                access: function(storageservice) {
+                    return storageservice.get('status', null);
+                },
+                status: function(budgetservice, access) {
+                    if (access != new Date()) {
                         budgetservice.budgetStatus().then(function(ret) {
                             if (ret === 'success') {
                                 storageservice.set('status', new Date());
                             }
                         });
                     }
-
+                },
+                data: function(budgetservice, storageservice, $location) {
                     budgetservice.getBudgetList().then(function(data) {
                         if (data.data.length > 0) {
                             d = data;
@@ -75,10 +79,35 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                             $location.path("/Home")
                         }
                     });
-
                 }
             }
-        })
+
+
+
+            // "check": function(budgetservice, $location, storageservice) {
+            //     if (storageservice.get('status', null) != new Date()) {
+            //         budgetservice.budgetStatus().then(function(ret) {
+            //             if (ret === 'success') {
+            //                 storageservice.set('status', new Date());
+            //             }
+            //         });
+            //     }
+
+            //     budgetservice.getBudgetList().then(function(data) {
+            //         if (data.data.length > 0) {
+            //             d = data;
+            //             storageservice.setObj('budgets', data.data);
+            //             $location.path("/ListBudgets")
+            //                 //$state.go('listbudgets', { data: data });
+            //         } else {
+            //             //$state.go('home');
+            //             $location.path("/Home")
+            //         }
+            //     });
+
+            // }
+            // }
+        });
 
 
 
