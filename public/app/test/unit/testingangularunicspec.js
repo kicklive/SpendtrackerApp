@@ -1,11 +1,115 @@
 describe('Testing SpendTracker App', function() {
+    var $httpBackend, $q, $state, $templateCache, $location, budgetServiceMock, budgetservice, $rootScope;
+
+
+    // beforeEach(module('spendtrackerapp'));
+    // beforeEach(inject(function(_$state_, _$rootScope_, $templateCache) {
+    //     console.log('BEGIN: it test - 3');
+    //     $state = _$state_;
+    //     console.log('BEGIN: it test - 4==>' + $state.resolve);
+    //     $rootScope = _$rootScope_;
+    // }));
+
+    // it('should respond to URL', function() {
+    //     expect($state.href('startpage')).toEqual('/');
+    // });
+
+
+    // it('should activate the state', function() {
+    //     $state.go('startpage');
+    //     $rootScope.$digest();
+    //     expect($state.current.controller).toBe('');
+    // });
+
+
+
+
+    // var mockRouteProvider;
+    // beforeEach(module('spendtrackerapp'));
+    // beforeEach(module('ui.router'));
+    // beforeEach(inject(function(_$state_, _$rootScope_, $templateCache, _$state_, _$q_) {
+    //     debugger;
+    //     console.log('BEGIN: it test - 3');
+    //     $state = _$state_;
+    //     $state.go('startpage');
+    //     console.log('BEGIN: it test - 4==>' + $state);
+
+    //     spyOn($state, 'state.resolve.access').and.callThrough();
+    // }));
+
+    // it('must have a route state for home', function() {
+    //     // expect($state.state).toHaveBeenCalledWith('/', jasmine.any(Object));
+    // });
+
+
+
+
+    // beforeEach(function() {
+    //     console.log('BEGIN: it test - 1');
+    //     module('ui.router', function($urlRouterProvider) {
+    //         console.log('BEGIN: it test - 2');
+    //         mockRouteProvider = $urlRouterProvider;
+    //         //spyOn(mockRouteProvider, 'when').andCallThrough();
+    //         spyOn(mockRouteProvider, 'otherwise').andCallThrough();
+
+    //     });
+    //     module('spendtrackerapp');
+
+    // });
+    // beforeEach(function() {
+    //     console.log('BEGIN: it test - 3');
+    //     inject(function(_$rootScope_) {
+    //         console.log('injecting');
+    //         $rootScope = _$rootScope_.$new();
+    //     });
+    // });
+
+    // it('should have registered a route for \'/\'', function() {
+
+    //     expect(mockRouteProvider.otherwise).toHaveBeenCalled();
+    //     $rootScope.$apply();
+    // });
+
+
+    // beforeEach(module('ui.router', function($stateProvider) {
+    //     console.log('BEGIN: it test - 1');
+    //     $state = $stateProvider;
+    //     budgetServiceMock = jasmine.createSpy('budgetservice', ['budgetStatus', 'getBudgetList']);
+    //     spyOn($state, 'state');
+    //     spyOn($state, '$get').andReturn(budgetServiceMock);
+    //     _$rootScope_.$new();
+    // }, function(budgetservice) {
+    //     budgetservice = budgetservice;
+    // }));
+    // beforeEach(
+    //     inject());
+    // it('does this', function() {
+    //     console.log('BEGIN: it test - 2');
+    //     expect($state.state).toBe(state);
+    //     //expect(budgetservice.budgetStatus).toHaveBeenCalled()
+    //     // $state.go();
+    //     console.log('BEGIN: it test - 3');
+    //     // $state = $state.get('startpage');
+    //     $rootScope.$apply();
+    //     console.log('BEGIN: it test - 4');
+    //     // expect($state.current.controller).toBe(state);
+    //     expect($state.access).toHaveBeenCalled()
+    // })
+
+
+
+
+
+
     var $httpBackend, $q, $state, $templateCache, $location;
 
-    var budgetServiceMock = jasmine.createSpy('budgetservice', ['budgetStatus', 'getBudgetList']);
-    var storageserviceMock = jasmine.createSpy('storageservice', ['get', 'set', 'setObj']);
+    var budgetServiceMock = jasmine.createSpyObj('budgetservice', ['budgetStatus', 'getBudgetList']);
+    var storageserviceMock = jasmine.createSpyObj('storageservice', ['get', 'set', 'setObj']);
 
     function mockServices($provide) {
+
         $provide.factory('budgetservice', function() {
+            debugger;
             return budgetServiceMock;
         });
         $provide.factory('storageservice', function() {
@@ -15,18 +119,21 @@ describe('Testing SpendTracker App', function() {
 
 
     function services($injector) {
-        $q = $injector.get($q);
-        $httpBackend = $injector.get($httpBackend);
-        $state = $injector.get($state);
-        $templateCache = $injector.get($templateCache);
-        $location = $injector.get($location);
+        debugger;
+        $q = $injector.get('$q');
+        $httpBackend = $injector.get('$httpBackend');
+        $state = $injector.get('$state');
+        $templateCache = $injector.get('$templateCache');
+        $location = $injector.get('$location');
     }
 
 
     function setUp() {
-        $httpBackend.whenGET(/assets\/(.+)/).respond(200, {});
+        //$httpBackend.whenGET(/assets\/(.+)/).respond(200, {});
+        $httpBackend.whenGET('/').respond(200, {});
     }
     beforeEach(function() {
+        // debugger;
         module('spendtrackerapp', mockServices);
         inject(services);
         setUp();
@@ -36,16 +143,22 @@ describe('Testing SpendTracker App', function() {
         function goTo(url) {
             $location.url(url);
             $httpBackend.flush();
+            console.log($location);
         }
 
-        beforeEach(function() {
-            budgetServiceMock.budgetStatus.and.returnValue($q.resolve([]));
-        });
-
-        desribe('xx', function() {
+        // beforeEach(function() {
+        //     budgetServiceMock.budgetStatus.and.returnValue($q.resolve([]));
+        // });
+        // it('zz', function() {
+        //     goTo('/');
+        //     expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
+        // });
+        describe('xx', function() {
             it('zz', function() {
+                budgetServiceMock.getBudgetList.and.returnValue($q.resolve([]));
+                debugger;
                 goTo('/');
-                expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
+                expect(budgetServiceMock.getBudgetList).toHaveBeenCalled();
             });
         });
 
