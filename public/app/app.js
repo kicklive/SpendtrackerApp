@@ -70,6 +70,7 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                 data: function(budgetservice, storageservice, $location) {
                     budgetservice.getBudgetList().then(function(data) {
                         if (data.data.length > 0) {
+                            debugger;
                             d = data;
                             storageservice.setObj('budgets', data.data);
                             $location.path("/ListBudgets")

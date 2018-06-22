@@ -1,118 +1,17 @@
 describe('Testing SpendTracker App', function() {
-    var $httpBackend, $q, $state, $templateCache, $location, budgetServiceMock, budgetservice, $rootScope;
-
-
-    // beforeEach(module('spendtrackerapp'));
-    // beforeEach(inject(function(_$state_, _$rootScope_, $templateCache) {
-    //     console.log('BEGIN: it test - 3');
-    //     $state = _$state_;
-    //     console.log('BEGIN: it test - 4==>' + $state.resolve);
-    //     $rootScope = _$rootScope_;
-    // }));
-
-    // it('should respond to URL', function() {
-    //     expect($state.href('startpage')).toEqual('/');
-    // });
-
-
-    // it('should activate the state', function() {
-    //     $state.go('startpage');
-    //     $rootScope.$digest();
-    //     expect($state.current.controller).toBe('');
-    // });
-
-
-
-
-    // var mockRouteProvider;
-    // beforeEach(module('spendtrackerapp'));
-    // beforeEach(module('ui.router'));
-    // beforeEach(inject(function(_$state_, _$rootScope_, $templateCache, _$state_, _$q_) {
-    //     debugger;
-    //     console.log('BEGIN: it test - 3');
-    //     $state = _$state_;
-    //     $state.go('startpage');
-    //     console.log('BEGIN: it test - 4==>' + $state);
-
-    //     spyOn($state, 'state.resolve.access').and.callThrough();
-    // }));
-
-    // it('must have a route state for home', function() {
-    //     // expect($state.state).toHaveBeenCalledWith('/', jasmine.any(Object));
-    // });
-
-
-
-
-    // beforeEach(function() {
-    //     console.log('BEGIN: it test - 1');
-    //     module('ui.router', function($urlRouterProvider) {
-    //         console.log('BEGIN: it test - 2');
-    //         mockRouteProvider = $urlRouterProvider;
-    //         //spyOn(mockRouteProvider, 'when').andCallThrough();
-    //         spyOn(mockRouteProvider, 'otherwise').andCallThrough();
-
-    //     });
-    //     module('spendtrackerapp');
-
-    // });
-    // beforeEach(function() {
-    //     console.log('BEGIN: it test - 3');
-    //     inject(function(_$rootScope_) {
-    //         console.log('injecting');
-    //         $rootScope = _$rootScope_.$new();
-    //     });
-    // });
-
-    // it('should have registered a route for \'/\'', function() {
-
-    //     expect(mockRouteProvider.otherwise).toHaveBeenCalled();
-    //     $rootScope.$apply();
-    // });
-
-
-    // beforeEach(module('ui.router', function($stateProvider) {
-    //     console.log('BEGIN: it test - 1');
-    //     $state = $stateProvider;
-    //     budgetServiceMock = jasmine.createSpy('budgetservice', ['budgetStatus', 'getBudgetList']);
-    //     spyOn($state, 'state');
-    //     spyOn($state, '$get').andReturn(budgetServiceMock);
-    //     _$rootScope_.$new();
-    // }, function(budgetservice) {
-    //     budgetservice = budgetservice;
-    // }));
-    // beforeEach(
-    //     inject());
-    // it('does this', function() {
-    //     console.log('BEGIN: it test - 2');
-    //     expect($state.state).toBe(state);
-    //     //expect(budgetservice.budgetStatus).toHaveBeenCalled()
-    //     // $state.go();
-    //     console.log('BEGIN: it test - 3');
-    //     // $state = $state.get('startpage');
-    //     $rootScope.$apply();
-    //     console.log('BEGIN: it test - 4');
-    //     // expect($state.current.controller).toBe(state);
-    //     expect($state.access).toHaveBeenCalled()
-    // })
-
-
-
-
-
-
-    var $httpBackend, $q, $state, $templateCache, $location;
+    var $httpBackend, $q, $state, $templateCache, $location, deferred, fakePromise, $scope, data, result;
 
     var budgetServiceMock = jasmine.createSpyObj('budgetservice', ['budgetStatus', 'getBudgetList']);
     var storageserviceMock = jasmine.createSpyObj('storageservice', ['get', 'set', 'setObj']);
 
     function mockServices($provide) {
-
+        debugger;
         $provide.factory('budgetservice', function() {
             debugger;
             return budgetServiceMock;
         });
         $provide.factory('storageservice', function() {
+            debugger;
             return storageserviceMock;
         });
     }
@@ -125,42 +24,88 @@ describe('Testing SpendTracker App', function() {
         $state = $injector.get('$state');
         $templateCache = $injector.get('$templateCache');
         $location = $injector.get('$location');
+        $rootScope = $injector.get('$rootScope');
+        $scope = $rootScope.$new();
     }
 
 
     function setUp() {
-        //$httpBackend.whenGET(/assets\/(.+)/).respond(200, {});
         $httpBackend.whenGET('/').respond(200, {});
+        deferred = $q.defer();
+
+
     }
     beforeEach(function() {
-        // debugger;
-        module('spendtrackerapp', mockServices);
+        debugger;
+        module('spendtrackerapp', 'ui.router', mockServices);
         inject(services);
         setUp();
     })
 
+
     describe('when navigating to ' / '', function() {
         function goTo(url) {
             $location.url(url);
-            $httpBackend.flush();
             console.log($location);
+            $httpBackend.flush();
+
         }
 
-        // beforeEach(function() {
-        //     budgetServiceMock.budgetStatus.and.returnValue($q.resolve([]));
-        // });
-        // it('zz', function() {
-        //     goTo('/');
-        //     expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
-        // });
-        describe('xx', function() {
-            it('zz', function() {
-                budgetServiceMock.getBudgetList.and.returnValue($q.resolve([]));
+
+        describe('testing get budgetlist ', function() {
+            it('will return call method and return results', function() {
+                deferred.resolve({
+                    'data': [{
+                        id: 1,
+                        itemdesc: 'aaa',
+                        itemprice: 5
+                    }, {
+                        id: 2,
+                        itemdesc: 'bbb',
+                        itemprice: 3
+                    }, {
+                        id: 3,
+                        itemdesc: 'ccc',
+                        itemprice: 7
+                    }, {
+                        id: 4,
+                        itemdesc: 'ddd',
+                        itemprice: 12
+                    }]
+                });
+                budgetServiceMock.getBudgetList.and.returnValue(deferred.promise);
+
+                budgetServiceMock.getBudgetList().then(function(returnedPromise) {
+                    result = returnedPromise;
+                });
+
                 debugger;
+
+                $httpBackend.whenGET("/partials/budgetsviews/budgetview").respond(200, {});
                 goTo('/');
                 expect(budgetServiceMock.getBudgetList).toHaveBeenCalled();
+                expect(result.data.length).toEqual(4);
+
             });
         });
+
+        describe('testing budget status', function() {
+            it('will return results of status check', function() {
+                debugger;
+                deferred.resolve({
+                    data: 'success'
+                });
+                budgetServiceMock.budgetStatus.and.returnValue(deferred.promise);
+                budgetServiceMock.budgetStatus().then(function(returnedPromise) {
+                    result = returnedPromise;
+                });
+                //   $httpBackend.whenGET("/partials/budgetsviews/budgetview").respond(200, {});
+                goTo('/');
+                expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
+                // expect(result.data).toBe('successs');
+            });
+        });
+
 
     });
 

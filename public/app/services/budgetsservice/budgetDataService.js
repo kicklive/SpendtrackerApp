@@ -9,11 +9,11 @@
 
     function BudgetData($http, $q, storageservice) {
         var service = {
-            //getBudgetList: getData,
-            //   saveBudget: saveBudgetData,
-            getBudgetDetails: GetBudgetDetails,
-            //   updateStatus: UpdateBudgetStatus,
-            //budgetStatus: CheckStatus
+            /// getBudgetList: getData,
+            // saveBudget: saveBudgetData,
+            // getBudgetDetails: GetBudgetDetails,
+            // updateStatus: UpdateBudgetStatus,
+            budgetStatus: CheckStatus
 
         };
 
@@ -21,22 +21,32 @@
 
         function getData() {
             storageservice.clear()
-            var deferred = $q.defer();
-            var httpPromise = $http.get('/data/budgetlist');
-            var d;
-            httpPromise.then(success, failure);
+            return $http.get('/data/budgetlist').then(success, failure);
 
-            function success(data) {
-                // CheckStatus();
-                d = data;
-                deferred.resolve(d);
+            function success(d) {
+                debugger;
+                return d;
             }
 
             function failure(err) {
-                console.error('Error ' + err);
-                deferred.reject();
+                return 'Error ' + err;
             }
-            return deferred.promise;
+            // var deferred = $q.defer();
+            // var httpPromise = $http.get('/data/budgetlist');
+            // var d;
+            // httpPromise.then(success, failure);
+
+            // function success(data) {
+            //     // CheckStatus();
+            //     d = data;
+            //     deferred.resolve(d);
+            // }
+
+            // function failure(err) {
+            //     console.error('Error ' + err);
+            //     deferred.reject();
+            // }
+            // return deferred.promise;
         }
 
         function saveBudgetData(formData) {
@@ -56,18 +66,28 @@
 
 
         function GetBudgetDetails(budgetId) {
-            var deferred = $q.defer();
-            var httpPromise = $http.get("/data/getdetails/", { params: { id: budgetId } });
-            httpPromise.then(success, failure);
+            return $http.get("/data/getdetails/", { params: { id: budgetId } }).then(success, failure);
 
             function success(data) {
-                deferred.resolve(data);
+                return data;
             }
 
             function failure(err) {
-                console.error('Error ' + err);
+                return 'Error ' + err;
             }
-            return deferred.promise
+
+            // var deferred = $q.defer();
+            // var httpPromise = $http.get("/data/getdetails/", { params: { id: budgetId } });
+            // httpPromise.then(success, failure);
+
+            // function success(data) {
+            //     deferred.resolve(data);
+            // }
+
+            // function failure(err) {
+            //     console.error('Error ' + err);
+            // }
+            // return deferred.promise
         }
 
         function UpdateBudgetStatus(budgetId) {
@@ -89,17 +109,21 @@
         function CheckStatus() {
             var deferred = $q.defer();
             //var httpPromise = $http.put("/data/updatestatus/", { params: { id: budgetId } });
-            var httpPromise = $http.put("/data/updatestatusall/");
-            httpPromise.then(success, failure);
+            return $http.put('/data/updatestatusall').then(success, failure);
+
+            // var httpPromise = $http.put("/data/updatestatusall/");
+            // httpPromise.then(success, failure);
 
             function success(data) {
-                deferred.resolve(data);
+                //deferred.resolve(data);
+                return data;
             }
 
             function failure(err) {
-                console.error('Error ' + err);
+                //console.error('Error ' + err);
+                return 'Error ' + err;
             }
-            return deferred.promise
+            //return deferred.promise
         }
 
     }

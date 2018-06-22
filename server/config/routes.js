@@ -10,7 +10,7 @@ module.exports = function(app, config) {
         Budget.find(function(err, ret) {
             if (err)
                 res.send(err);
-            res.json(ret);
+            res.send(ret);
         });
     });
 
