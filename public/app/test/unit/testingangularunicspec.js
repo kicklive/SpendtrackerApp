@@ -59,9 +59,6 @@ describe('Testing SpendTracker App', function() {
                 'BudgetEndDate': '8/1/2018'
             }]
         });
-        // DateCountService.getDays.and.callFake(function() {
-        //     return 9;
-        // });
         $httpBackend.whenGET('/').respond(200, {});
         deferred = $q.defer();
     }
@@ -72,7 +69,7 @@ describe('Testing SpendTracker App', function() {
         setUp();
     })
 
-
+    /**Testing controllers********************/
     describe('when navigating to ' / '', function() {
         function goTo(url) {
             $location.url(url);
@@ -80,14 +77,7 @@ describe('Testing SpendTracker App', function() {
             $httpBackend.flush();
         }
 
-
         describe('testing get default ', function() {
-            // var params = {
-            //     'keyexists': 'haskey',
-            //     'keynotexist': 'nokey'
-            // }
-            // var ret;
-            // var p = 'keynotexist';
             it('will return call method and return results', function() {
                 deferred.resolve({
                     'data': [{
@@ -111,16 +101,6 @@ describe('Testing SpendTracker App', function() {
                 budgetServiceMock.getBudgetList.and.returnValue(deferred.promise);
 
                 budgetServiceMock.getBudgetList().then(function(returnedPromise) {
-                    // storageserviceMock.get.and.callFake(function() {
-                    //     return params[p];
-                    // });
-                    // storageserviceMock.set.and.callFake(function() {
-                    //     return params[p];
-                    // });
-                    // storageserviceMock.setObj.and.callFake(function() {
-                    //     return params[p];
-                    // });
-                    ;
                     setUp();
                     deferred.resolve(
                         'success'
@@ -131,12 +111,6 @@ describe('Testing SpendTracker App', function() {
                     budgetServiceMock.budgetStatus().then(function(returnedPromise) {
                         storResults = returnedPromise;
                     });
-                    // debugger;
-                    // budgetServiceMock.CheckAndUpdate.and.returnValue(deferred.promise);
-                    // var d = { 'openDate': '7/17/2018', 'closeDate': '7/18/2018' };
-                    // budgetServiceMock.CheckAndUpdate(d).then(function(returnedPromise) {
-                    //     statusResults = returnedPromise;
-                    // });
                     result = returnedPromise;
                 });
 
@@ -147,12 +121,20 @@ describe('Testing SpendTracker App', function() {
                 expect(budgetServiceMock.getBudgetList).toHaveBeenCalled();
                 expect(storageserviceMock.get).toHaveBeenCalled();
                 expect(storageserviceMock.get('keyexists')).toBe('nokey')
-                    // expect(budgetServiceMock.CheckAndUpdate).toHaveBeenCalled();
-                    // expect(statusResults).toBe('success');
                 expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
                 expect(storResults).toBe('success');
                 expect(result.data.length).toEqual(4);
-
+            });
+        });
+        describe('testing viewBudgetsController', function() {
+            it('should have a passed param', function() {;
+                $controller('ViewBudgetController', { $scope: $scope });
+                expect(storageserviceMock.getObj).toHaveBeenCalled();
+                expect((storageserviceMock.getObj()).length).toEqual(2);
+                expect((storageserviceMock.getObj())[1].BudgetAmount).toEqual(300);
+                expect($scope.budgets.length).toEqual(2);
+                expect($scope.budgets[1].BudgetAmount).toEqual(300);
+                expect($scope.CCtype).toBeUndefined;
             });
         });
 
@@ -160,26 +142,85 @@ describe('Testing SpendTracker App', function() {
             it('will successfully redirect to transaction page', function() {
                 $httpBackend.whenGET("/partials/transactionsviews/NewTransaction").respond(200, {});
                 goTo('/Transaction');
-                // expect('/partials/transactionsviews/NewTransaction').
             });
 
         });
     });
-    describe('testing viewBudgetsController', function() {
-        it('should have a passed param', function() {;
-            $controller('ViewBudgetController', { $scope: $scope });
-            // $scope.CCtype = 'Amex';
-            expect(storageserviceMock.getObj).toHaveBeenCalled();
-            expect((storageserviceMock.getObj()).length).toEqual(2);
-            expect((storageserviceMock.getObj())[1].BudgetAmount).toEqual(300);
-            expect($scope.budgets.length).toEqual(2);
-            expect($scope.budgets[1].BudgetAmount).toEqual(300);
-            //expect($scope.findDiff($scope.budgets[1])).toEqual(16);
-            expect($scope.CCtype).toBeUndefined;
+
+
+    describe('when navigating to /NewBudget', function() {
+        function goTo(url) {
+            $location.url(url);
+            $httpBackend.flush();
+        }
+
+        beforeEach(function() {
+            compareData = { 'budgetEnd': '8/1/2018', 'budgetBegin': '7/1/2018', 'budgetAmt': '$100', 'budgetStatus': 'open', 'budgetType': 'Amex' };
+            //debugger;
+            newBudgetController = $controller('newbudgetcontroller', { $scope: $scope, budgetServiceMock: budgetServiceMock });
+        });
+
+
+        it('should exist', function() {
+            expect(newBudgetController).toBeDefined();
+        });
+
+        describe('testing newbugetcontrolller', function() {
+            it('Will go to details page and execute methods', function() {
+                $httpBackend.whenGET("/partials/budgetsviews/newbudget").respond(200, {});
+                goTo('/NewBudget');
+            });
+            it('should pass correct new budget data', function() {
+                postedData = { 'budgetEnd': '8/1/2018', 'budgetBegin': '7/1/2018', 'budgetAmt': '$100', 'budgetStatus': 'open', 'budgetType': 'Amex' };
+                deferred.resolve(compareData);
+                budgetServiceMock.saveBudget.and.returnValue(deferred.promise);
+                budgetServiceMock.saveBudget(postedData).then(function(returnedPromise) {
+                    result = returnedPromise;
+
+                });
+                //debugger;
+                $scope.$apply();
+                $scope.addbudget();
+
+                expect(result.budgetAmt).toEqual('$100');
+                expect(result.budgetAmt).toEqual(postedData.budgetAmt);
+                expect(result).toEqual(postedData);
+                expect($scope.budgetType.options[0].name).toBe('Amex');
+            });
 
         });
     });
+    describe('when navigating to /Details', function() {
+        function goTo(url) {
+            $location.url(url);
+            $httpBackend.flush();
+        }
+        beforeEach(function() {
+            //debugger;
+            BudgetDetailsController = $controller('BudgetDetailsController', { $scope: $scope });
+        });
+        it('should exist', function() {
+            expect(BudgetDetailsController).toBeDefined();
+        });
+        describe('Testing BudgetDetailsController', function() {
 
+            var d = { 'BudgetEndDate': '7/29/2018' };
+            it('Will go to details page and execute methods', function() {
+                $httpBackend.whenGET("/partials/budgetsviews/budgetDetails").respond(200, {});
+                goTo('/Details');
+            });
+            it('will test scope methods', function() {
+                var status = $scope.ShowLink('Closed');
+                debugger;
+                var dateDiff = $scope.findDiff(d);
+                expect(status).toBe(false);
+                expect(dateDiff).toBe(9);
+            })
+        });
+    });
+
+
+    /**Testing services and filters**************/
     describe('testing transactionDataService', function() {
         var jsonData, results;
         var postDummyData = {
@@ -255,62 +296,6 @@ describe('Testing SpendTracker App', function() {
         });
     });
 
-    describe('testing newbugetcontrolller', function() {
-        beforeEach(function() {
-            compareData = { 'budgetEnd': '8/1/2018', 'budgetBegin': '7/1/2018', 'budgetAmt': '$100', 'budgetStatus': 'open', 'budgetType': 'Amex' };
-            debugger;
-            newBudgetController = $controller('newbudgetcontroller', { $scope: $scope, budgetServiceMock: budgetServiceMock });
-        });
-
-
-        it('should exist', function() {
-            expect(newBudgetController).toBeDefined();
-        });
-        it('should pass correct new budget data', function() {
-            postedData = { 'budgetEnd': '8/1/2018', 'budgetBegin': '7/1/2018', 'budgetAmt': '$100', 'budgetStatus': 'open', 'budgetType': 'Amex' };
-            deferred.resolve(compareData);
-            budgetServiceMock.saveBudget.and.returnValue(deferred.promise);
-            budgetServiceMock.saveBudget(postedData).then(function(returnedPromise) {
-                result = returnedPromise;
-
-            });
-            //debugger;
-            $scope.$apply();
-            $scope.addbudget();
-
-            expect(result.budgetAmt).toEqual('$100');
-            expect(result.budgetAmt).toEqual(postedData.budgetAmt);
-            expect(result).toEqual(postedData);
-            expect($scope.budgetType.options[0].name).toBe('Amex');
-        });
-
-    });
-    describe('when navigating to  /Details', function() {
-        function goTo(url) {
-            $location.url(url);
-            $httpBackend.flush();
-        }
-        beforeEach(function() {
-            debugger;
-            BudgetDetailsController = $controller('BudgetDetailsController', { $scope: $scope });
-        });
-        it('should exist', function() {
-            expect(BudgetDetailsController).toBeDefined();
-        });
-        describe('Testing BudgetDetailsController', function() {
-
-
-            it('Will go to details page and execute methods', function() {
-                $httpBackend.whenGET("/partials/budgetsviews/budgetDetails").respond(200, {});
-                goTo('/Details');
-            });
-            it('will test scope methods', function() {
-                var status = $scope.ShowLink('Closed');
-                expect(status).toBe(false);
-            })
-        });
-    });
-
     describe('Testing summing filter', function() {
         it('should add values correctly', function() {
             var values = [{ 'amt': 5 }, { 'amt': 9 }];
@@ -327,271 +312,3 @@ describe('Testing SpendTracker App', function() {
             });
     });
 });
-
-
-// describe('testing budget status', function() {
-//     // it('will test access', function() {
-//     //     deferred.resolve('yes');
-//     //     storageserviceMock.get.and.returnValue(deferred.promise)
-
-//     //     storageserviceMock.get('status', null).then(function(returnedPromise) {
-//     //         result = returnedPromise;
-//     //     });
-
-//     //     ;
-//     //     console.log('xxxxxx=>' + storageserviceMock.get('status', null));
-//     //     expect(storageserviceMock.get).toHaveBeenCalled();
-//     //     expect(storageserviceMock.get.value).toBe('yes');
-//     // });
-//     beforeEach(function() {
-//         var params = {
-//             'keyexists': 'haskey',
-//             'keynotexist': 'nokey'
-//         }
-//         var ret;
-//         var p = 'keyexists';
-//         ;
-//         storageserviceMock.get.and.callFake(function() {
-//             return params[p];
-//         });
-//         ;
-//         deferred.resolve(
-//             'success'
-//         );
-//         budgetServiceMock.budgetStatus.and.returnValue(deferred.promise);
-//         // storageserviceMock.set('status', new Date());
-//         budgetServiceMock.budgetStatus().then(function(returnedPromise) {
-//             ;
-//             storResults = returnedPromise;
-//         });
-
-//         // budgetServiceMock.budgetStatus.and.callFake(function() {
-//         //     return 'success';
-//         // });
-//         // if (ret != null) {
-//         //     budgetServiceMock.budgetStatus.and.callFake(function() {
-//         //         return 'success';
-//         //     });
-//         // }
-//     });
-
-//     var storResults;
-
-//     it('will return results of status check', function() {
-
-
-//         // deferred.resolve(
-//         //     'success'
-//         // );
-//         // budgetServiceMock.budgetStatus.and.returnValue(deferred.promise);
-//         // // storageserviceMock.set('status', new Date());
-//         // budgetServiceMock.budgetStatus().then(function(returnedPromise) {
-//         //     ;
-//         //     storResults = returnedPromise;
-//         // });
-//         $rootScope.$apply();
-//         //   $httpBackend.whenGET("/partials/budgetsviews/budgetview").respond(200, {});
-//         // goTo('/');
-//         expect(storageserviceMock.get).toHaveBeenCalled();
-//         expect(storageserviceMock.get('keyexists')).toBe('haskey')
-//         expect(budgetServiceMock.budgetStatus).toHaveBeenCalled();
-//         expect(storResults).toBe('success');
-//     });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-// var $locationProvider, $stateProvider;
-// beforeEach(function() {
-//     angular.module('locationProviderConfig', [])
-//         .config(function(_$locationProvider_, $state) {
-//             $locationProvider = _$locationProvider_;
-//             $stateProvider = $state
-//             spyOn($locationProvider, 'html5Mode');
-//         });
-//     module('locationProviderConfig');
-//     module('spendtrackerapp');
-//     inject();
-// });
-//beforeEach(module('ui.router'));
-// beforeEach(function() {
-//     module(function(_$locationProvider_, _$stateProvider_) {
-//         $locationProvider = _$locationProvider_;
-//         spyOn($locationProvider, 'html5Mode');
-//     });
-//     module('spendtrackerapp');
-//     inject();
-// });
-// it('should set html5 mode', function() {
-//     expect($locationProvider.html5Mode)
-//         .toHaveBeenCalledWith(true);
-// });
-
-
-
-
-
-// var storageserviceMock, budgetserviceMock, state = 'startpage',
-//     $rootScope, $state, $injector;
-// beforeEach(function() {
-//     module(function(_$locationProvider_, $provide) {
-//         $provide.value('storageservice', storageserviceMock = {}, 'budgetservice', budgetserviceMock = {});
-//         $locationProvider = _$locationProvider_;
-//         // $state = _$state_;
-//     });
-//     module('spendtrackerapp');
-//     inject(function(_$rootScope_, _$state_, _$injector_) {
-//         $rootScope = _$rootScope_.$new();
-//         $state = _$state_;
-//         //$state = $stateProvider;
-//         $injector = _$injector_;
-
-//     });
-// });
-// it('should resolve data', function() {
-//     storageserviceMock.get = jasmine.createSpy('get').and.returnValue('get');
-//     budgetserviceMock.budgetStatus = jasmine.createSpy('budgetStatus').and.returnValue('budgetStatus');
-//     // earlier than jasmine 2.0, replace "and.returnValue" with "andReturn"
-//     $state.go(state);
-//     // $state.go(state);
-//     // $state = $state.get('startpage');
-//     $rootScope.$apply();
-//     expect($state.current.controller).toBe(state);
-
-//     // Call invoke to inject dependencies and run function
-//     //expect($state.resolve.check()).toBe('get');
-//     //expect(storageserviceMock.get).toHaveBeenCalled();
-//     //$injector.invoke($state.get(state).resolve['check'])
-//     //expect($injector.invoke($state.get(state).resolve['access'])).toHaveBeenCalled();
-//     //expect($injector.invoke($state.current.resolve.access)).toBe('get');
-// });
-// //  var $stateProvider;
-
-
-
-
-// beforeEach(module('ui.router', function(_$stateProvider_) {
-//     $stateProvider = _$stateProvider_;
-//     // spyOn($stateProvider, 'state');
-// }, 'spendtrackerapp'));
-
-// it('must have a route state for home', function() {
-//     expect($stateProvider.state).toHaveBeenCalledWith('/', jasmine.any(Object));
-// });
-
-// describe('Test budgetservice gets', function() {
-//     var budgetService, httpBackend, deferred, $q, result, scope, result2, result3, pullDeferred;
-//     beforeEach(inject(function(_budgetservice_, $httpBackend, _$q_, _$rootScope_) {
-//         budgetService = _budgetservice_;
-//         httpBackend = $httpBackend;
-//         $q = _$q_;
-//         scope = _$rootScope_.$new();
-
-//         deferred = $q.defer();
-
-//         deferred.resolve(
-//             [{
-//                 id: 1,
-//                 itemdesc: 'aaa',
-//                 itemprice: 5
-//             }, {
-//                 id: 2,
-//                 itemdesc: 'bbb',
-//                 itemprice: 3
-//             }, {
-//                 id: 3,
-//                 itemdesc: 'ccc',
-//                 itemprice: 7
-//             }, {
-//                 id: 4,
-//                 itemdesc: 'ddd',
-//                 itemprice: 12
-//             }]
-//         );
-//         //  pullDeferred = $q.defer();
-//         //   pullDeferred.resolve({ data: 'success!' });
-
-//     }));
-
-//     it('getBudgetList should return array of budgetitems (using spy)', function() {
-//         spyOn(budgetService, 'getBudgetList').and.returnValue(deferred.promise);
-//         budgetService.getBudgetList().then(function(returnedPromise) {
-//             result = returnedPromise;
-//         });
-//         scope.$apply();
-//         expect(budgetService.getBudgetList).toHaveBeenCalled();
-//         expect(result.length).toBe(4);
-//         expect(result[0].itemdesc).toEqual('aaa');
-//     });
-
-
-//     it('should get budget details by budgetId', function() {
-//         spyOn(budgetService, 'getBudgetDetails').and.returnValue(deferred.promise);
-//         budgetService.getBudgetDetails(4).then(function(returnedPromise) {
-//             result2 = returnedPromise;
-//         });
-//         scope.$apply();
-//         expect(budgetService.getBudgetDetails).toHaveBeenCalledWith(4);
-//         expect(result2).toContain(jasmine.objectContaining({ id: 4 }));
-//     });
-// });
-
-// it('set budget status to open or closed', function() {
-
-//     //  result = null;
-//     spyOn(budgetService, 'budgetStatus').and.returnValue(deferred.promise);
-//     budgetService.budgetStatus().then(function(returnedPromise) {
-//         result3 = returnedPromise;
-//     });
-//     scope.$apply();
-//     expect(budgetService.budgetStatus).toHaveBeenCalled();
-//     expect(result3).toEqual('success!')
-// });
-
-
-
-
-
-
-
-
-
-// it('getBudgetList should return array of budgetitems (using httpGET)', function() {
-//     httpBackend.whenGET('/data/budgetlist').respond(
-//         [{
-//             id: 1,
-//             itemdesc: 'aaa',
-//             itemprice: 5
-//         }, {
-//             id: 2,
-//             itemdesc: 'bbb',
-//             itemprice: 3
-//         }, {
-//             id: 3,
-//             itemdesc: 'ccc',
-//             itemprice: 7
-//         }, {
-//             id: 4,
-//             itemdesc: 'ddd',
-//             itemprice: 12
-//         }]
-//     );
-//     budgetService.getBudgetList().then(function(d) {
-//         expect(d.data[3].itemprice).toEqual(12);
-//     });
-
-//     httpBackend.flush();
-
-
-
-
-// });

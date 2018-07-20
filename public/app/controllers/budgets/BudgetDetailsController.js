@@ -20,7 +20,7 @@
                 return false;
             }
             $scope.ShowLink = function(v) {
-                    debugger;
+                    //debugger;
                     console.log('show link--> ' + v);
                     var retStatus = true;
                     if (v == 'Closed')
@@ -28,7 +28,7 @@
                     return retStatus;
                 }
                 // storageservice.clear();
-            debugger;
+                //debugger;
             var budgId = null;
             if ($stateParams.budgetId != null) {
                 storageservice.remove('budgetid');
@@ -47,7 +47,7 @@
 
             if (storageservice.getObj(budgId, 'empty') == 'empty') {
                 budgetservice.getBudgetDetails(budgId).then(function(data) {
-                    debugger;
+                    //debugger;
                     $scope.data = data.data;
                     $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
                     $scope.budgetStatus = $scope.data.BudgetStatus;
@@ -57,7 +57,7 @@
                     if (DateCountService.getDays(fDate, $scope.data.BudgetEndDate) >= 0 && data.data.BudgetStatus == "Open") {
                         //if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && data.data.BudgetStatus == "Open") {
                         budgetservice.updateStatus($stateParams.budgetId).then(function(updateData) {
-                            debugger;
+                            //debugger;
                             $scope.data.BudgetStatus = updateData.BudgetStatus;
                             $scope.ShowButton = function() {
                                 return false;
@@ -68,11 +68,11 @@
                 });
             } else {
                 $scope.data = storageservice.getObj(budgId, 'empty');
-                debugger;
+                //debugger;
                 //if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && $scope.data.BudgetStatus == "Open") {
                 if (DateCountService.getDays(fDate, $scope.data.BudgetEndDate) >= 0 && data.data.BudgetStatus == "Open") {
                     budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
-                        debugger;
+                        //debugger;
                         if ($scope.data.Transactions.length != undefined && $scope.data.Transactions.length === 0)
                             $scope.data.msg = "There are no transactions for this budget."
                         $scope.ShowButton = function() {

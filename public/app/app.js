@@ -57,10 +57,10 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                     return storageservice.get('status', null);
                 },
                 status: function(budgetservice, access, storageservice) {
-                    debugger;
+                    //debugger;
                     storageservice.clear();
                     budgetservice.budgetStatus().then(function(ret) {
-                        debugger;
+                        //debugger;
                         if (ret === 'success') {
                             storageservice.set('status', new Date());
                         }

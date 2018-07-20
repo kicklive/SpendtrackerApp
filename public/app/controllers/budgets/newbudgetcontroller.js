@@ -22,9 +22,9 @@
         }
 
         function activate() {
-            debugger;
+            //debugger;
             budgetservice.saveBudget($scope.formData).then(function(data) {
-                debugger;
+                //debugger;
                 console.log('budget saved');
                 if (data == null) {
                     notifierService.error("There was an issue saving this budget. Contact Administrator.")
