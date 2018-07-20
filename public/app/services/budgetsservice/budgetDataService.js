@@ -14,6 +14,7 @@
             getBudgetDetails: GetBudgetDetails,
             updateStatus: UpdateBudgetStatus,
             budgetStatus: CheckStatus
+                // CheckAndUpdate: CheckAndUpdateStatus
 
         };
 
@@ -24,7 +25,7 @@
             return $http.get('/data/budgetlist').then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
@@ -126,5 +127,18 @@
             //return deferred.promise
         }
 
+        function CheckAndUpdateStatus(budgetList) {
+            return $http.put('/data/updatestatusall').then(success, failure);
+
+            function success(data) {
+                //deferred.resolve(data);
+                return 'success';
+            }
+
+            function failure(err) {
+                //console.error('Error ' + err);
+                return 'Error ' + err;
+            }
+        }
     }
 })();

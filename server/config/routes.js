@@ -7,9 +7,11 @@ var nodedate = require("node-datetime");
 module.exports = function(app, config) {
     app.get("/data/budgetlist", function(req, res) {
         console.log('heree');
+        //debugger;
         Budget.find(function(err, ret) {
             if (err)
                 res.send(err);
+            //debugger;
             res.send(ret);
         });
     });
@@ -38,11 +40,41 @@ module.exports = function(app, config) {
 
 
     app.post("/data/SaveBudget", function(req, res) {
+        debugger;
+        var startDate = new Date(req.body.startdate);
+        var endDate = new Date(req.body.enddate);
+        var status;
+        var today = new Date();
+        if (startDate > today)
+            status = 'Future';
+        else
+            status = 'Open';
+        //startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
+        //endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
+
+        // var startYear=startDate.getFullYear;
+        // var startDate=startDate.getDate;
+        // var startMonth=startDate.getMonth;
+
+        // startDate = startDate.getFullYear().toString() + '-' + (startDate.getMonth() + 1).toString() + '-' + (startDate.getDate() + 1).toString();
+        // endDate = endDate.getFullYear().toString() + '-' + (endDate.getMonth() + 1).toString() + '-' + (endDate.getDate() + 1).toString();
+        // startDate = nodedate.create(startDate);
+        // endDate = nodedate.create(endDate);
+
+
+        // startDate = startDate.setHours(0, 0, 0, 0);
+        // endDate = endDate.setHours(0, 0, 0, 0);
+
+        // startDate = startDate.toISOString().slice(0, 10);
+        // endDate = endDate.toISOString().slice(0, 10);
+        console.log('startDate==>' + req.body.startdate);
+        console.log('startDatex==>' + startDate);
+
         NewBudget.create({
-                BudgetStartDate: req.body.startdate,
-                BudgetEndDate: req.body.enddate,
+                BudgetStartDate: startDate,
+                BudgetEndDate: endDate,
                 BudgetAmount: req.body.budgetamt,
-                BudgetStatus: "Open",
+                BudgetStatus: status,
                 BudgetType: req.body.budgetType.selectedOption.id
             },
             function(err, newBudget) {
@@ -192,11 +224,21 @@ module.exports = function(app, config) {
     app.put("/data/updatestatusall/", function(req, res) {
         var bulk = NewBudget.collection.initializeOrderedBulkOp();
         console.log("bulk==>" + bulk);
-        var dt = nodedate.create()
+        var todaysDate = new Date();
 
-        bulk.find({ "BudgetAmount": { $lt: dt.getTime() } }).update({
+        //var dt = nodedate.create()
+        // var formattedDate = dt.format('m/d/Y')
+        // var dateOnly = new Date(dateOnly.setHours(0, 0, 0, 0));
+
+        //bulk.find({ 'BudgetAmount': { $lt: dt.getTime() } }).update({
+        bulk.find({ 'BudgetEndDate': { $lt: todaysDate } }).update({
             $set: {
                 BudgetStatus: 'Closed'
+            }
+        });
+        bulk.find({ 'BudgetStartDate': { $lte: todaysDate }, 'BudgetStatus': 'Future' }).update({
+            $set: {
+                BudgetStatus: 'Open'
             }
         });
         bulk.execute(function(err, ret) {

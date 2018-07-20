@@ -14,7 +14,6 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         .state('newbudget', {
             url: '/NewBudget',
             templateUrl: '/partials/budgetsviews/newbudget',
-            controller: 'ViewBudgetController'
         })
         .state('splash', {
             url: '/splash',
@@ -52,28 +51,36 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         })
         .state('startpage', {
             url: '/',
-            params: { d: null },
-            controller: 'ViewBudgetController',
+            params: { d: null, s: null },
             resolve: {
                 access: function(storageservice) {
                     return storageservice.get('status', null);
                 },
                 status: function(budgetservice, access, storageservice) {
-                    if (access != new Date()) {
-                        budgetservice.budgetStatus().then(function(ret) {
-                            debugger;
-                            if (ret === 'success') {
-                                storageservice.set('status', new Date());
-                            }
-                        });
-                    }
+                    debugger;
+                    storageservice.clear();
+                    budgetservice.budgetStatus().then(function(ret) {
+                        debugger;
+                        if (ret === 'success') {
+                            storageservice.set('status', new Date());
+                        }
+                    });
+
+                    // if (access != new Date()) {
+                    //     budgetservice.budgetStatus().then(function(ret) {
+                    //         //debugger;
+                    //         if (ret === 'success') {
+                    //             storageservice.set('status', new Date());
+                    //         }
+                    //     });
+                    // }
                 },
                 data: function(budgetservice, storageservice, $location) {
                     budgetservice.getBudgetList().then(function(data) {
                         if (data.data.length > 0) {
-                            debugger;
+                            //debugger;
                             d = data;
-                            storageservice.setObj('budgets', data.data);
+
                             $location.path("/ListBudgets")
                                 //$state.go('listbudgets', { data: data });
                         } else {
@@ -81,7 +88,17 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                             $location.path("/Home")
                         }
                     });
-                }
+                },
+                // status: function(budgetservice, data) {
+                //     if (data != null) {
+                //         budgetservice.CheckAndUpdate(data).then(function(ret) {
+                //             //debugger;
+                //             if (ret === 'success') {
+                //                 s = ret;
+                //             }
+                //         });
+                //     }
+                // },
             }
 
 

@@ -7,6 +7,7 @@ angular.module('spendtrackerapp')
 
             var sum = 0;
             for (var i = data.length - 1; i >= 0; i--) {
+                debugger;
                 sum += parseFloat(data[i][key]);
             }
             return sum;
