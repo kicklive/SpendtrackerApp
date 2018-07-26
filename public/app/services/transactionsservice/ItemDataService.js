@@ -75,18 +75,30 @@
         }
 
         function SearchForItem(upc) {
-            var deferred = $q.defer();
-            var httpPromise = $http.get("/data/itemsearch", { params: { id: upc } });
-            httpPromise.then(success, failure);
 
-            function success(data) {
-                deferred.resolve(data);
+            return $http.get('/data/itemsearch', { params: { id: upc } }).then(success, failure);
+
+            function success(d) {
+                //debugger;
+                return d;
             }
 
             function failure(err) {
-                console.error('Error ' + err);
+                return 'Error ' + err;
             }
-            return deferred.promise
+
+            // var deferred = $q.defer();
+            // var httpPromise = $http.get("/data/itemsearch", { params: { id: upc } });
+            // httpPromise.then(success, failure);
+
+            // function success(data) {
+            //     deferred.resolve(data);
+            // }
+
+            // function failure(err) {
+            //     console.error('Error ' + err);
+            // }
+            // return deferred.promise
         }
 
     }

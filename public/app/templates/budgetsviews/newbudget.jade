@@ -5,23 +5,23 @@
                 .form-group
                     label.col-sm-2.control-label(for="formData.startdate") Budget Begin 
                     .col-sm-6
-                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="formData.startdate" datepkr="" style="width:150px")
+                        input.form-control(name="startdate", type="text",placeholder="Budget Start Date" ng-model="formData.startdate" datepkr="" style="width:150px" required)
                 .form-group
                     label.col-sm-2.control-label(for="enddate") Budget End
                     .col-sm-6
-                        input.form-control(name="enddate", type="text",placeholder="Budget End Date" ng-model="formData.enddate" datepkr="" style="width:150px")
+                        input.form-control(name="enddate", type="text",placeholder="Budget End Date" ng-model="formData.enddate" datepkr="" style="width:150px" required)
                 .form-group
                     label.col-sm-2.control-label(for="budgetamt") Budget Amount
                     .col-sm-6
-                        input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="formData.budgetamt"  style="width:150px")
+                        input.form-control(name="budgetamt", type="text",placeholder="Budget Amount" ng-model="formData.budgetamt"  style="width:150px" required)
                  .form-group
                     label.col-sm-2.control-label(for="budgettype") Budget Type
                     .col-sm-6
-                        select.form-control(name="budgettype", type="select", ng-options="option.name for option in budgetType.options track by option.id" ng-model="formData.budgetType.selectedOption" style="width:150px")
+                        select.form-control(name="budgettype", type="select", ng-options="option.name for option in budgetType.options track by option.id" ng-model="formData.budgetType.selectedOption" style="width:150px" required)
                 form-group
                     .col-md-10.col-md-offset-2
                         //- a.btn.btn-primary(ng-click="addbudget()") Submit
-                        button.btn.btn-primary(type="submit") Submit
+                        button.btn.btn-primary(type="submit" ng-disabled='newBudgetForm.$invalid') Submit
                         &nbsp;
                         a.btn.btn-default(href="/") Cancel                        
                         

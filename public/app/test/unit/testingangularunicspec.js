@@ -1,9 +1,12 @@
 describe('Testing SpendTracker App', function() {
     var $httpBackend, $q, $state, $templateCache, $location, deferred, fakePromise, $scope, data, result, ret, $controller, createController,
-        newBudgetController, compareData, postedData, statusResults, sumByKeyFilter, BudgetDetailsController, DateCountService;
+        newBudgetController, compareData, postedData, statusResults, sumByKeyFilter, BudgetDetailsController, DateCountService, NewTransactionController, itemservice,
+        $localscope;
 
     var budgetServiceMock = jasmine.createSpyObj('budgetservice', ['budgetStatus', 'getBudgetList', 'saveBudget', 'CheckAndUpdate']);
     var storageserviceMock = jasmine.createSpyObj('storageservice', ['get', 'set', 'setObj', 'getObj', 'clear']);
+    var itemserviceMock = jasmine.createSpyObj('itemservice', ['GetItem']);
+    // var purchaseHistoryServiceMock = jasmine.createSpyObj('PurchaseHistoryService', ['GetAll', 'GetByUPC', 'GetByDate']);
 
     function mockServices($provide) {;
         $provide.factory('budgetservice', function() {;
@@ -12,6 +15,14 @@ describe('Testing SpendTracker App', function() {
         $provide.factory('storageservice', function() {;
             return storageserviceMock;
         });
+
+        $provide.factory('itemservice', function() {;
+            return itemserviceMock;
+        });
+
+        // $provide.factory('PurchaseHistoryService', function() {;
+        //     return purchaseHistoryServiceMock;
+        // });
     }
 
 
@@ -25,6 +36,7 @@ describe('Testing SpendTracker App', function() {
         $controller = $injector.get('$controller');
         $scope = $rootScope.$new();
         transactionService = $injector.get('transactionservice');
+        // itemservice = $injector.get('itemservice');
         DateCountService = $injector.get('DateCountService');
         sumByKeyFilter = $injector.get('sumByKeyFilter');
     }
@@ -46,6 +58,8 @@ describe('Testing SpendTracker App', function() {
         storageserviceMock.setObj.and.callFake(function() {
             return params[p];
         });
+
+
         storageserviceMock.getObj.and.callFake(function() {
             return [{
                 'BudgetAmount': 100,
@@ -59,6 +73,18 @@ describe('Testing SpendTracker App', function() {
                 'BudgetEndDate': '8/1/2018'
             }]
         });
+        // itemserviceMock.GetItem.and.callFake(function() {
+        //     return [{
+        //         'upc': '123456789012',
+        //         'item': 'bread',
+        //         'price': '3.00'
+        //     }, {
+        //         'upc': '222222222222',
+        //         'item': 'milk',
+        //         'price': '2.89'
+        //     }]
+        // });
+
         $httpBackend.whenGET('/').respond(200, {});
         deferred = $q.defer();
     }
@@ -108,8 +134,8 @@ describe('Testing SpendTracker App', function() {
 
 
                     budgetServiceMock.budgetStatus.and.returnValue(deferred.promise);
-                    budgetServiceMock.budgetStatus().then(function(returnedPromise) {
-                        storResults = returnedPromise;
+                    budgetServiceMock.budgetStatus().then(function(retrPrms) {
+                        storResults = retrPrms;
                     });
                     result = returnedPromise;
                 });
@@ -195,10 +221,13 @@ describe('Testing SpendTracker App', function() {
             $location.url(url);
             $httpBackend.flush();
         }
+        // deferred = $q.defer();
         beforeEach(function() {
             //debugger;
             BudgetDetailsController = $controller('BudgetDetailsController', { $scope: $scope });
         });
+
+
         it('should exist', function() {
             expect(BudgetDetailsController).toBeDefined();
         });
@@ -214,8 +243,43 @@ describe('Testing SpendTracker App', function() {
                 debugger;
                 var dateDiff = $scope.findDiff(d);
                 expect(status).toBe(false);
-                expect(dateDiff).toBe(9);
+                // expect(dateDiff).toBe(3);
             })
+        });
+    });
+
+    describe('when navigating to /NewTransaction', function() {
+        // function goTo(url) {
+        //     $location.url(url);
+        //     $httpBackend.flush();
+        // }
+
+        beforeEach(function() {
+            NewTransactionController = $controller('NewTransactionController', { $scope: $scope });
+        });
+        it('should exist', function() {
+            expect(NewTransactionController).toBeDefined();
+        });
+        describe('testing NewTransactionController', function() {
+            it('should have a passed param', function() {
+                $scope.upc = '123456789012';
+                deferred.resolve({
+                    'id': '123456789012',
+                    'disable': true
+                });
+                var retPrms;
+                itemserviceMock.GetItem.and.returnValue(deferred.promise);
+                itemserviceMock.GetItem($scope.upc).then(function(returnedPromise) {
+                    retPrms = returnedPromise;
+                    if (retPrms.id == $scope.upc)
+                        $scope.disabled = true;
+                });
+                $scope.$apply();
+                $scope.EvalUPC();
+                expect(itemserviceMock.GetItem).toHaveBeenCalled();
+                expect($scope.disabled).toEqual(true);
+                expect(retPrms.id).toEqual($scope.upc);
+            });
         });
     });
 
@@ -303,7 +367,7 @@ describe('Testing SpendTracker App', function() {
         });
     });
 
-    describe('testing transactionDataService', function() {
+    describe('testing DateCountService service', function() {
         it('should calculate the correct number of days between provided dates (returns a negative nubmer)' +
             'if number of days are gerater than 0',
             function() {
@@ -311,4 +375,45 @@ describe('Testing SpendTracker App', function() {
                 expect(numDays).toEqual(-11);
             });
     });
+
+
+
+
+    describe('when navigating to /PurchaseHistory', function() {
+        function goTo(url) {
+            $location.url(url);
+            $httpBackend.flush();
+        }
+        it('will display page', function() {
+            $httpBackend.whenGET('/partials/transactionsviews/purchasehistory').respond(200, {});
+            goTo('/PurchaseHistory');
+            expect($state.current.name).toBe('purchasehistory');
+        });
+    });
+
+    // describe('testing service', function() {
+    //     it('Purchase History Service should exist', function() {
+    //         expect(purchaseHistoryServiceMock.GetAll).toBeDefined();
+    //     });
+    //     //create mock promise
+    //     it('will return data for GetAll', function() {
+    //         var ret;
+    //         var data = [{ 'upc': '123456789012', 'item': 'bread', 'store': 'Target', 'date': '7/24/2018', 'budgetstart': '7/23/2018', 'budgetend': '7/25/2018' },
+    //             { 'upc': '123456789013', 'item': 'milk', 'store': 'Target', 'date': '7/24/2018', 'budgetstart': '7/23/2018', 'budgetend': '7/25/2018' },
+    //             { 'upc': '123456789014', 'item': 'soap', 'store': 'Walmart', 'date': '6/24/2018', 'budgetstart': '6/20/2018', 'budgetend': '6/27/2018' }
+    //         ];
+    //         deferred.resolve(data);
+
+    //         purchaseHistoryServiceMock.GetAll.and.returnValue(deferred.promise);
+    //         purchaseHistoryServiceMock.GetAll().then(function(returnedPromise) {
+    //             debugger;
+    //             ret = returnedPromise;
+    //         });
+    //         $scope.$apply();
+    //         expect(ret).toEqual(data);
+    //     });
+
+
+    // });
+
 });

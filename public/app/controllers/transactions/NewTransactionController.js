@@ -12,6 +12,7 @@
         activate();
 
         function activate() {
+
             //var tranId=$scope.id;
             // $scope.id = $route.current.pathParams.budgetId;
             if ($stateParams.transId) {

@@ -1,23 +1,24 @@
 .container
-    form.form-vertical(name="NewTransaction")
+    form.form-vertical(name="NewTransaction" novalidate ng-submit='submitForm()')
         H3 Create Transaction
             .row&nbsp;
             .row.align-items-start
                 .form-group
                     .col-md-4
                         label.labelfont.text-left.paddingleft10(for="transdate") Transation Date 
-                        input.form-control.col-sm-12(name="transdate", type="text", ng-model="transdate" datepkr="" style="width:150px")
+                        input.form-control.col-sm-12(name="transdate", type="text", ng-model="transdate" datepkr="" style="width:150px" required)
+                        p(ng-show='NewTransaction.transdate.$isvalid && NewTransaction.transdate.$pristine') Date required
                     .col-md-4
                         label.labelfont.text-left.paddingleft10(for="transamt") Transaction Amount 
-                        input.form-control.col-sm-12(name="transamt", type="text", ng-model="transamt" style="width:150px" ng-disabled="disabled")
+                        input.form-control.col-sm-12(name="transamt", type="text", ng-model="transamt" style="width:150px" required)
                     .col-md-2
                         label.labelfont.text-left.paddingleft10(for="upc") UPC 
-                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" ng-keyup="EvalUPC()" style="width:160px")
+                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" ng-keyup="EvalUPC()" style="width:160px" required)
              .row.align-items-start
                 .form-group
                     .col-md-12
                         label.labelfont.text-left.paddingleft10(for="store") Store 
-                        input.form-control(name="store", ng-model='store' style="width:300px")
+                        input.form-control(name="store", ng-model='store' style="width:300px" required)
             .row.align-items-start
                 .form-group
                     .col-md-12
@@ -27,7 +28,7 @@
             .row.align-items-start
                 form-group
                         .col-md-12.col.text-right
-                            a.btn.btn-primary(ng-click="AddTransaction()") Submit
+                            a.btn.btn-primary(ng-click="AddTransaction()" ng-disabled='NewTransaction.$invalid') Submit
                             &nbsp;
                             submit.btn.btn-primary(confirmed-click="DeleteTransaction()" confirm-click="") Delete
                             &nbsp;

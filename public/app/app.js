@@ -49,6 +49,11 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
             templateUrl: '/partials/transactionsviews/NewTransaction',
             controller: 'NewTransactionController'
         })
+        .state('purchasehistory', {
+            url: '/PurchaseHistory',
+            templateUrl: '/partials/transactionsviews/purchasehistory',
+            controllerAs: 'PurchaseHistoryController'
+        })
         .state('startpage', {
             url: '/',
             params: { d: null, s: null },
@@ -57,7 +62,7 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                     return storageservice.get('status', null);
                 },
                 status: function(budgetservice, access, storageservice) {
-                    //debugger;
+                    debugger;
                     storageservice.clear();
                     budgetservice.budgetStatus().then(function(ret) {
                         //debugger;
@@ -76,9 +81,10 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
                     // }
                 },
                 data: function(budgetservice, storageservice, $location) {
+                    debugger;
                     budgetservice.getBudgetList().then(function(data) {
                         if (data.data.length > 0) {
-                            //debugger;
+                            debugger;
                             d = data;
 
                             $location.path("/ListBudgets")
