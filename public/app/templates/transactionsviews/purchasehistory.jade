@@ -1,7 +1,26 @@
-.container
-    form.form-vertical(name="NewTransaction" novalidate ng-submit='submitForm()')
-        H3 Purchase History
+.container100
+     H3 zen's Cafe
+        form.form-vertical(name="NewTransaction" novalidate ng-submit='submitForm()')
             .row&nbsp;
             .row.align-items-start
-                div.form-group
-                    label(for="all") All History
+                 .div(style="width:82%;display: block;margin-left: auto; margin-right: auto;")
+                    .form-group
+                        .col-sm-3 
+                            H4 Search History By:
+                        .col-sm-2
+                            label.labelfont.text-left.paddingleft10.radio.inline(for="allhistory") All History 
+                                input(type="radio", id="allhihstory" name="history") 
+                        .col-sm-2
+                            label.labelfont.paddingleft65.radio.inline(for="allhistory") UPC
+                                input(type="radio", id="upc" name="history" onclick="ShowDate(false)")
+                        .col-sm-2
+                            label.labelfont.radio.inline(for="allhistory") Date
+                                input(type="radio", id="date" name="history" onclick="ShowDate(true)")
+                        .col-sm-2
+                            input.form-control(type="text", name="searchval" style="width:126px;font-size:10pt")
+                            input.form-control(type="text", name="searchval" style="width:126px;font-size:10pt" ng-show="{{phc.isDdate}}")
+                        .col-sm-1
+                           a.btn.btn-primary(ng-click="Search()") Search
+hr(style="height:3px;border:none;color:#333;background-color:#333;")
+
+                        

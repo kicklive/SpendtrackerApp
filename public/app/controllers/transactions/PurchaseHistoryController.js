@@ -15,6 +15,13 @@
 
         function activate() {
             vm.search = '';
+            vm.serchBy = ''
+            vm.isDdate = false
+
+            vm.ShowDate = function(v) {
+                debugger;
+                vm.isDdate = v;
+            }
         }
     }
 })();

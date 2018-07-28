@@ -52,7 +52,8 @@ angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProv
         .state('purchasehistory', {
             url: '/PurchaseHistory',
             templateUrl: '/partials/transactionsviews/purchasehistory',
-            controllerAs: 'PurchaseHistoryController'
+            controller: 'PurchaseHistoryController',
+            controllerAs: 'phc'
         })
         .state('startpage', {
             url: '/',

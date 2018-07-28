@@ -12,6 +12,7 @@ module.exports = function(app, config) {
     // app.set('views',__dirname+'/server/views');
     app.set('views', config.rootPath + '/server/views');
     app.set('view engine', 'jade');
+    /// app.set('view engine', 'html');
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(logger('dev'));
