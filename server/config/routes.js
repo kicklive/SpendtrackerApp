@@ -278,6 +278,41 @@ module.exports = function(app, config) {
             res.json(data);
         });
     });
+    app.get('/data/AllHistory', function(req, res) {
+        Transactions.find({}).sort({ transdate: -1, upc: 1, store: 1 }).exec(function(err, data) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(data);
+        })
+    });
+
+    app.get('/data/HistoryByDateRange', function(req, res) {
+        console.log('sd==>' + req.query.startdate)
+            //  console.log('new sd==>' + new Date(req.query.startdate))
+        Transactions.find({
+            transdate: {
+                $gte: new Date(req.query.startdate).toISOString(),
+                $lte: new Date(req.query.enddate).toISOString()
+            }
+        }).sort({ transdate: -1, upc: 1, store: 1 }).exec(function(err, data) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(data);
+        });
+    });
+    app.get('/data/HistoryByUPC', function(req, res) {
+        Transactions.find({
+            upc: req.query.upc
+        }).sort({ transdate: -1, upc: 1, store: 1 }).exec(function(err, data) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(data);
+        });
+    });
+
     //have to set up static routing to our public directory for stylus config
 
     //catchall route

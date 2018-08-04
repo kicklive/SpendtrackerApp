@@ -1,4 +1,4 @@
-angular.module("spendtrackerapp", ["ngResource", "ngRoute", "ui.router"]);
+angular.module("spendtrackerapp", ["ngResource", "ngRoute", "ui.router", "ui.grid", "ui.grid.grouping"]);
 
 angular.module("spendtrackerapp").config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);

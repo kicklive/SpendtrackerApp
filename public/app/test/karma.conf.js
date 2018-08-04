@@ -20,6 +20,9 @@ module.exports = function(config) {
             'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.15/angular-ui-router.min.js',
             '../../vendor/angular-route/angular-route.js',
             '../../vendor/angular-ui/build/angular-ui.js',
+            '../../vendor/angular-ui-grid/ui-grid.min.js',
+            '../../vendor/angular-ui-grid/ui-grid.core.min.js',
+            '../../vendor/angular-ui-grid/ui-grid.grouping.min.js',
 
 
             '../../vendor/angular-resource/angular-resource.js',

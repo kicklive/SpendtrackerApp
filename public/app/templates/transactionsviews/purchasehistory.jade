@@ -1,26 +1,34 @@
 .container100
-     H3 zen's Cafe
-        form.form-vertical(name="NewTransaction" novalidate ng-submit='submitForm()')
+     H3 
+        form.form-vertical(name="NewTransaction" novalidate ng-submit='phc.submitForm()')
             .row&nbsp;
             .row.align-items-start
-                 .div(style="width:82%;display: block;margin-left: auto; margin-right: auto;")
+                 .div(style="width:75%;display: block;margin: 0 auto;")
                     .form-group
-                        .col-sm-3 
+                        .col-md-2
                             H4 Search History By:
-                        .col-sm-2
+                        .col-md-2
                             label.labelfont.text-left.paddingleft10.radio.inline(for="allhistory") All History 
-                                input(type="radio", id="allhihstory" name="history") 
-                        .col-sm-2
-                            label.labelfont.paddingleft65.radio.inline(for="allhistory") UPC
-                                input(type="radio", id="upc" name="history" onclick="ShowDate(false)")
-                        .col-sm-2
-                            label.labelfont.radio.inline(for="allhistory") Date
-                                input(type="radio", id="date" name="history" onclick="ShowDate(true)")
-                        .col-sm-2
-                            input.form-control(type="text", name="searchval" style="width:126px;font-size:10pt")
-                            input.form-control(type="text", name="searchval" style="width:126px;font-size:10pt" ng-show="{{phc.isDdate}}")
-                        .col-sm-1
-                           a.btn.btn-primary(ng-click="Search()") Search
+                                input(type="radio" id="allhihstory" name="history" ng-model="phc.rdoHistory" ng-value='all') 
+                        .col-md-2
+                            label.labelfont.paddingleft65.radio.inline(for="upc") UPC
+                                input(type="radio" id="upc" name="history" value='upc' ng-model="phc.rdoHistory" ng-value='upc')
+                        .col-md-1
+                            label.labelfont.radio.inline(for="date") Date
+                                input(type="radio" id="date" name="history" value='date' ng-model="phc.rdoHistory" ng-value='date')
+                        .div(ng-show="phc.HideAllBoxes()")
+                            .col-md-4.inline(ng-show="!phc.ShowDate()")
+                                input.form-control(type="text" id="upcdisplay" name="searchval" style="width:126px;font-size:10pt" ng-model="phc.upc" placeholder="UPC" )
+                                
+                            .col-md-2.inline(ng-show="phc.ShowDate()")
+                                input.form-control(type="text" id="fromDate" name="searchval" style="width:126px;font-size:10pt" ng-model="phc.startDate" datepkr="" placeholder="Start Date")
+                            .col-md-2.inline(ng-show="phc.ShowDate()")
+                                input.form-control(type="text" id="toDate" name="searchval" style="width:126px;font-size:10pt" ng-model="phc.endDate" datepkr="" placeholder="End Date")
+                         
+                        .col-md-1
+                           a.btn.btn-primary(ng-click="phc.Search()" ng-disabled='NewTransaction.$invalid') Search
+   
 hr(style="height:3px;border:none;color:#333;background-color:#333;")
+.div(id="grid1" ui-grid="phc.history" ui-grid-grouping class="grid")
 
                         
