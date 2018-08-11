@@ -4,7 +4,7 @@
             .row&nbsp;
             .row.align-items-start
                 .form-group
-                    .col-md-4
+                    .col-md-3
                         label.labelfont.text-left.paddingleft10(for="transdate") Transation Date 
                         input.form-control.col-sm-12(name="transdate", type="text", ng-model="transdate" datepkr="" style="width:150px" required)
                         p(ng-show='NewTransaction.transdate.$isvalid && NewTransaction.transdate.$pristine') Date required

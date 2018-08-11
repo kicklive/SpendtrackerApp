@@ -70,10 +70,12 @@
             return $http.get("/data/getdetails/", { params: { id: budgetId } }).then(success, failure);
 
             function success(data) {
+                debugger;
                 return data;
             }
 
             function failure(err) {
+                debugger;
                 return 'Error ' + err;
             }
 

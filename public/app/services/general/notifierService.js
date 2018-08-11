@@ -21,9 +21,9 @@
         .module('spendtrackerapp')
         .factory('notifierService', Notify)
 
-    Notify.$inject = ['$http'];
+    //  Notify.$inject = ['$http'];
 
-    function Notify($http) {
+    function Notify() {
         var service = {
             notify: NotifyMsg,
             error: ErrorMsg,

@@ -1,0 +1,23 @@
+.container
+    fieldset
+        .row
+            .col-sm-3
+                b Budget Dates: 
+            {{data.BudgetStartDate|date:"MM/dd/yyyy"}} to {{data.BudgetEndDate|date:"MM/dd/yyyy"}}
+        .row
+            .col-sm-4
+                b Days Left in Budget: 
+            {{findDiff(data)}}
+        .row
+            .col-sm-6
+                b Budget Amount:
+            {{data.BudgetAmount|currency : "$" : 2}}
+        .row
+            .col-sm-6
+                b Budget Status:
+            {{data.BudgetStatus}}
+        .row
+            .col-sm-6
+                b Budget Type:
+            {{data.BudgetType}}
+hr(style="height:3px;border:none;color:#333;background-color:#333;")            

@@ -110,18 +110,21 @@
                 PurchaseHistoryService.GetAll().then(function(data, err) {
                     debugger;
                     if (data != null) {
+                        debugger;
                         //vm.history = data;
                         vm.history.data = vm.formatDate(data);
-                    } else {
-                        notifierService.InfoMsg(
-                            "There was an retrieving data. Contact Administrator."
-                        );
+                        // } else {
+                        //     debugger;
+                        //     notifierService.InfoMsg(
+                        //         "There was an retrieving data. Contact Administrator."
+                        //     );
                     }
                 });
             };
 
             vm.GetHistoryByUPC = function() {
                 debugger;
+                throw { message: 'There was an retrieving data. Contact Administrator.' };
                 PurchaseHistoryService.GetByUPC(vm.upc).then(function(data, err) {
                     debugger;
                     if (data != null) {

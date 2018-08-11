@@ -17,7 +17,7 @@
         return service;
 
         function GetAllHistory() {
-            return $http.get('/data/AllHistory').then(success, failure);
+            return $http.get('/data/AllHistory').then(success, failure).catch(angular.noop);
 
             function success(d) {
                 //debugger;
@@ -25,13 +25,14 @@
             }
 
             function failure(err) {
-                return 'Error ' + err;
+                debugger;
+                return 'There was an retrieving data. Contact Administrator.' + err;
             }
 
         }
 
         function GetHistoryByUPC(upc) {
-            return $http.get('/data/HistoryByUPC', { params: { upc: upc } }).then(success, failure);
+            return $http.get('/data/HistoryByUPC', { params: { upc: upc } }).then(success, failure).catch(angular.noop);
 
             function success(d) {
                 //debugger;
@@ -39,13 +40,13 @@
             }
 
             function failure(err) {
-                return 'Error ' + err;
+                return 'There was an retrieving data. Contact Administrator.' + err;
             }
 
         }
 
         function GetHistoryByDateRange(startdate, enddate) {
-            return $http.get('/data/HistoryByDateRange', { params: { startdate: startdate, enddate: enddate } }).then(success, failure);
+            return $http.get('/data/HistoryByDateRange', { params: { startdate: startdate, enddate: enddate } }).then(success, failure).catch(angular.noop);
 
             function success(d) {
                 //debugger;
@@ -53,7 +54,7 @@
             }
 
             function failure(err) {
-                return 'Error ' + err;
+                return 'There was an retrieving data. Contact Administrator.' + err;
             }
 
         }

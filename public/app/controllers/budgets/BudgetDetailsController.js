@@ -14,6 +14,7 @@
         activate();
 
         function activate() {
+            debugger;
             var date = new Date();
             var fDate = new Date(date.setHours(0, 0, 0, 0));
             $scope.ShowButton = function() {
