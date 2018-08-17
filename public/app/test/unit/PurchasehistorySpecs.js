@@ -145,11 +145,11 @@ describe("Testing Purchase History", function() {
 
                 purchaseHistoryServiceMock.GetAll.and.returnValue(deferred.promise);
                 purchaseHistoryServiceMock.GetAll().then(function(returnedPromise) {
-                    debugger;
+                    //debugger;
                     ret = returnedPromise;
                 });
                 $scope.$apply();
-                debugger;
+                //debugger;
                 expect(ret).toEqual(data);
                 expect(ret.length).toEqual(3);
             });
@@ -160,7 +160,7 @@ describe("Testing Purchase History", function() {
                 purchaseHistoryServiceMock
                     .GetByUPC("123456789013")
                     .then(function(returnedPromise) {
-                        debugger;
+                        //debugger;
                         ret = returnedPromise;
                     });
                 $scope.$apply();
@@ -175,7 +175,7 @@ describe("Testing Purchase History", function() {
                 purchaseHistoryServiceMock
                     .GetByDates("7/25/2018")
                     .then(function(returnedPromise) {
-                        debugger;
+                        //debugger;
                         ret = returnedPromise;
                     });
                 $scope.$apply();

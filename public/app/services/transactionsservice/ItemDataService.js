@@ -79,7 +79,7 @@
             return $http.get('/data/itemsearch', { params: { id: upc } }).then(success, failure);
 
             function success(d) {
-                //debugger;
+                ////debugger;
                 return d;
             }
 

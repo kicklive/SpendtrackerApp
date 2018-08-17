@@ -57,6 +57,12 @@
                 templateUrl: '/partials/transactionsviews/NewTransaction',
                 controller: 'NewTransactionController'
             })
+            .state('budgettrends', {
+                url: '/BudgetTrends',
+                templateUrl: '/partials/budgetsviews/BudgetTrends',
+                controller: 'BudgetTrendsController',
+                controllerAs: 'btc'
+            })
             .state('purchasehistory', {
                 url: '/PurchaseHistory',
                 templateUrl: '/partials/transactionsviews/purchasehistory',
@@ -71,20 +77,20 @@
                         return storageservice.get('status', null);
                     },
                     status: function(budgetservice, access, storageservice) {
-                        debugger;
+                        //debugger;
                         storageservice.clear();
                         budgetservice.budgetStatus().then(function(ret) {
-                            //debugger;
+                            ////debugger;
                             if (ret === 'success') {
                                 storageservice.set('status', new Date());
                             }
                         });
                     },
                     data: function(budgetservice, storageservice, $location) {
-                        debugger;
+                        //debugger;
                         budgetservice.getBudgetList().then(function(data) {
                             if (data.data.length > 0) {
-                                debugger;
+                                //debugger;
                                 d = data;
 
                                 $location.path("/ListBudgets")
@@ -112,7 +118,7 @@
                 exception: exception,
                 cause: cause
             };
-            debugger;
+            //debugger;
             /**
              * 
              * Could add the error to a service's collection,

@@ -2,9 +2,12 @@
  // var stylus=require('stylus');
  // var logger=require('morgan');
  // var bodyParser=require('body-parser');
- var mongoose = require('mongoose');
+ //var mongoose = require('mongoose');
  //environment variable to tell with in dev or prod mode
  //assigning a default value into NODE_ENV if it hasn't been assigned already
+
+
+
  var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
  //create express application
@@ -13,6 +16,8 @@
  require('./server/config/express')(app, config);
  require('./server/config/mongoose')(config);
  require('./server/config/routes')(app, config);
+
+
 
  //mongoose.connect('mongodb://localhost/Spendtracker2018');
  // if (env==='development'){

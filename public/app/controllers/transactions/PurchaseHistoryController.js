@@ -27,6 +27,7 @@
 
 
         function activate() {
+            //debugger;
             vm.search = "";
             vm.serchBy = "";
             vm.history = null;
@@ -62,7 +63,7 @@
             };
 
             vm.submitForm = function() {
-                debugger;
+                //debugger;
                 alert("error");
             };
 
@@ -70,7 +71,7 @@
 
             vm.ShowDate = function(v) {
                 var ret;
-                // debugger;
+                // //debugger;
                 switch (vm.rdoHistory) {
                     case "all":
                         ret = false;
@@ -85,7 +86,7 @@
                 return ret;
             };
             vm.Search = function() {
-                debugger;
+                //debugger;
                 switch (vm.rdoHistory) {
                     case "all":
                         vm.GetAllHistory();
@@ -108,13 +109,13 @@
 
             vm.GetAllHistory = function() {
                 PurchaseHistoryService.GetAll().then(function(data, err) {
-                    debugger;
+                    //debugger;
                     if (data != null) {
-                        debugger;
+                        //debugger;
                         //vm.history = data;
                         vm.history.data = vm.formatDate(data);
                         // } else {
-                        //     debugger;
+                        //     //debugger;
                         //     notifierService.InfoMsg(
                         //         "There was an retrieving data. Contact Administrator."
                         //     );
@@ -123,10 +124,10 @@
             };
 
             vm.GetHistoryByUPC = function() {
-                debugger;
+                //debugger;
                 throw { message: 'There was an retrieving data. Contact Administrator.' };
                 PurchaseHistoryService.GetByUPC(vm.upc).then(function(data, err) {
-                    debugger;
+                    //debugger;
                     if (data != null) {
                         //vm.history = data;
 
@@ -142,7 +143,7 @@
             vm.GetHistoryByDateRange = function() {
                 PurchaseHistoryService.GetByDates(vm.startDate, vm.endDate).then(
                     function(data, err) {
-                        debugger;
+                        //debugger;
                         if (data != null) {
                             //vm.history = data;
                             vm.history.data = vm.formatDate(data);
@@ -157,7 +158,7 @@
 
             vm.formatDate = function(data) {
                 var newDate;
-                debugger;
+                //debugger;
                 for (var i = 0; i < data.length; i++) {
                     newDate = new Date(data[i].transdate).toLocaleDateString();
                     data[i].transdate = newDate;
@@ -166,7 +167,7 @@
                 return data;
             };
             // vm.checkRadioSelection = function() {
-            //     debugger;
+            //     //debugger;
             //     var ret = true;
             //     if (vm.searchval == undefined) {
             //         notifierService.warning("Please select a search method.");

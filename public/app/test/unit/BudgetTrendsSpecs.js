@@ -44,6 +44,7 @@ describe("Testing BudgetTrends History", function() {
         $controller = $injector.get("$controller");
         $filter = $injector.get("$filter");
         $scope = $rootScope.$new();
+        // budgetTrendsService = $injector.get('BudgetTrendsService');
     }
 
     function setUp() {
@@ -126,14 +127,28 @@ describe("Testing BudgetTrends History", function() {
                 budgetTrendsServiceMock
                     .GetTrends(upc)
                     .then(function(returnedPromise) {
-                        debugger;
+                        //debugger;
                         ret = returnedPromise;
                     });
                 $scope.$apply();
                 expect(
                     $filter("filter")(ret, { upc: upc }, true).length).toEqual(2);
             });
+
         });
+        // describe('Testng BudgetTrendsService real data', function() {
+        //     it('should return the correct data. Testing the actual service method', function() {
+
+        //         debugger;
+        //         budgetTrendsService.xxx().then(function(response) {
+        //             debugger;
+        //             results = response.data;
+        //             expect(results).toBeTruthy();
+        //         });
+        //         $scope.$apply()
+        //             //   $httpBackend.flush();
+        //     });
+        // });
         describe('Testing BudgetTrendsController', function() {
             it('should return correct values from variables and functions', function() {
                 BudgetTrendsController = $controller('BudgetTrendsController', {});
@@ -141,6 +156,7 @@ describe("Testing BudgetTrends History", function() {
             });
 
         });
+
 
 
     });

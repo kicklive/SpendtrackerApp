@@ -182,7 +182,7 @@ describe('Testing SpendTracker App', function() {
 
         beforeEach(function() {
             compareData = { 'budgetEnd': '8/1/2018', 'budgetBegin': '7/1/2018', 'budgetAmt': '$100', 'budgetStatus': 'open', 'budgetType': 'Amex' };
-            //debugger;
+            ////debugger;
             newBudgetController = $controller('newbudgetcontroller', { $scope: $scope, budgetServiceMock: budgetServiceMock });
         });
 
@@ -204,7 +204,7 @@ describe('Testing SpendTracker App', function() {
                     result = returnedPromise;
 
                 });
-                //debugger;
+                ////debugger;
                 $scope.$apply();
                 $scope.addbudget();
 
@@ -223,7 +223,7 @@ describe('Testing SpendTracker App', function() {
         }
         // deferred = $q.defer();
         beforeEach(function() {
-            //debugger;
+            ////debugger;
             BudgetDetailsController = $controller('BudgetDetailsController', { $scope: $scope });
         });
 
@@ -240,7 +240,7 @@ describe('Testing SpendTracker App', function() {
             });
             it('will test scope methods', function() {
                 var status = $scope.ShowLink('Closed');
-                debugger;
+                //debugger;
                 var dateDiff = $scope.findDiff(d);
                 expect(status).toBe(false);
                 // expect(dateDiff).toBe(3);
@@ -310,7 +310,7 @@ describe('Testing SpendTracker App', function() {
 
         it('should get trans data from db by passed param', function() {
             var tranId = '0'
-                ////debugger;
+                //////debugger;
             $httpBackend.when('GET', '/data/gettrandetails/?id=' + tranId, function() {}).respond(200, [{
                 'id': '1',
                 'ret': 'milk'
@@ -343,7 +343,7 @@ describe('Testing SpendTracker App', function() {
 
         it('should delete transaction from db', function() {
             var tranId = '0'
-                ////debugger;
+                //////debugger;
             $httpBackend.when('GET', '/data/deletetransaction/?id=' + tranId, function() {}).respond(200, 'success');
 
 
@@ -406,7 +406,7 @@ describe('Testing SpendTracker App', function() {
 
     //         purchaseHistoryServiceMock.GetAll.and.returnValue(deferred.promise);
     //         purchaseHistoryServiceMock.GetAll().then(function(returnedPromise) {
-    //             debugger;
+    //             //debugger;
     //             ret = returnedPromise;
     //         });
     //         $scope.$apply();

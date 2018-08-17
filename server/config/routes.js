@@ -7,11 +7,11 @@ var nodedate = require("node-datetime");
 module.exports = function(app, config) {
     app.get("/data/budgetlist", function(req, res) {
         console.log('heree');
-        //debugger;
+        ////debugger;
         Budget.find(function(err, ret) {
             if (err)
                 res.send(err);
-            //debugger;
+            ////debugger;
             res.send(ret);
         });
     });
@@ -40,7 +40,7 @@ module.exports = function(app, config) {
 
 
     app.post("/data/SaveBudget", function(req, res) {
-        //debugger;
+        ////debugger;
         var startDate = new Date(req.body.startdate);
         var endDate = new Date(req.body.enddate);
         var status;
@@ -312,6 +312,62 @@ module.exports = function(app, config) {
             res.json(data);
         });
     });
+
+    app.get('/data/Trends', function(req, res) {
+        var maxCount;
+        console.log("here delete success?");
+        Transactions.aggregate([{
+                $group: {
+                    _id: "$store",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $group: {
+                    _id: "$store",
+                    count: { $max: "$count" }
+                }
+            }, { $project: { _id: 0 } }
+
+        ]).exec(function(err, ret) {
+            if (err) {
+                res.send(err);
+            }
+            console.log(ret[0].count);
+            maxCount = ret[0].count;
+            Transactions.aggregate([{
+                    $group: {
+                        _id: "$store",
+                        itemprice: { $sum: "$itemprice" },
+                        count: { $sum: 1 }
+                    }
+                },
+                { $match: { "count": { $eq: maxCount } } }
+
+            ]).exec(function(err, data) {
+                if (err) {
+                    res.send(err);
+                }
+                res.json(data);
+            });
+
+        });
+        // Transactions.aggregate([{
+        //         $group: {
+        //             _id: "$store",
+        //             count: { $sum: 1 }
+        //         }
+        //     },
+        //     { $match: { "count": { $eq: maxCount } } }
+
+        // ]).exec(function(err, data) {
+        //     if (err) {
+        //         res.send(err);
+        //     }
+        //     res.json(data);
+        // });
+
+    })
 
     //have to set up static routing to our public directory for stylus config
 

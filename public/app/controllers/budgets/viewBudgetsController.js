@@ -12,12 +12,12 @@
         activate();
 
         function activate() {
-            //debugger;
+            ////debugger;
             getData();
             console.log();
 
             $scope.ShowLink = function(v) {
-                //debugger;
+                ////debugger;
                 console.log('show link--> ' + v);
                 var retStatus = true;
                 if (v == 'Future')
@@ -27,14 +27,14 @@
         }
 
         function getData() {
-            // //debugger;
+            // ////debugger;
             if (storageservice.getObj('budgets', 'empty') == 'empty') {
                 budgetservice.getBudgetList().then(function(data) {
-                    //debugger;
+                    ////debugger;
                     //     d = data.data;
                     $scope.budgets = data.data
                     $scope.results = 'success';
-                    //debugger;
+                    ////debugger;
                     console.log('aaa=' + $scope.budgets[0].BudgetStatus);
                     console.log("second budget");
                 }).catch(function() {

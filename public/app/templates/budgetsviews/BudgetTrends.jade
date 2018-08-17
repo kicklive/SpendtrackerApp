@@ -1,23 +1,40 @@
-.container
-    fieldset
-        .row
-            .col-sm-3
-                b Budget Dates: 
-            {{data.BudgetStartDate|date:"MM/dd/yyyy"}} to {{data.BudgetEndDate|date:"MM/dd/yyyy"}}
-        .row
-            .col-sm-4
-                b Days Left in Budget: 
-            {{findDiff(data)}}
-        .row
-            .col-sm-6
-                b Budget Amount:
-            {{data.BudgetAmount|currency : "$" : 2}}
-        .row
-            .col-sm-6
-                b Budget Status:
-            {{data.BudgetStatus}}
-        .row
-            .col-sm-6
-                b Budget Type:
-            {{data.BudgetType}}
-hr(style="height:3px;border:none;color:#333;background-color:#333;")            
+.container100
+    form.form-vertical(name="BudgetTrends" novalidate ng-submit='submitForm()')
+     .row&nbsp;
+            .row.align-items-start
+                 .div(style="width:75%;display: block;margin: 0 auto;")
+                    .form-group
+                        .col-md-3
+                            H4 Trends:
+                        .col-md-3
+                            label.labelfont.text-left.paddingleft10.radio.inline(for="allhistory") All To Present 
+                                input(type="radio" id="allhihstory" name="trends" ng-model="phc.rdoTrends" value="all") 
+                        .col-md-2
+                            label.labelfont.paddingleft65.radio.inline(for="bymonth") By Month
+                                input(type="radio" id="bymonth" name="trends" value='bymonth' ng-model="phc.rdoTrends")
+                        .div
+                            .col-md-2.inline
+                                select(monthpkr ng-model="btc.month" ng-required="phc.rdoTrends=='bymonth'")
+                              
+                                  
+                       .col-md-2
+                           a.btn.btn-primary(ng-click="phc.Search()" ng-disabled='NewTransaction.$invalid') Search
+       
+hr(style="height:3px;border:none;color:#333;background-color:#333;")  
+.div(style="width:100%;display: block;margin: 0 auto;")
+    .row
+        .col.md-11.inline(style="float:left;font-weight:bold") Store(s) with most activity: &nbsp;
+        {{btc.TopActivity.storeinfo}} 
+    .row 
+        .col.md-11.inline(style="float:left;font-weight:bold") Number of visits: &nbsp;
+        {{btc.TopActivity.visits}}  
+    .row 
+        .col.md-11.inline(style="float:left;font-weight:bold") Average Spent per visit: &nbsp;
+        {{btc.TopActivity.visits}}  
+    .row 
+        .col.md-11.inline(style="float:left;font-weight:bold") Total Spent: &nbsp;
+        {{btc.TopActivity.visits}}  
+    .row
+        .datepicker(min-mode="month")
+
+   //- .col-md-1.inline(style="float:left")(ng-repeat="item in btc.TopActivity") {{item._id}}         
