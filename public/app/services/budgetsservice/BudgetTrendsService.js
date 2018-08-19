@@ -25,7 +25,7 @@
 
             function failure(err) {
                 debugger;
-                return 'Error ' + err;
+                return err.data.message;
             }
         }
 
@@ -47,19 +47,29 @@
 
 
     function MassageData(data) {
-        var comma = "";
-        var stringData = "";
+        var comma = '';
+        var lineBreak='';
+        var stringData = '';
+        var spentString= 'Total Spent: $'
+        var avgSpentString=''
         var numberOfVisits = data[0].count;
         for (var i = 0, len = data.length; i < len; i++) {
-            if (len > 0 && (i + 1) != len)
-                comma = "; ";
-            else
-                comma = "";
-            stringData = stringData + data[i]._id + ' Total Spent: $' + data[i].itemprice + comma;
+            if (len > 0 && (i + 1) != len){
+                comma = '; ';
+                lineBreak='\n';
+            }
+            else{
+                comma = '';
+                lineBreak='';
+            //stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + comma;
+            stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + lineBreak;
+            //avgSpentString=avgSpentString
+            }
         }
         return {
             'storeinfo': stringData,
             'visits': numberOfVisits,
+            //'avgpervist'
         }
     }
 })();

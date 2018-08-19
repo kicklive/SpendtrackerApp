@@ -314,7 +314,7 @@ module.exports = function(app, config) {
     });
 
     app.get('/data/Trends', function(req, res) {
-        var maxCount;
+        var maxCount=0;
         console.log("here delete success?");
         Transactions.aggregate([{
                 $group: {
@@ -333,8 +333,11 @@ module.exports = function(app, config) {
             if (err) {
                 res.send(err);
             }
-            console.log(ret[0].count);
-            maxCount = ret[0].count;
+            //console.log(ret[0].count);
+            if (ret.length==0){
+                return res.status(400).send({message:-1});
+            }else{
+                maxCount = ret[0].count;
             Transactions.aggregate([{
                     $group: {
                         _id: "$store",
@@ -350,6 +353,7 @@ module.exports = function(app, config) {
                 }
                 res.json(data);
             });
+        }
 
         });
         // Transactions.aggregate([{

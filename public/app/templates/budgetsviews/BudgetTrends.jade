@@ -2,26 +2,28 @@
     form.form-vertical(name="BudgetTrends" novalidate ng-submit='submitForm()')
      .row&nbsp;
             .row.align-items-start
-                 .div(style="width:75%;display: block;margin: 0 auto;")
+                .div(style="width:80%;display: block;margin: 0 auto;")
                     .form-group
-                        .col-md-3
+                        .col-md-1
                             H4 Trends:
                         .col-md-3
-                            label.labelfont.text-left.paddingleft10.radio.inline(for="allhistory") All To Present 
-                                input(type="radio" id="allhihstory" name="trends" ng-model="phc.rdoTrends" value="all") 
+                            label.labelfont.text-left.radio.inline(for="allhistory" style="padding-left:50px") All To Present 
+                                input(type="radio" id="allhihstory" name="trends" ng-model="btc.rdoTrends" value="all" required) 
                         .col-md-2
-                            label.labelfont.paddingleft65.radio.inline(for="bymonth") By Month
-                                input(type="radio" id="bymonth" name="trends" value='bymonth' ng-model="phc.rdoTrends")
+                            label.labelfont.radio.inline(for="bymonth") By Month
+                                input(type="radio" id="bymonth" name="trends" value='bymonth' ng-model="btc.rdoTrends")
                         .div
-                            .col-md-2.inline
-                                select(monthpkr ng-model="btc.month" ng-required="phc.rdoTrends=='bymonth'")
+                            .col-md-2
+                                select(monthpkr ng-model="btc.month" ng-required="btc.rdoTrends=='bymonth'" style='position:absolute;top:10px')
                               
                                   
-                       .col-md-2
-                           a.btn.btn-primary(ng-click="phc.Search()" ng-disabled='NewTransaction.$invalid') Search
+                       .col-md-3
+                           a.btn.btn-primary(ng-click="btc.Search()" ng-disabled='BudgetTrends.$invalid') Search
        
 hr(style="height:3px;border:none;color:#333;background-color:#333;")  
-.div(style="width:100%;display: block;margin: 0 auto;")
+.div(ng-show="btc.ShowMessage" ng-cloak)
+    {{btc.Message}}
+.div(style="width:100%;display: block;margin: 0 auto;" ng-show="!btc.ShowMessage" ng-cloak)
     .row
         .col.md-11.inline(style="float:left;font-weight:bold") Store(s) with most activity: &nbsp;
         {{btc.TopActivity.storeinfo}} 
