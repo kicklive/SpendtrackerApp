@@ -5,11 +5,12 @@
         .module('spendtrackerapp')
         .factory('BudgetTrendsService', BudgetTrends)
 
-    BudgetTrends.$inject = ['$http'];
+    BudgetTrends.$inject = ['$http', 'DataCalculationService'];
 
-    function BudgetTrends($http) {
+    function BudgetTrends($http, DataCalculationService) {
         var service = {
             GetTrends: GetDataAll,
+            // _massageData: MassageData
             //GetMostPurchasedItem: GetPurchaseTrends
         };
 
@@ -20,7 +21,8 @@
             return $http.get('/data/Trends').then(success, failure);
 
             function success(d) {
-                return MassageData(d.data);
+                debugger;
+                return DataCalculationService.getTrendCal(d.data);
             }
 
             function failure(err) {
@@ -43,33 +45,9 @@
                 return 'Error ' + err;
             }
         }
+
+
     }
 
 
-    function MassageData(data) {
-        var comma = '';
-        var lineBreak='';
-        var stringData = '';
-        var spentString= 'Total Spent: $'
-        var avgSpentString=''
-        var numberOfVisits = data[0].count;
-        for (var i = 0, len = data.length; i < len; i++) {
-            if (len > 0 && (i + 1) != len){
-                comma = '; ';
-                lineBreak='\n';
-            }
-            else{
-                comma = '';
-                lineBreak='';
-            //stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + comma;
-            stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + lineBreak;
-            //avgSpentString=avgSpentString
-            }
-        }
-        return {
-            'storeinfo': stringData,
-            'visits': numberOfVisits,
-            //'avgpervist'
-        }
-    }
 })();

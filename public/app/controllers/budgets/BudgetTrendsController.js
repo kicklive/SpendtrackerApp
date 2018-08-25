@@ -13,13 +13,13 @@
         vm.budgetId = $stateParams.budgetId;
         vm.TopActivity = [];
         vm.MostPurchased = [];
-        vm.Message=''
-        vm.ShowMessage=true;
+        vm.Message = ''
+        vm.ShowMessage = true;
 
         activate();
 
         function activate() {
-           
+
 
             vm.Search = function() {
                 //debugger;
@@ -34,23 +34,27 @@
                         notifierService.warning("Please select a search method.");
                 }
             };
-            vm.GetAllTrends=function(){
-                BudgetTrendsService.GetTrends().then(function(ret,err) {
+            vm.GetAllTrends = function() {
+                BudgetTrendsService.GetTrends().then(function(ret, err) {
                     debugger
-                    if(ret!=-1){
-                        vm.ShowMessage=false;
+                    if (ret != -1) {
+                        vm.ShowMessage = false;
                         vm.TopActivity = ret;
-                    }else{
-                        vm.Message='There are no tranactions available.'
-                    
-                    // BudgetTrendsService.GetMostPurchasedItem().then(function(retItems) {
-                    //     vm.MostPurchased = retItems;
-                    // });
+                    } else {
+                        vm.Message = 'There are no tranactions available.'
+
+                        // BudgetTrendsService.GetMostPurchasedItem().then(function(retItems) {
+                        //     vm.MostPurchased = retItems;
+                        // });
                     }
                 });
             };
+            vm.AddBold = function(s) {
+                if (typeof s != 'undefined')
+                    return s.replace('Total Spent:', "<span style='font-weight:bold;>xxx</span>");
+            }
         }
-        
+
 
     }
 })();

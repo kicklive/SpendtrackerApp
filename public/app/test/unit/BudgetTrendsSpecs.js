@@ -8,14 +8,15 @@ describe("Testing BudgetTrends History", function() {
         $controller,
         BudgetTrendsController;
 
-    var budgetTrendsServiceMock = jasmine.createSpyObj(
-        "BudgetTrendsService", ["GetTrends"]
-    );
+    // var budgetTrendsServiceMock = jasmine.createSpyObj(
+    //     "BudgetTrendsService", ["GetTrends"]
+    // );
     var budgetServiceMock = jasmine.createSpyObj("budgetservice", [
         "budgetStatus",
         "getBudgetList",
         "saveBudget",
         "CheckAndUpdate"
+
     ]);
 
 
@@ -27,9 +28,9 @@ describe("Testing BudgetTrends History", function() {
     });
 
     function mockServices($provide) {
-        $provide.factory("BudgetTrendsService", function() {
-            return budgetTrendsServiceMock;
-        });
+        // $provide.factory("BudgetTrendsService", function() {
+        //     return budgetTrendsServiceMock;
+        // });
         $provide.factory("budgetservice", function() {
             return budgetServiceMock;
         });
@@ -44,7 +45,8 @@ describe("Testing BudgetTrends History", function() {
         $controller = $injector.get("$controller");
         $filter = $injector.get("$filter");
         $scope = $rootScope.$new();
-        // budgetTrendsService = $injector.get('BudgetTrendsService');
+        budgetTrendsService = $injector.get('BudgetTrendsService');
+        dataCalcService = $injector.get('DataCalculationService');
     }
 
     function setUp() {
@@ -55,7 +57,6 @@ describe("Testing BudgetTrends History", function() {
     describe("testing default application entry in config ", function() {
         it("will return call method and return results", function() {
             $httpBackend.whenGET("/").respond(200, {});
-            // goTo('/');
             deferred.resolve({
                 data: [{}]
             });
@@ -115,40 +116,53 @@ describe("Testing BudgetTrends History", function() {
                 transdate: "7/25/2018"
             }
         ];
+
+
         describe('testing BudgetTrendsService', function() {
+            var ret;
             it('BudgetTrendsService should exist', function() {
-                expect(budgetTrendsServiceMock.GetTrends).toBeDefined();
+                expect(budgetTrendsService.GetTrends).toBeDefined();
             });
-            it("will return data for GetTrends", function() {
-                var ret;
-                var upc = '123456789012'
+            it('will return data for GetTrends', function() {
                 deferred.resolve(data);
-                budgetTrendsServiceMock.GetTrends.and.returnValue(deferred.promise);
-                budgetTrendsServiceMock
-                    .GetTrends(upc)
-                    .then(function(returnedPromise) {
-                        //debugger;
-                        ret = returnedPromise;
-                    });
+                spyOn(budgetTrendsService, 'GetTrends').and.returnValue(deferred.promise);
+                expect(budgetTrendsService.GetTrends()).toBeDefined();
+                budgetTrendsService.GetTrends().then(function(returnedPromise) {
+                    ret = returnedPromise;
+                });
                 $scope.$apply();
-                expect(
-                    $filter("filter")(ret, { upc: upc }, true).length).toEqual(2);
+                expect(ret.length).toEqual(3)
             });
-
         });
-        // describe('Testng BudgetTrendsService real data', function() {
-        //     it('should return the correct data. Testing the actual service method', function() {
 
-        //         debugger;
-        //         budgetTrendsService.xxx().then(function(response) {
-        //             debugger;
-        //             results = response.data;
-        //             expect(results).toBeTruthy();
-        //         });
-        //         $scope.$apply()
-        //             //   $httpBackend.flush();
-        //     });
-        // });
+        describe('testing data calc service', function() {
+            var calcData = [{
+                    _id: "Stop N Shop",
+                    itemprice: "8.98",
+                    count: "2",
+                },
+                {
+                    _id: "Walmart",
+                    itemprice: "8.49",
+                    count: "2",
+                },
+            ];
+            it('MassageData should correctly return formated calculations from inputted data', function() {
+                spyOn(dataCalcService, 'getTrendCal').and.callThrough();
+                var ret = dataCalcService.getTrendCal(calcData);
+                expect(dataCalcService.getTrendCal).toBeDefined();
+                expect(dataCalcService.getTrendCal).toHaveBeenCalledWith(calcData);
+            });
+            it('SumPrice should return sum total price of all items', function() {
+                spyOn(dataCalcService, 'getSum').and.callThrough();
+                var ret = dataCalcService.getSum(calcData);
+                expect(dataCalcService.getSum).toBeDefined();
+                expect(dataCalcService.getSum).toHaveBeenCalledWith(calcData);
+                expect(ret).toEqual(17.47);
+            });
+        });
+
+
         describe('Testing BudgetTrendsController', function() {
             it('should return correct values from variables and functions', function() {
                 BudgetTrendsController = $controller('BudgetTrendsController', {});
@@ -156,8 +170,5 @@ describe("Testing BudgetTrends History", function() {
             });
 
         });
-
-
-
     });
 });
