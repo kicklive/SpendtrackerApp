@@ -62,7 +62,9 @@
                 'storeinfo': stores.substring(0, stores.length - 2),
                 'visits': numberOfVisits,
                 'avgpervist': retAvg.substring(0, retAvg.length - 2),
-                'totalSpent': spentString.substring(0, spentString.length - 2)
+                'totalSpent': spentString.substring(0, spentString.length - 2),
+                'totalbudget': '$' + data[0].total.toString(),
+                'amtspent': '$' + data[0].amtspent.toString()
             }
         }
 

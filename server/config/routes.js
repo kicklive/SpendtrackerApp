@@ -314,8 +314,12 @@ module.exports = function(app, config) {
     });
 
     app.get('/data/Trends', function(req, res) {
-        var maxCount=0;
+        var maxCount = 0;
+        var totalBudgeted = 0;
+        var totalSpent = 0;
         console.log("here delete success?");
+
+
         Transactions.aggregate([{
                 $group: {
                     _id: "$store",
@@ -334,26 +338,72 @@ module.exports = function(app, config) {
                 res.send(err);
             }
             //console.log(ret[0].count);
-            if (ret.length==0){
-                return res.status(400).send({message:-1});
-            }else{
+            if (ret.length == 0) {
+                return res.status(400).send({ message: -1 });
+            } else {
                 maxCount = ret[0].count;
-            Transactions.aggregate([{
-                    $group: {
-                        _id: "$store",
-                        itemprice: { $sum: "$itemprice" },
-                        count: { $sum: 1 }
-                    }
-                },
-                { $match: { "count": { $eq: maxCount } } }
 
-            ]).exec(function(err, data) {
-                if (err) {
-                    res.send(err);
-                }
-                res.json(data);
-            });
-        }
+                Budget.aggregate([{
+                    $group: {
+                        _id: null,
+                        totalAmount: {
+                            $sum: "$BudgetAmount"
+
+                        }
+                    }
+                }]).exec(function(err, retTotal) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+
+                        Transactions.aggregate([{
+                            $group: {
+                                _id: null,
+                                totalspent: { $sum: "$itemprice" }
+                            }
+                        }]).exec(function(err, retSpent) {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                console.log("retTotal=" + retTotal[0].totalAmount)
+                                console.log("retspent=" + retSpent[0].totalspent)
+                                totalBudgeted = retTotal[0].totalAmount;
+                                totalSpent = retSpent[0].totalspent;
+                                Transactions.aggregate([{
+                                        $group: {
+                                            _id: "$store",
+                                            itemprice: { $sum: "$itemprice" },
+                                            count: { $sum: 1 }
+                                        }
+                                    },
+                                    { $match: { "count": { $eq: maxCount } } },
+                                    { $addFields: { "total": totalBudgeted } },
+                                    { $addFields: { "amtspent": totalSpent } }
+
+                                ]).exec(function(err, data) {
+                                    if (err) {
+                                        res.send(err);
+                                    }
+                                    res.json(data);
+                                });
+
+                            }
+                        });
+
+
+
+
+
+
+
+
+                    }
+                });
+
+
+
+
+            }
 
         });
         // Transactions.aggregate([{
