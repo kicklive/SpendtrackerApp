@@ -26,18 +26,24 @@ hr(style="height:3px;border:none;color:#333;background-color:#333;")
 .div(style="width:100%;display: block;margin: 0 auto;" ng-show="!btc.ShowMessage" ng-cloak)
     .row
         .col.md-6.inline(style="float:left;font-weight:bold") Total Budget Amount Year To Date: &nbsp;
-        {{btc.TopActivity.totalbudget}}
+        ${{btc.Activity.Budgeted[0].totalbudget}}
     .row
         .col.md-6.inline(style="float:left;font-weight:bold") Total Spent Year To Date: &nbsp;
-        {{btc.TopActivity.amtspent}}
-        
+        ${{btc.Activity.Spent[0].totalspent}}
     .row
         .col.md-6.inline(style="float:left;font-weight:bold") Top spending month: &nbsp;
-
+        {{btc.Activity.TopMonth}}     
     .row
         .col.md-6.inline(style="float:left;font-weight:bold") Lowest spending month: &nbsp;
-      .row
+        {{btc.Activity.LowMonth}} 
+
+    .row
         .col.md-6.inline(style="float:left;font-weight:bold") Number Of Times Over Budget: &nbsp;
+        .row(ng-repeat="ts in btc.Activity.OverSpent")
+            .col-sm-2.align-items-center.row-head {{ts.budgetstartdate|date:'MM/dd/yyyy'}}
+
+
+
 
     .row
         .col.md-6.inline(style="float:left;font-weight:bold") Stores Visited: &nbsp;

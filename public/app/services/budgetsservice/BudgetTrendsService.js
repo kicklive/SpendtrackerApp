@@ -22,7 +22,8 @@
 
             function success(d) {
                 debugger;
-                return DataCalculationService.getTrendCal(d.data);
+                return DataCalculationService.getTrendCal(d.data[0]);
+                //return d.data[0];
             }
 
             function failure(err) {

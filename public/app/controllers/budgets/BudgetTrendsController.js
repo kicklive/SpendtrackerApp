@@ -11,7 +11,8 @@
         /* jshint validthis:true */
         var vm = this;
         vm.budgetId = $stateParams.budgetId;
-        vm.TopActivity = [];
+        //vm.TopActivity = [];
+        vm.Activity;
         vm.MostPurchased = [];
         vm.Message = ''
         vm.ShowMessage = true;
@@ -39,7 +40,7 @@
                     debugger
                     if (ret != -1) {
                         vm.ShowMessage = false;
-                        vm.TopActivity = ret;
+                        vm.Activity = ret;
                     } else {
                         vm.Message = 'There are no tranactions available.'
 

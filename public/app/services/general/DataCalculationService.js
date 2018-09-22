@@ -5,8 +5,9 @@
         .module('spendtrackerapp')
         .factory('DataCalculationService', Calculate)
 
+    Calculate.$inject = ['$filter']
 
-    function Calculate() {
+    function Calculate($filter) {
         var service = {
             getTrendCal: MassageDataForTrends,
             getSum: SumPrice
@@ -15,57 +16,167 @@
         return service;
 
         function MassageDataForTrends(data) {
-            var comma = '';
-            var lineBreak = '';
-            var stores;
-            var totalSpent;
-            var retAvg;
-            var spentString;
-            var avgSpentString = ''
-            var numberOfVisits = data[0].count;
             debugger;
-            for (var i = 0, len = data.length; i < len; i++) {
-                if (len > 0 && (i + 1) != len) {
-                    comma = '; ';
-                    lineBreak = '\n';
-                } else {
-                    // comma = '';
-                    //lineBreak = '';
-                    //stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + comma;
-                    //stringData = stringData + data[i]._id + spentString.bold() + data[i].itemprice + lineBreak;
-                    //avgSpentString=avgSpentString
-                }
-                if (i === 0) {
-                    stores = data[i]._id + (len > 1 ? ', ' : ' ');
-                } else {
-                    stores = stores + data[i]._id + (len > 1 ? ', ' : ' ');
-                }
-                if (len === 1) {
-                    spentString = '$' + data[i].itemprice;
-                } else {
-                    if (i === 0) {
-                        spentString = data[i]._id + ' $' + data[i].itemprice + (len > 1 ? ', ' : ' ');
-                    } else {
-                        spentString = spentString + data[i]._id + ' $' + data[i].itemprice + (len > 1 ? ', ' : ' ');
-                    }
-                }
-
-                if (typeof retAvg === 'undefined') {
-                    retAvg = Calculate(data[i], numberOfVisits) + (len > 1 ? ', ' : ' ');
-                } else {
-                    retAvg = retAvg + Calculate(data[i], numberOfVisits) + (len > 1 ? ', ' : ' ');
-                }
+            var tmpAmt = ''
+            var topSpendingString = '';
+            var lowSpendingString = '';
+            var topSpendingMonth, topSpendingAmount, lowpSpendingMonth, lowSpendingAmount,
+                payType, amtByPayType, payTypeString, mostActivityStore, mostActivityCount, mostActivityString;
+            debugger;
 
 
+
+            for (var i = 0, len = data.TopMonth.length; i < len; i++) {
+                if (tmpAmt == '' || tmpAmt == data.TopMonth[i].total) {
+                    topSpendingMonth = $filter('MonthFltr')(data.TopMonth[i].month);
+                    topSpendingAmount = data.TopMonth[i].total;
+                    topSpendingString = topSpendingString + topSpendingMonth + '-->$' + topSpendingAmount + '; '
+                    tmpAmt = data.TopMonth[i].total
+                }
+                debugger;
+                topSpendingString = topSpendingString.substring(0, topSpendingString.length - 1);
+            }
+            tmpAmt = '';
+            for (var i = 0, len = data.LowMonth.length; i < len; i++) {
+                if (tmpAmt == '' || tmpAmt == data.LowMonth[i].total) {
+                    lowpSpendingMonth = $filter('MonthFltr')(data.LowMonth[i].month);
+                    lowSpendingAmount = data.LowMonth[i].total;
+                    lowSpendingString = lowSpendingString + lowpSpendingMonth + '-->$' + lowSpendingAmount + '; '
+                    tmpAmt = data.LowMonth[i].total
+                }
+                debugger;
+                lowSpendingString = lowSpendingString.substring(0, lowSpendingString.length - 1);
+            }
+
+            tmpAmt = ''
+            for (var i = 0, len = data.SpendingByPaymentType.length; i < len; i++) {
+                if (tmpAmt == '' || tmpAmt == data.SpendingByPaymentType[i].total) {
+                    payType = $filter('PaymentTypeFltr')(data.SpendingByPaymentType[i].BudgetType);
+                    amtByPayType = data.SpendingByPaymentType[i].total;
+                    payTypeString = payTypeString + 'Pament Type: ' + payType + ', Amount: ' + amtByPayType.toString() + ', ';
+                    tmpAmt = data.SpendingByPaymentType[i].total;
+                }
+                payTypeString = payTypeString.substring(0, payTypeString.length - 1);
+            }
+
+            tmpAmt = ''
+            for (var i = 0, len = data.MostActivity.length; i < len; i++) {
+                if (tmpAmt == '' || tmpAmt == data.MostActivity[i].count) {
+                    mostActivityStore = data.MostActivity[i].store;
+                    mostActivityCount = data.MostActivity[i].count;
+                    mostActivityString = mostActivityString + 'Store with most visits: ' + mostActivityStore + ', Number of Visits: ' + mostActivityCount.toString() + ', ';
+                    tmpAmt = data.MostActivity[i].count;
+                }
+                mostActivityString = mostActivityString.substring(0, mostActivityString.length - 1);
             }
             return {
-                'storeinfo': stores.substring(0, stores.length - 2),
-                'visits': numberOfVisits,
-                'avgpervist': retAvg.substring(0, retAvg.length - 2),
-                'totalSpent': spentString.substring(0, spentString.length - 2),
-                'totalbudget': '$' + data[0].total.toString(),
-                'amtspent': '$' + data[0].amtspent.toString()
+                'AvgSpentPerStore': data.AvgSpentPerStore,
+                'Budgeted': data.Budgeted,
+                'LowMonth': lowSpendingString,
+                'MostActivity': mostActivityString,
+                'OverSpent': data.OverSpent,
+                'SpendingByPaymentType': payTypeString,
+                'Spent': data.Spent,
+                'StoresVisited': data.StoresVisited,
+                'TopMonth': topSpendingString,
+                'TopSpendingStore': data.TopSpendingStore
             }
+
+
+
+
+
+
+
+
+
+
+
+
+            // for (var i = 0, len = data[0].TopMonth.length; i < len; i++) {
+            //     monthNumber = data[0].TopMonth[i].month;
+            //     if (tmpAmt == '' || tmpAmt == data[0].TopMonth[i].total) {
+            //         topSpendingMonth = months[monthNumber - 1];
+            //         topSpendingAmount = data[0].TopMonth[i].total;
+            //         topSpendingString + topSpendingString + topSpendingMonth + '-->$' + topSpendingAmount + '; '
+            //         tempHolder = data[0].TopMonth[i].total
+            //     }
+            //     debugger;
+            //     topSpendingString = topSpendingString.substring(0, topSpendingString.length - 1);
+            // }
+            // tmpAmt = '';
+            // for (var i = 0, len = data[0].LowMonth.length; i < len; i++) {
+            //     monthNumber = data[0].LowMonth[i].month;
+            //     if (tmpAmt == '' || tmpAmt == data[0].LowMonth[i].total) {
+            //         lowpSpendingMonth = months[monthNumber - 1];
+            //         lowSpendingAmount = data[0].LowMonth[i].total;
+            //         lowSpendingString + topSpendingString + lowpSpendingMonth + '-->$' + lowSpendingAmount + '; '
+            //         tempHolder = data[0].LowMonth[i].total
+            //     }
+            //     debugger;
+            //     topSpendingString = topSpendingString.substring(0, topSpendingString.length - 1);
+            // }
+            // overBudgetcount = data[0].OversSpent.length;
+            // debugger;
+            // if (overBudgetcount > 0) {
+            //     for (var i = 0, len = data[0].OversSpent.length; i < len; i++) {
+            //         debugger;
+            //         startDate = $filter('date')(data[0].OversSpent[i].budgetstartdate, 'MM/dd/yyyy');
+            //         endDate = $filter('date')(data[0].OversSpent[i].budgetenddate, 'MM/dd/yyyy');
+            //         startingBudget = data[0].OversSpent[i].budgetamount;
+            //         endingBudget = data[0].OversSpent[i].totalspent;
+            //         amountOver = startingBudget - endingBudget;
+            //         debugger;
+            //         overBudgetString = overBudgetString + 'Budget period: ' + startDate + ' to ' + endDate + '; Budget Amount: $' + startingBudget + '; Total Spent: $' + endingBudget + '; Total Over Budget $' + $filter('number')(amountOver, 2) + ', ';
+            //     }
+            //     overBudgetString = overBudgetString.substring(0, overBudgetString.length - 1);
+            // } else {
+            //     overBudgetString = '0';
+            // }
+
+            // for (var i = 0, len = data[0].StoresVisited.length; i < len; i++) {
+            //     storesVisited = storesVisited + data[0].StoresVisited[i].store + ', ';
+            // }
+            // storesVisited = storesVisited.substring(0, storesVisited.length - 1);
+            // var topSpendingStore = data[0].TopSpendingStore[0].store;
+            // var topSpendingStoreAmt = data[0].TopSpendingStore[0].totalspent;
+
+            // tmpAmt = ''
+            // for (var i = 0, len = data[0].SpendingByPaymentType.length; i < len; i++) {
+            //     if (tmpAmt == '' || tmpAmt == data[0].SpendingByPaymentType[i].total) {
+            //         payType = data[0].SpendingByPaymentType[i].BudgetType;
+            //         amtByPayType = data[0].SpendingByPaymentType[i].amount;
+            //         payTypeString = payTypeString + 'Pament Type: ' + payType + ', Amount: ' + amtByPayType.toString() + ', ';
+            //         tmpAmt = data[0].SpendingByPaymentType[i].total;
+            //     }
+            //     payTypeString = payTypeString.substring(0, payTypeString.length - 1);
+            // }
+
+            // tmpAmt = ''
+            // for (var i = 0, len = data[0].MostActivity.length; i < len; i++) {
+            //     if (tmpAmt == '' || tmpAmt == data[0].MostActivity[i].count) {
+            //         mostActivityStore = data[0].MostActivity[i].store;
+            //         mostActivityCount = data[0].MostActivity[i].count;
+            //         mostActivityString = mostActivityString + 'Store with most visits: ' + mostActivityStore + ', Number of Visits: ' + mostActivityCount.toString() + ', ';
+            //         tmpAmt = data[0].MostActivity[i].count;
+            //     }
+            //     mostActivityString = mostActivityString.substring(0, mostActivityString.length - 1);
+            // }
+
+
+
+
+            // return {
+            //     'totabudgetytd': stores.substring(0, stores.length - 2),
+            //     'totalspentytd': numberOfVisits,
+            //     'topspendingmonth': retAvg.substring(0, retAvg.length - 2),
+            //     'lowspendingmonth': spentString.substring(0, spentString.length - 2),
+            //     'overbudgetcount': '$' + data[0].total.toString(),
+            //     'storemostspent': '$' + data[0].amtspent.toString(),
+            //     'spendingbypaymenttype': '$' + data[0].amtspent.toString(),
+            //     'topvisitedstore': '$' + data[0].amtspent.toString(),
+            //     'storesvisited': '$' + data[0].amtspent.toString(),
+            // }
         }
 
 

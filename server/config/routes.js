@@ -313,98 +313,108 @@ module.exports = function(app, config) {
         });
     });
 
+
     app.get('/data/Trends', function(req, res) {
         var maxCount = 0;
         var totalBudgeted = 0;
         var totalSpent = 0;
         console.log("here delete success?");
 
-
-        Transactions.aggregate([{
-                $group: {
-                    _id: "$store",
-                    count: { $sum: 1 }
+        Budget.aggregate([{
+                $lookup: {
+                    from: 'transactions',
+                    localField: 'Transactions',
+                    foreignField: '_id',
+                    as: 'trans'
                 }
             },
             {
-                $group: {
-                    _id: "$store",
-                    count: { $max: "$count" }
+                $facet: {
+                    "Budgeted": [
+                        { $group: { _id: null, total: { $sum: { $sum: '$BudgetAmount' } } } },
+                        { $project: { '_id': 0, totalbudget: '$total' } }
+                    ],
+                    "Spent": [
+                        { $unwind: '$trans' },
+                        { $project: { '_id': 0, t: '$trans' } },
+                        { $group: { _id: '$t.store', total: { $sum: { $sum: '$t.itemprice' } } } },
+                        { $project: { '_id': 0, total: '$total' } },
+                        { $group: { _id: null, totalspent: { $sum: { $sum: '$total' } } } },
+                        { $project: { '_id': 0, totalspent: '$totalspent' } },
+                    ],
+                    "TopMonth": [
+                        { $unwind: '$trans' },
+                        { $project: { '_id': 0, t: '$trans' } },
+                        { $group: { _id: { $month: '$t.transdate' }, total: { $sum: { $sum: '$t.itemprice' } } } },
+                        { $project: { '_id': 0, 'month': '$_id', 'total': { $max: '$total' } } },
+                        { $sort: { 'total': -1 } }
+                    ],
+                    "LowMonth": [
+                        { $unwind: '$trans' },
+                        { $project: { '_id': 0, t: '$trans' } },
+                        { $group: { _id: { $month: '$t.transdate' }, total: { $sum: { $sum: '$t.itemprice' } } } },
+                        { $project: { '_id': 0, 'month': '$_id', 'total': { $max: '$total' } } },
+                        { $sort: { 'total': 1 } }
+                    ],
+                    "OverSpent": [
+                        { $project: { '_id': 0, 'budgetamount': '$BudgetAmount', 'budgetstartdate': '$BudgetStartDate', 'budgetenddate': '$BudgetEndDate', 'totalspent': { $sum: '$trans.itemprice' } } },
+                        { $project: { '_id': 0, 'budgetamount': '$budgetamount', 'budgetstartdate': '$budgetstartdate', 'budgetenddate': '$budgetenddate', 'ts': '$totalspent' } },
+                        { $project: { '_id': 0, 'budgetamount': '$budgetamount', 'budgetstartdate': '$budgetstartdate', 'budgetenddate': '$budgetenddate', 'totalspent': '$ts', 'cmp': { $cmp: ['$ts', '$budgetamount'] } } },
+                        { $match: { cmp: { $gt: 0 } } }
+                    ],
+                    "MostActivity": [
+                        { $project: { '_id': 0, 'totalspent': '$trans.store' } },
+                        { $unwind: '$totalspent' },
+                        { $group: { _id: '$totalspent', count: { $sum: 1 } } },
+                        {
+                            $project: {
+                                '_id': 0,
+                                'store': '$_id',
+                                'count': { $max: '$count' },
+                            }
+                        },
+                        { $sort: { 'count': -1 } }
+                    ],
+                    "StoresVisited": [
+                        { $project: { '_id': 0, 'totalspent': '$trans.store' } },
+                        { $unwind: '$totalspent' },
+                        { $group: { _id: '$totalspent', count: { $sum: 1 } } },
+                        {
+                            $project: {
+                                '_id': 0,
+                                'store': '$_id',
+                            }
+                        },
+                    ],
+                    "TopSpendingStore": [
+                        { $project: { '_id': 0, 't': '$trans' } },
+                        { $unwind: '$t' },
+                        { $group: { _id: '$t.store', total: { $sum: '$t.itemprice' } } },
+                        { $sort: { 'total': -1 } },
+                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total' } },
+                        { $limit: 1 }
+                    ],
+                    "SpendingByPaymentType": [
+                        { $project: { '_id': '$_id', 'BudgetType': '$BudgetType', 't': '$trans' } },
+                        { $unwind: '$t' },
+                        { $group: { _id: '$BudgetType', total: { $sum: '$t.itemprice' } } },
+                        { $project: { '_id': 0, 'BudgetType': '$_id', 'total': '$total' } },
+                        { $sort: { 'BudgetType': 1 } },
+                    ],
+                    "AvgSpentPerStore": [
+                        { $project: { '_id': 0, 't': '$trans' } },
+                        { $unwind: '$t' },
+                        { $group: { _id: '$t.store', total: { $sum: '$t.itemprice' }, visitsperstore: { $sum: 1 } } },
+                        { $sort: { 'total': -1 } },
+                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total', 'avgspentpervist': { $divide: ['$total', '$visitsperstore'] } } },
+                    ]
                 }
-            }, { $project: { _id: 0 } }
-
+            }
         ]).exec(function(err, ret) {
             if (err) {
                 res.send(err);
             }
-            //console.log(ret[0].count);
-            if (ret.length == 0) {
-                return res.status(400).send({ message: -1 });
-            } else {
-                maxCount = ret[0].count;
-
-                Budget.aggregate([{
-                    $group: {
-                        _id: null,
-                        totalAmount: {
-                            $sum: "$BudgetAmount"
-
-                        }
-                    }
-                }]).exec(function(err, retTotal) {
-                    if (err) {
-                        res.send(err);
-                    } else {
-
-                        Transactions.aggregate([{
-                            $group: {
-                                _id: null,
-                                totalspent: { $sum: "$itemprice" }
-                            }
-                        }]).exec(function(err, retSpent) {
-                            if (err) {
-                                res.send(err);
-                            } else {
-                                console.log("retTotal=" + retTotal[0].totalAmount)
-                                console.log("retspent=" + retSpent[0].totalspent)
-                                totalBudgeted = retTotal[0].totalAmount;
-                                totalSpent = retSpent[0].totalspent;
-                                Transactions.aggregate([{
-                                        $group: {
-                                            _id: "$store",
-                                            itemprice: { $sum: "$itemprice" },
-                                            count: { $sum: 1 }
-                                        }
-                                    },
-                                    { $match: { "count": { $eq: maxCount } } },
-                                    { $addFields: { "total": totalBudgeted } },
-                                    { $addFields: { "amtspent": totalSpent } }
-
-                                ]).exec(function(err, data) {
-                                    if (err) {
-                                        res.send(err);
-                                    }
-                                    res.json(data);
-                                });
-
-                            }
-                        });
-
-
-
-
-
-
-
-
-                    }
-                });
-
-
-
-
-            }
-
+            res.json(ret);
         });
         // Transactions.aggregate([{
         //         $group: {
@@ -422,6 +432,117 @@ module.exports = function(app, config) {
         // });
 
     })
+
+
+    // app.get('/data/Trends', function(req, res) {
+    //     var maxCount = 0;
+    //     var totalBudgeted = 0;
+    //     var totalSpent = 0;
+    //     console.log("here delete success?");
+
+
+    //     Transactions.aggregate([{
+    //             $group: {
+    //                 _id: "$store",
+    //                 count: { $sum: 1 }
+    //             }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: "$store",
+    //                 count: { $max: "$count" }
+    //             }
+    //         }, { $project: { _id: 0 } }
+
+    //     ]).exec(function(err, ret) {
+    //         if (err) {
+    //             res.send(err);
+    //         }
+    //         //console.log(ret[0].count);
+    //         if (ret.length == 0) {
+    //             return res.status(400).send({ message: -1 });
+    //         } else {
+    //             maxCount = ret[0].count;
+
+    //             Budget.aggregate([{
+    //                 $group: {
+    //                     _id: null,
+    //                     totalAmount: {
+    //                         $sum: "$BudgetAmount"
+
+    //                     }
+    //                 }
+    //             }]).exec(function(err, retTotal) {
+    //                 if (err) {
+    //                     res.send(err);
+    //                 } else {
+
+    //                     Transactions.aggregate([{
+    //                         $group: {
+    //                             _id: null,
+    //                             totalspent: { $sum: "$itemprice" }
+    //                         }
+    //                     }]).exec(function(err, retSpent) {
+    //                         if (err) {
+    //                             res.send(err);
+    //                         } else {
+    //                             console.log("retTotal=" + retTotal[0].totalAmount)
+    //                             console.log("retspent=" + retSpent[0].totalspent)
+    //                             totalBudgeted = retTotal[0].totalAmount;
+    //                             totalSpent = retSpent[0].totalspent;
+    //                             Transactions.aggregate([{
+    //                                     $group: {
+    //                                         _id: "$store",
+    //                                         itemprice: { $sum: "$itemprice" },
+    //                                         count: { $sum: 1 }
+    //                                     }
+    //                                 },
+    //                                 { $match: { "count": { $eq: maxCount } } },
+    //                                 { $addFields: { "total": totalBudgeted } },
+    //                                 { $addFields: { "amtspent": totalSpent } }
+
+    //                             ]).exec(function(err, data) {
+    //                                 if (err) {
+    //                                     res.send(err);
+    //                                 }
+    //                                 res.json(data);
+    //                             });
+
+    //                         }
+    //                     });
+
+
+
+
+
+
+
+
+    //                 }
+    //             });
+
+
+
+
+    //         }
+
+    //     });
+    //     // Transactions.aggregate([{
+    //     //         $group: {
+    //     //             _id: "$store",
+    //     //             count: { $sum: 1 }
+    //     //         }
+    //     //     },
+    //     //     { $match: { "count": { $eq: maxCount } } }
+
+    //     // ]).exec(function(err, data) {
+    //     //     if (err) {
+    //     //         res.send(err);
+    //     //     }
+    //     //     res.json(data);
+    //     // });
+
+    // })
 
     //have to set up static routing to our public directory for stylus config
 
