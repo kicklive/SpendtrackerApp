@@ -49,24 +49,7 @@ module.exports = function(app, config) {
             status = 'Future';
         else
             status = 'Open';
-        //startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
-        //endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
 
-        // var startYear=startDate.getFullYear;
-        // var startDate=startDate.getDate;
-        // var startMonth=startDate.getMonth;
-
-        // startDate = startDate.getFullYear().toString() + '-' + (startDate.getMonth() + 1).toString() + '-' + (startDate.getDate() + 1).toString();
-        // endDate = endDate.getFullYear().toString() + '-' + (endDate.getMonth() + 1).toString() + '-' + (endDate.getDate() + 1).toString();
-        // startDate = nodedate.create(startDate);
-        // endDate = nodedate.create(endDate);
-
-
-        // startDate = startDate.setHours(0, 0, 0, 0);
-        // endDate = endDate.setHours(0, 0, 0, 0);
-
-        // startDate = startDate.toISOString().slice(0, 10);
-        // endDate = endDate.toISOString().slice(0, 10);
         console.log('startDate==>' + req.body.startdate);
         console.log('startDatex==>' + startDate);
 
@@ -124,40 +107,6 @@ module.exports = function(app, config) {
             });
     });
 
-    // app.post("/data/SaveTransaction", function(req, res) {
-    //     console.log('dfsddas');
-    //     Transactions.create({
-    //             itemdescription: req.body.itemDesc,
-    //             itemprice: req.body.transAmt,
-    //             transdate: req.body.transDate,
-    //             store: req.body.store,
-    //             upc: req.body.upc
-    //                 //BudgetId: req.body.budgetId
-    //         },
-    //         function(err, NewTrans) {
-    //             if (err) {
-    //                 res.send(err);
-    //             } else {
-    //                 console.log("nb==>" + NewBudget);
-    //                 SaveItem(req.body.upc, req.body.itemDesc);
-    //                 NewBudget.findOne({
-    //                         _id: req.body.budgetId
-    //                     },
-    //                     function(err, ret) {
-    //                         //console.log('HEEEERREE');
-    //                         ret.Transactions.push(NewTrans);
-    //                         ret.save(function(err, ret) {
-    //                             if (err) {
-    //                                 res.send(err);
-    //                                 console.log('err here')
-    //                             }
-    //                         });
-    //                     }
-    //                 );
-    //                 res.json(NewTrans);
-    //             }
-    //         });
-    // });
 
     function SaveItem(upc, desc) {
         console.log("upc==>" + upc);
@@ -226,11 +175,6 @@ module.exports = function(app, config) {
         console.log("bulk==>" + bulk);
         var todaysDate = new Date();
 
-        //var dt = nodedate.create()
-        // var formattedDate = dt.format('m/d/Y')
-        // var dateOnly = new Date(dateOnly.setHours(0, 0, 0, 0));
-
-        //bulk.find({ 'BudgetAmount': { $lt: dt.getTime() } }).update({
         bulk.find({ 'BudgetEndDate': { $lt: todaysDate } }).update({
             $set: {
                 BudgetStatus: 'Closed'
@@ -399,14 +343,14 @@ module.exports = function(app, config) {
                         { $unwind: '$t' },
                         { $group: { _id: '$BudgetType', total: { $sum: '$t.itemprice' } } },
                         { $project: { '_id': 0, 'BudgetType': '$_id', 'total': '$total' } },
-                        { $sort: { 'BudgetType': 1 } },
+                        { $sort: { 'total': -1 } },
                     ],
                     "AvgSpentPerStore": [
                         { $project: { '_id': 0, 't': '$trans' } },
                         { $unwind: '$t' },
                         { $group: { _id: '$t.store', total: { $sum: '$t.itemprice' }, visitsperstore: { $sum: 1 } } },
                         { $sort: { 'total': -1 } },
-                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total', 'avgspentpervist': { $divide: ['$total', '$visitsperstore'] } } },
+                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total', 'avgspentpervist': { $divide: ['$total', '$visitsperstore'] }, 'numvisits': '$visitsperstore' } },
                     ]
                 }
             }
@@ -416,147 +360,7 @@ module.exports = function(app, config) {
             }
             res.json(ret);
         });
-        // Transactions.aggregate([{
-        //         $group: {
-        //             _id: "$store",
-        //             count: { $sum: 1 }
-        //         }
-        //     },
-        //     { $match: { "count": { $eq: maxCount } } }
-
-        // ]).exec(function(err, data) {
-        //     if (err) {
-        //         res.send(err);
-        //     }
-        //     res.json(data);
-        // });
-
     })
-
-
-    // app.get('/data/Trends', function(req, res) {
-    //     var maxCount = 0;
-    //     var totalBudgeted = 0;
-    //     var totalSpent = 0;
-    //     console.log("here delete success?");
-
-
-    //     Transactions.aggregate([{
-    //             $group: {
-    //                 _id: "$store",
-    //                 count: { $sum: 1 }
-    //             }
-    //         },
-    //         {
-    //             $group: {
-    //                 _id: "$store",
-    //                 count: { $max: "$count" }
-    //             }
-    //         }, { $project: { _id: 0 } }
-
-    //     ]).exec(function(err, ret) {
-    //         if (err) {
-    //             res.send(err);
-    //         }
-    //         //console.log(ret[0].count);
-    //         if (ret.length == 0) {
-    //             return res.status(400).send({ message: -1 });
-    //         } else {
-    //             maxCount = ret[0].count;
-
-    //             Budget.aggregate([{
-    //                 $group: {
-    //                     _id: null,
-    //                     totalAmount: {
-    //                         $sum: "$BudgetAmount"
-
-    //                     }
-    //                 }
-    //             }]).exec(function(err, retTotal) {
-    //                 if (err) {
-    //                     res.send(err);
-    //                 } else {
-
-    //                     Transactions.aggregate([{
-    //                         $group: {
-    //                             _id: null,
-    //                             totalspent: { $sum: "$itemprice" }
-    //                         }
-    //                     }]).exec(function(err, retSpent) {
-    //                         if (err) {
-    //                             res.send(err);
-    //                         } else {
-    //                             console.log("retTotal=" + retTotal[0].totalAmount)
-    //                             console.log("retspent=" + retSpent[0].totalspent)
-    //                             totalBudgeted = retTotal[0].totalAmount;
-    //                             totalSpent = retSpent[0].totalspent;
-    //                             Transactions.aggregate([{
-    //                                     $group: {
-    //                                         _id: "$store",
-    //                                         itemprice: { $sum: "$itemprice" },
-    //                                         count: { $sum: 1 }
-    //                                     }
-    //                                 },
-    //                                 { $match: { "count": { $eq: maxCount } } },
-    //                                 { $addFields: { "total": totalBudgeted } },
-    //                                 { $addFields: { "amtspent": totalSpent } }
-
-    //                             ]).exec(function(err, data) {
-    //                                 if (err) {
-    //                                     res.send(err);
-    //                                 }
-    //                                 res.json(data);
-    //                             });
-
-    //                         }
-    //                     });
-
-
-
-
-
-
-
-
-    //                 }
-    //             });
-
-
-
-
-    //         }
-
-    //     });
-    //     // Transactions.aggregate([{
-    //     //         $group: {
-    //     //             _id: "$store",
-    //     //             count: { $sum: 1 }
-    //     //         }
-    //     //     },
-    //     //     { $match: { "count": { $eq: maxCount } } }
-
-    //     // ]).exec(function(err, data) {
-    //     //     if (err) {
-    //     //         res.send(err);
-    //     //     }
-    //     //     res.json(data);
-    //     // });
-
-    // })
-
-    //have to set up static routing to our public directory for stylus config
-
-    //catchall route
-    // app.all('/*', function(req, res, next) {
-    //     // Just send the index.html for other files to support HTML5Mode
-    //     console.log("xx=" + config.rootPath)
-    //     res.sendFile('index.jade', { root: config.rootPath + "/server/views/" });
-    // });
-    // app.all("/partials/*", function(req, res) {
-    //     console.log('here');
-    //     res.sendFile("../../public/app/templates/" + req.params[0]);
-    // });
-
 
     app.get("/partials/*", function(req, res) {
         console.log('here');
