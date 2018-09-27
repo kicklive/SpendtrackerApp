@@ -50,6 +50,23 @@
                     }
                 });
             };
+            vm.GetTrendsByMonth = function() {
+                debugger;
+                var month = vm.month;
+                BudgetTrendsService.GetTrendsByMonoth(month).then(function(ret, err) {
+                    debugger
+                    if (ret != -1) {
+                        vm.ShowMessage = false;
+                        vm.Activity = ret;
+                    } else {
+                        vm.Message = 'There are no tranactions available.'
+
+                        // BudgetTrendsService.GetMostPurchasedItem().then(function(retItems) {
+                        //     vm.MostPurchased = retItems;
+                        // });
+                    }
+                });
+            };
             vm.AddBold = function(s) {
                 if (typeof s != 'undefined')
                     return s.replace('Total Spent:', "<span style='font-weight:bold;>xxx</span>");

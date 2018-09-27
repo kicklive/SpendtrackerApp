@@ -10,8 +10,9 @@
     function BudgetTrends($http, DataCalculationService) {
         var service = {
             GetTrends: GetDataAll,
-            // _massageData: MassageData
-            //GetMostPurchasedItem: GetPurchaseTrends
+            GetTrendsByMonoth: GetDataByMonth
+                // _massageData: MassageData
+                //GetMostPurchasedItem: GetPurchaseTrends
         };
 
         return service;
@@ -29,6 +30,22 @@
             function failure(err) {
                 debugger;
                 return err.data.message;
+            }
+        }
+
+        function GetDataByMonth(m) {
+            debugger;
+            // return $http.get('/data/TrendsByMonth').then(success, failure);
+            return $http.get('/data/TrendsByMonth', { params: { m: m } }).then(success, failure).catch(angular.noop);
+
+            function success(d) {
+                debugger;
+                return DataCalculationService.getTrendCal(d.data[0]);
+            }
+
+            function failure(err) {
+                debugger;
+                return 'There was an retrieving data. Contact Administrator.' + err;
             }
         }
 

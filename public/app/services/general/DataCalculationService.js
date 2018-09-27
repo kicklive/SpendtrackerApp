@@ -26,43 +26,50 @@
 
 
             var topMonth = [];
-            for (var i = 0, len = data.TopMonth.length; i < len; i++) {
-                if (tmpAmt == '' || tmpAmt == data.TopMonth[i].total) {
-                    topMonth[i] = { 'month': $filter('MonthFltr')(data.TopMonth[i].month), 'amount': $filter('currency')(data.TopMonth[i].total, '$', '2') };
-                    tmpAmt = data.TopMonth[i].total
+            if (typeof(data.TopMonth) != 'undefined') {
+                for (var i = 0, len = data.TopMonth.length; i < len; i++) {
+                    if (tmpAmt == '' || tmpAmt == data.TopMonth[i].total) {
+                        topMonth[i] = { 'month': $filter('MonthFltr')(data.TopMonth[i].month), 'amount': $filter('currency')(data.TopMonth[i].total, '$', '2') };
+                        tmpAmt = data.TopMonth[i].total
+                    }
+                    debugger;
                 }
-                debugger;
-            }
-            tmpAmt = '';
-            var lowMonth = [];
-            for (var i = 0, len = data.LowMonth.length; i < len; i++) {
-                if (tmpAmt == '' || tmpAmt == data.LowMonth[i].total) {
-                    lowMonth[i] = { 'month': $filter('MonthFltr')(data.LowMonth[i].month), 'amount': $filter('currency')(data.LowMonth[i].total, '$', '2') };
-                    tmpAmt = data.LowMonth[i].total
-                }
-                debugger;
             }
 
-            tmpAmt = ''
-            var topActivity = [];
-            for (var i = 0, len = data.MostActivity.length; i < len; i++) {
-                if (tmpAmt == '' || tmpAmt == data.MostActivity[i].count) {
-                    topActivity[i] = { 'store': data.MostActivity[i].store, 'count': data.MostActivity[i].count };
-                    tmpAmt = data.MostActivity[i].count;
+            if (typeof(data.TopMonth) != 'undefined') {
+                tmpAmt = '';
+                var lowMonth = [];
+                for (var i = 0, len = data.LowMonth.length; i < len; i++) {
+                    if (tmpAmt == '' || tmpAmt == data.LowMonth[i].total) {
+                        lowMonth[i] = { 'month': $filter('MonthFltr')(data.LowMonth[i].month), 'amount': $filter('currency')(data.LowMonth[i].total, '$', '2') };
+                        tmpAmt = data.LowMonth[i].total
+                    }
+                    debugger;
+                }
+            }
+
+            if (typeof(data.TopMonth) != 'undefined') {
+                tmpAmt = ''
+                var topActivity = [];
+                for (var i = 0, len = data.MostActivity.length; i < len; i++) {
+                    if (tmpAmt == '' || tmpAmt == data.MostActivity[i].count) {
+                        topActivity[i] = { 'store': data.MostActivity[i].store, 'count': data.MostActivity[i].count };
+                        tmpAmt = data.MostActivity[i].count;
+                    }
                 }
             }
             return {
-                'AvgSpentPerStore': data.AvgSpentPerStore,
+                // 'AvgSpentPerStore': data.AvgSpentPerStore,
                 'Budgeted': data.Budgeted,
-                'LowMonth': lowMonth,
-                'MostActivity': topActivity,
-                'OverSpent': data.OverSpent,
-                'OverSpentOccurencesCount': data.OverSpent.length,
-                'SpendingByPaymentType': data.SpendingByPaymentType,
+                // 'LowMonth': lowMonth,
+                // 'MostActivity': topActivity,
+                // 'OverSpent': data.OverSpent,
+                // 'OverSpentOccurencesCount': data.OverSpent.length,
+                // 'SpendingByPaymentType': data.SpendingByPaymentType,
                 'Spent': data.Spent,
-                'StoresVisited': data.StoresVisited,
-                'TopMonth': topMonth,
-                'TopSpendingStore': data.TopSpendingStore
+                // 'StoresVisited': data.StoresVisited,
+                // 'TopMonth': topMonth,
+                // 'TopSpendingStore': data.TopSpendingStore
             }
         }
 

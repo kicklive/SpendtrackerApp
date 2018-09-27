@@ -360,6 +360,241 @@ module.exports = function(app, config) {
             }
             res.json(ret);
         });
+    });
+
+    app.get('/data/TrendsByMonth', function(req, res) {
+        var maxCount = 0;
+        var totalBudgeted = 0;
+        var totalSpent = 0;
+        var m = req.query.m;
+        console.log("here delete success?");
+
+        Budget.aggregate([{
+                $lookup: {
+                    from: 'transactions',
+                    localField: 'Transactions',
+                    foreignField: '_id',
+                    as: 'trans'
+                }
+            },
+            {
+                $facet: {
+                    "Budgeted": [{
+                            $project: {
+                                '_id': 0,
+                                start: '$BudgetStartDate',
+                                end: '$BudgetEndDate',
+                                amount: '$BudgetAmount',
+                                status: '$BudgetStatus',
+                                'type': '$BudgetType',
+                                daysinbudget: { $divide: [{ $subtract: ['$BudgetEndDate', '$BudgetStartDate'] }, { $multiply: [24, 60, 60, 1000] }] },
+                                startmonth: { $month: '$BudgetStartDate' },
+                                endmonth: { $month: '$BudgetEndDate' },
+                                yr: { $year: '$BudgetStartDate' },
+                                trans: '$trans'
+                            },
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: { $toString: '$startmonth' },
+                                endmonth: { $toString: '$endmonth' },
+                                yr: { $toString: '$yr' },
+                                trans: '$trans'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: '$startmonth',
+                                endmonth: '$endmonth',
+                                yr: '$yr',
+                                trans: '$trans'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: '$startmonth',
+                                endmonth: '$endmonth',
+                                yr: '$yr',
+                                eomenddate: { $toDate: { $concat: ['$endmonth', '/1/', '$yr'] } },
+                                eomstartdate: { $toDate: { $concat: ['$startmonth', '/1/', '$yr'] } },
+                                trans: '$trans'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: '$startmonth',
+                                endmonth: '$endmonth',
+                                yr: '$yr',
+                                eomenddate: '$eomenddate',
+                                eomstartdate: '$eomstartdate',
+                                eomdate: { $toString: { $divide: [{ $subtract: ['$eomenddate', '$eomstartdate'] }, { $multiply: [24, 60, 60, 1000] }] } },
+                                trans: '$trans'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: '$startmonth',
+                                endmonth: '$endmonth',
+                                yr: '$yr',
+                                eomenddate: '$eomenddate',
+                                eomstartdate: '$eomstartdate',
+                                eomday: '$eomdate',
+                                trans: '$trans'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                startmonth: '$startmonth',
+                                endmonth: '$endmonth',
+                                yr: '$yr',
+                                eomenddate: '$eomenddate',
+                                eomstartdate: '$eomstartdate',
+                                eomday: '$eomdate',
+                                trans: '$trans',
+                                end: {
+                                    $cond: {
+                                        if: {
+                                            $ne: ['$eomday', '0']
+                                        },
+                                        then: { $toDate: { $concat: ['$startmonth', '/', '$eomday', '/', '$yr', ' 04:00:00'] } },
+                                        else: '$end'
+                                    }
+                                }
+
+
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                amount: '$amount',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: { $divide: [{ $subtract: ['$end', '$start'] }, { $multiply: [24, 60, 60, 1000] }] },
+                                originaldaysinbudget: '$daysinbudget',
+                                endmonth: '$endmonth',
+                                startmonth: '$startmonth'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                originaldaysinbudget: '$originaldaysinbudget',
+                                amount: { $multiply: [{ $divide: ['$amount', '$originaldaysinbudget'] }, '$daysinbudget'] },
+                                remainingamt: { $subtract: ['$amount', { $multiply: [{ $divide: ['$amount', '$originaldaysinbudget'] }, '$daysinbudget'] }] },
+                                endmonth: '$endmonth',
+                                startmonth: '$startmonth'
+                            }
+                        },
+                        {
+                            $project: {
+                                '_id': 0,
+                                start: '$start',
+                                end: '$end',
+                                status: '$status',
+                                type: '$type',
+                                daysinbudget: '$daysinbudget',
+                                originaldaysinbudget: '$originaldaysinbudget',
+                                endmonth: '$endmonth',
+                                startmonth: '$startmonth',
+                                x: '$amount',
+                                y: '$remainingamt',
+                                amount: {
+                                    $cond: {
+                                        if: {
+                                            $ne: ['$startmonth', m.toString()]
+                                        },
+                                        then: 0,
+                                        else: '$amount'
+                                    }
+                                },
+
+                                remainingamt: {
+                                    $cond: {
+                                        if: {
+                                            $ne: ['$startmonth', (m - 1).toString()]
+                                        },
+                                        then: 0,
+                                        else: '$remainingamt'
+                                    }
+                                }
+
+                            }
+                        },
+                        { $group: { _id: null, totalremaining: { $sum: '$remainingamt' }, total: { $sum: '$amount' } } },
+                        {
+                            $project: {
+                                '_id': 0,
+                                totalbudget: { $add: ['$totalremaining', '$total'] }
+                            }
+                        },
+                    ],
+                    "Spent": [{ $unwind: '$trans' },
+                        { $project: { '_id': 0, t: '$trans' } },
+                        { $project: { '_id': 0, t: '$t', month: { $month: '$t.transdate' } } },
+                        { $match: { month: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$t.store', total: { $sum: { $sum: '$t.itemprice' } } } },
+                        { $project: { '_id': 0, total: '$total' } },
+                        { $group: { _id: null, totalspent: { $sum: { $sum: '$total' } } } },
+                        { $project: { '_id': 0, totalspent: '$totalspent' } }
+                    ]
+
+                }
+            }
+        ]).exec(function(err, ret) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(ret);
+        });
     })
 
     app.get("/partials/*", function(req, res) {
