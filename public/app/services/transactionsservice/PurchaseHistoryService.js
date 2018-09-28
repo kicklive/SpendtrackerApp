@@ -35,11 +35,12 @@
             return $http.get('/data/HistoryByUPC', { params: { upc: upc } }).then(success, failure).catch(angular.noop);
 
             function success(d) {
-                ////debugger;
+                debugger;
                 return d.data;
             }
 
             function failure(err) {
+                debugger;
                 return 'There was an retrieving data. Contact Administrator.' + err;
             }
 

@@ -23,7 +23,7 @@
 
             function success(d) {
                 debugger;
-                return DataCalculationService.getTrendCal(d.data[0]);
+                return DataCalculationService.getTrendCal(d.data[0], 0, null);
                 //return d.data[0];
             }
 
@@ -40,7 +40,7 @@
 
             function success(d) {
                 debugger;
-                return DataCalculationService.getTrendCal(d.data[0]);
+                return DataCalculationService.getTrendCal(d.data[0], 1, m);
             }
 
             function failure(err) {

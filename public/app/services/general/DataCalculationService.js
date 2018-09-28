@@ -8,6 +8,10 @@
     Calculate.$inject = ['$filter']
 
     function Calculate($filter) {
+        var topMonth = [];
+        var lowMonth = [];
+        var topActivity = [];
+        var totalOverSpent;
         var service = {
             getTrendCal: MassageDataForTrends,
             getSum: SumPrice
@@ -15,17 +19,21 @@
 
         return service;
 
-        function MassageDataForTrends(data) {
+        function MassageDataForTrends(data, trendType, selectedMonth) {
             debugger;
             var tmpAmt = ''
             var topSpendingString = '';
             var lowSpendingString = '';
+            var spent;
+            var budgetAmt;
+
             var topSpendingMonth, topSpendingAmount, lowpSpendingMonth, lowSpendingAmount,
                 payType, amtByPayType, payTypeString, mostActivityStore, mostActivityCount, mostActivityString;
             debugger;
 
 
-            var topMonth = [];
+
+            debugger;
             if (typeof(data.TopMonth) != 'undefined') {
                 for (var i = 0, len = data.TopMonth.length; i < len; i++) {
                     if (tmpAmt == '' || tmpAmt == data.TopMonth[i].total) {
@@ -36,9 +44,9 @@
                 }
             }
 
-            if (typeof(data.TopMonth) != 'undefined') {
+            if (typeof(data.LowMonth) != 'undefined') {
                 tmpAmt = '';
-                var lowMonth = [];
+                debugger;
                 for (var i = 0, len = data.LowMonth.length; i < len; i++) {
                     if (tmpAmt == '' || tmpAmt == data.LowMonth[i].total) {
                         lowMonth[i] = { 'month': $filter('MonthFltr')(data.LowMonth[i].month), 'amount': $filter('currency')(data.LowMonth[i].total, '$', '2') };
@@ -48,9 +56,9 @@
                 }
             }
 
-            if (typeof(data.TopMonth) != 'undefined') {
+            if (typeof(data.MostActivity) != 'undefined') {
                 tmpAmt = ''
-                var topActivity = [];
+                topActivity.length = 0;
                 for (var i = 0, len = data.MostActivity.length; i < len; i++) {
                     if (tmpAmt == '' || tmpAmt == data.MostActivity[i].count) {
                         topActivity[i] = { 'store': data.MostActivity[i].store, 'count': data.MostActivity[i].count };
@@ -58,19 +66,16 @@
                     }
                 }
             }
-            return {
-                // 'AvgSpentPerStore': data.AvgSpentPerStore,
-                'Budgeted': data.Budgeted,
-                // 'LowMonth': lowMonth,
-                // 'MostActivity': topActivity,
-                // 'OverSpent': data.OverSpent,
-                // 'OverSpentOccurencesCount': data.OverSpent.length,
-                // 'SpendingByPaymentType': data.SpendingByPaymentType,
-                'Spent': data.Spent,
-                // 'StoresVisited': data.StoresVisited,
-                // 'TopMonth': topMonth,
-                // 'TopSpendingStore': data.TopSpendingStore
-            }
+            debugger;
+            totalOverSpent = 0
+            if (data.Spent.length == 1)
+                spent = data.Spent[0];
+            if (data.Budgeted.length == 1)
+                budgetAmt = data.Budgeted[0];
+            if (typeof(spent) != 'undefined' && typeof(budgetAmt) != 'undefined')
+                totalOverSpent = (budgetAmt.totalbudget - spent.totalspent);
+
+            return CreateReturnObject(trendType, data, selectedMonth);
         }
 
 
@@ -92,6 +97,45 @@
                 ret = ret + Number(d[i].itemprice);
             }
             return ret;
+        }
+
+        function CreateReturnObject(t, data, selectedMonth) {
+            debugger;
+            var retObj = {};
+            if (t === 1) {
+                retObj = {
+                    'AvgSpentPerStore': data.AvgSpentPerStore,
+                    'Budgeted': data.Budgeted,
+                    // 'LowMonth': lowMonth,
+                    'MostActivity': topActivity,
+                    'OverSpent': totalOverSpent,
+                    // 'OverSpentOccurencesCount': data.OverSpent.length,
+                    'SpendingByPaymentType': data.SpendingByPaymentType,
+                    'Spent': data.Spent,
+                    'StoresVisited': data.StoresVisited,
+                    // 'TopMonth': topMonth,
+                    'TopSpendingStore': data.TopSpendingStore,
+                    'TrendType': t,
+                    'SelectedMonth': selectedMonth
+                }
+            } else {
+                retObj = {
+                    'AvgSpentPerStore': data.AvgSpentPerStore,
+                    'Budgeted': data.Budgeted,
+                    'LowMonth': lowMonth,
+                    'MostActivity': topActivity,
+                    'OverSpent': data.OverSpent,
+                    'OverSpentOccurencesCount': data.OverSpent.length,
+                    'SpendingByPaymentType': data.SpendingByPaymentType,
+                    'Spent': data.Spent,
+                    'StoresVisited': data.StoresVisited,
+                    'TopMonth': topMonth,
+                    'TopSpendingStore': data.TopSpendingStore,
+                    'TrendType': t,
+                    'selectedMonth': null
+                }
+            }
+            return retObj;
         }
     }
 })();

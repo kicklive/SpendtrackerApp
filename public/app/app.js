@@ -69,6 +69,12 @@
                 controller: 'PurchaseHistoryController',
                 controllerAs: 'phc'
             })
+            .state('itemsearch', {
+                url: '/SearchItem',
+                templateUrl: '/partials/itemsviews/searchitem',
+                controller: 'SearchItemController',
+                controllerAs: 'sic'
+            })
             .state('startpage', {
                 url: '/',
                 params: { d: null, s: null },

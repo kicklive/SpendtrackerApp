@@ -125,7 +125,6 @@
 
             vm.GetHistoryByUPC = function() {
                 //debugger;
-                throw { message: 'There was an retrieving data. Contact Administrator.' };
                 PurchaseHistoryService.GetByUPC(vm.upc).then(function(data, err) {
                     //debugger;
                     if (data != null) {
@@ -135,6 +134,7 @@
                     } else {
                         notifierService.InfoMsg(
                             "There was an retrieving data. Contact Administrator."
+                            //throw { message: 'There was an retrieving data. Contact Administrator.' };
                         );
                     }
                 });

@@ -585,7 +585,49 @@ module.exports = function(app, config) {
                         { $project: { '_id': 0, total: '$total' } },
                         { $group: { _id: null, totalspent: { $sum: { $sum: '$total' } } } },
                         { $project: { '_id': 0, totalspent: '$totalspent' } }
+                    ],
+                    "StoresVisited": [
+                        { $unwind: '$trans' },
+                        { $project: { store: '$trans.store', transmonth: { $month: '$trans.transdate' } } },
+                        { $match: { transmonth: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$store' } },
+                        { $project: { _id: 0, store: '$_id' } }
+                    ],
+                    "TopSpendingStore": [
+                        { $project: { '_id': 0, 't': '$trans' } },
+                        { $unwind: '$t' },
+                        { $project: { store: '$t.store', price: '$t.itemprice', transmonth: { $month: '$t.transdate' } } },
+                        { $match: { transmonth: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$store', total: { $sum: '$price' } } },
+                        { $sort: { 'total': -1 } },
+                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total' } },
+                        { $limit: 1 }
+                    ],
+                    "SpendingByPaymentType": [
+                        { $unwind: '$trans' },
+                        { $project: { _id: '$_id', BudgetType: '$BudgetType', price: '$trans.itemprice', transmonth: { $month: '$trans.transdate' } } },
+                        { $match: { transmonth: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$BudgetType', total: { $sum: '$price' } } },
+                        { $project: { '_id': 0, 'BudgetType': '$_id', 'total': '$total' } },
+                        { $sort: { 'total': -1 } }
+                    ],
+                    "MostActivity": [
+                        { $unwind: '$trans' },
+                        { $project: { '_id': 0, totalspent: '$trans.store', transmonth: { $month: '$trans.transdate' } } },
+                        { $match: { transmonth: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$totalspent', count: { $sum: 1 } } },
+                        { $project: { _id: 0, store: '$_id', count: { $max: '$count' }, } },
+                        { $sort: { count: -1 } }
+                    ],
+                    "AvgSpentPerStore": [
+                        { $unwind: '$trans' },
+                        { $project: { store: '$trans.store', price: '$trans.itemprice', transmonth: { $month: '$trans.transdate' } } },
+                        { $match: { transmonth: { $eq: parseInt(m, 10) } } },
+                        { $group: { _id: '$store', total: { $sum: '$price' }, visitsperstore: { $sum: 1 } } },
+                        { $sort: { 'total': -1 } },
+                        { $project: { '_id': 0, 'store': '$_id', 'totalspent': '$total', 'avgspentpervist': { $divide: ['$total', '$visitsperstore'] }, 'numvisits': '$visitsperstore' } },
                     ]
+
 
                 }
             }
