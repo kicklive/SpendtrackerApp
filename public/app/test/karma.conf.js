@@ -36,6 +36,7 @@ module.exports = function(config) {
             '../filters/*.js',
             '../controllers/budgets/*.js',
             '../controllers/transactions/*.js',
+            '../controllers/items/*.js',
             'unit/*js'
         ],
 

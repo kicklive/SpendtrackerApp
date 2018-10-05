@@ -1,0 +1,47 @@
+.container100
+    form.form-vertical(name="isc.ItemSearch" novalidate ng-submit='submitForm()')
+        .row&nbsp;
+            .row.align-items-start
+                .div(style="width:80%;display: block;margin: 0 auto;")
+                    .form-group
+                        .col-md-2
+                            H4 Search By UPC:
+                        .col-md-3
+                            input.form-control(type="text" id="searchUPC" name="searchUPC" ng-model="isc.searchUPC"  ng-keyup="isc.SearchForItem()"  style="width:200px" placeholder="UPC" maxlength="12" numbers-only="numbers-only") 
+                       .col-md-3
+                            a.btn.btn-primary(ng-click="isc.AddNewProduct()") Add Product
+                            &nbsp;
+                            a.btn.btn-primary(ng-click="isc.ShowAllProducts()") Show All Products
+        hr(style="height:3px;border:none;color:#333;background-color:#333;")  
+        .div(ng-if="isc.errMsg!=''")   
+            .row
+                {{isc.errMsg}}
+        .div(ng-if="isc.Item == -1 && isc.count == 0 && isc.addProduct==false" ng-cloak)
+            {{"Item not found."}}
+        .div(ng-if="isc.Item._id != null && isc.count == 0  && isc.addProduct==false" ng-cloak)
+            .row
+                .col.md-6.inline(style="float:left;font-weight:bold") Item UPC: &nbsp;
+                {{isc.Item.UPC}}
+            .row
+                .col.md-6.inline(style="float:left;font-weight:bold") Item Description: &nbsp;
+                {{isc.Item.ItemDescription}}
+            .row
+                .col.md-6.inline(style="float:left;font-weight:bold") Item Price: &nbsp;
+                {{isc.Item.Price|currency : "$" : 2}}
+        .div(ng-if="isc.count > 1 && isc.addProduct==false" ng-cloak id="grid1" ui-grid="isc.items" ui-grid-grouping class="grid")
+        .div(ng-if="isc.addProduct" style="width:50%;display: block;margin: 0 auto;")
+            .row(style="height:50px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item UPC
+                .col-md-9
+                    input.form-control(type="text" id="upc" name="upc" ng-model="isc.UPC" required style="width:200px" placeholder="UPC" maxlength="12" numbers-only="numbers-only") 
+            .row(style="height:68px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item Description
+                .col-md-9 
+                    textarea.form-control(name="itemDescription", ng-model='isc.ItemDescription' style="resize:none;" ng-disabled="disabled" placeholder="Description" required)
+            .row(style="height:50px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item Price
+                .col-md-9
+                    input.form-control(type="text" id="price" name="price" ng-model="isc.Price" required style="width:100px" placeholder="Price" decimal-numbers="decimal-numbers") 
+            .row(style="height:50px")
+            .row(style="width:50%;display: block;margin: 0 auto;")
+                a.btn.btn-primary(ng-click="isc.Save()" ng-disabled='isc.ItemSearch.$invalid') Save

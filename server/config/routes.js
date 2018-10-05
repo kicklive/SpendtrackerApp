@@ -73,7 +73,7 @@ module.exports = function(app, config) {
             });
     });
 
-    app.post("/data/SaveTransaction", function(req, res) {
+    app.post("/data/SaveTransaction", function(req, res, next) {
         console.log('dfsddas');
         Transactions.create({
                 itemdescription: req.body.itemDesc,
@@ -96,36 +96,90 @@ module.exports = function(app, config) {
                         ret.Transactions.push(NewTrans);
                         ret.save(function(err, ret) {
                             if (err) {
-                                res.send(err);
-                                console.log('err here')
+                                return next(err);
+                                // console.log('err here')
                             }
                         });
                     }
                 );
-                SaveItem(req.body.upc, req.body.itemDesc);
-                res.json(NewTrans);
+                saveRet = SaveItem(req.body.upc, req.body.itemDesc, req.body.transAmt);
+                if (saveRet == 'success')
+                    res.json(NewTrans);
+                else
+                    res.send(saveRet);
             });
     });
 
-
-    function SaveItem(upc, desc) {
-        console.log("upc==>" + upc);
+    app.post("/data/addproduct", function(req, res, next) {
+        var id;
         Product.findOne({
-            upc: upc
+            UPC: req.body.UPC
         }, function(err, ret) {
-            if (err) {
-                res.send(err)
-            } else {
-                console.log("ret==>" + ret)
-                Product.create({
-                    itemdescription: desc,
-                    upc: upc
-                }, function(itemSaveErr, itemRet) {
-                    if (itemSaveErr)
-                        res.send("There was a problem saving the item.");
+            if (err)
+                return next();
+            else {
+                if (ret != null)
+                    id = ret._id;
+                prod = new Product({
+                    _id: id,
+                    ItemDescription: req.body.ItemDescription,
+                    UPC: req.body.UPC,
+                    Price: req.body.Price
+                });
+                prod.save(function(err, ret) {
+                    if (err) {
+                        console.log("saved==>" + err)
+                        return next();
+                    }
+                    res.send('ssuccess');
                 });
             }
+
+
         });
+
+
+
+        // var saveRet = SaveItem(req.body.UPC, req.body.ItemDescription, req.body.Price, next);
+        // console.log("saveRet==>" + saveRet)
+        // res.send(saveRet);
+    });
+
+
+    function SaveItem(upc, desc, price, next) {
+        console.log("upc==>" + upc);
+        var id;
+        Product.findOne({
+            UPC: upc
+        }, function(err, ret) {
+            if (err) {
+                return next();
+            } else {
+                console.log("ret==>" + ret)
+                if (ret != null)
+                    id = ret._id;
+                console.log("in Product.save()==>" + upc);
+                console.log("price==>" + price);
+                prod = new Product({
+                    _id: id,
+                    ItemDescription: desc,
+                    UPC: upc,
+                    Price: price
+                });
+                prod.save(function(err, ret) {
+                    if (err) {
+                        console.log("saved==>" + err)
+                        var error = new Error("This is an error");
+                        error.code = 403;
+                        error.statusText = 'hey';
+                        return next(error);
+                    }
+                    return 'successx';
+                });
+
+            }
+        });
+
     }
 
     app.put("/data/updatetransaction", function(req, res) {
@@ -211,15 +265,29 @@ module.exports = function(app, config) {
         });
     })
 
-    app.get("/data/itemsearch", function(req, res) {
+    app.get("/data/itemsearch", function(req, res, next) {
         console.log(req.query.id)
-        Transactions.findOne({
-            upc: req.query.id
+        Product.findOne({
+            UPC: req.query.id
         }, function(err, data) {
+            if (err) {
+                console.log('error===>' + err.message)
+                err.httpStatusCode = 500; //change to another number
+                //er
+                //res.send(err);
+                return next(err);
+            }
+            res.json(data);
+        });
+    });
+    app.get("/data/searchallitems", function(req, res) {
+        console.log(req.query.id)
+        Product.find({}, function(err, data) {
             if (err) {
                 res.send(err);
             }
             res.json(data);
+
         });
     });
     app.get('/data/AllHistory', function(req, res) {

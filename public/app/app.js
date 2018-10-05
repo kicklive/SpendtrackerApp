@@ -72,8 +72,8 @@
             .state('itemsearch', {
                 url: '/SearchItem',
                 templateUrl: '/partials/itemsviews/searchitem',
-                controller: 'SearchItemController',
-                controllerAs: 'sic'
+                controller: 'ItemSearchController',
+                controllerAs: 'isc'
             })
             .state('startpage', {
                 url: '/',
@@ -119,6 +119,7 @@
 
     function extendExceptionHandler($delegate, notifierService) {
         return function(exception, cause) {
+            debugger;
             $delegate(exception, cause);
             var errorData = {
                 exception: exception,

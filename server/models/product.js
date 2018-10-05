@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var AddProductSchema = new Schema({
     UPC: Number,
-    ItemDescription: String
+    ItemDescription: String,
+    Price: Number
 });
 module.exports = mongoose.model("Product", AddProductSchema);

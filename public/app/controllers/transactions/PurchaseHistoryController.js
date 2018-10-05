@@ -111,14 +111,7 @@
                 PurchaseHistoryService.GetAll().then(function(data, err) {
                     //debugger;
                     if (data != null) {
-                        //debugger;
-                        //vm.history = data;
                         vm.history.data = vm.formatDate(data);
-                        // } else {
-                        //     //debugger;
-                        //     notifierService.InfoMsg(
-                        //         "There was an retrieving data. Contact Administrator."
-                        //     );
                     }
                 });
             };
@@ -128,8 +121,6 @@
                 PurchaseHistoryService.GetByUPC(vm.upc).then(function(data, err) {
                     //debugger;
                     if (data != null) {
-                        //vm.history = data;
-
                         vm.history.data = vm.formatDate(data);
                     } else {
                         notifierService.InfoMsg(
@@ -163,18 +154,8 @@
                     newDate = new Date(data[i].transdate).toLocaleDateString();
                     data[i].transdate = newDate;
                 }
-                //vm.history = data;
                 return data;
             };
-            // vm.checkRadioSelection = function() {
-            //     //debugger;
-            //     var ret = true;
-            //     if (vm.searchval == undefined) {
-            //         notifierService.warning("Please select a search method.");
-            //         ret = false;
-            //     }
-            //     return ret;
-            // }
         }
     }
 })();

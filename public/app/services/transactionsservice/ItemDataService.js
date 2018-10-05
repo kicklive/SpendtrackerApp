@@ -9,7 +9,9 @@
 
     function Items($http, $q) {
         var service = {
-            GetItem: SearchForItem
+            GetItem: SearchForItem,
+            SearchForAllProduct: GetAllProducts,
+            Save: AddNewProduct
         };
 
         return service;
@@ -79,6 +81,21 @@
             return $http.get('/data/itemsearch', { params: { id: upc } }).then(success, failure);
 
             function success(d) {
+                debugger;
+                return d;
+            }
+
+            function failure(err) {
+                debugger;
+                return err.status;
+            }
+        }
+
+        function GetAllProducts(upc) {
+
+            return $http.get('/data/searchallitems').then(success, failure);
+
+            function success(d) {
                 ////debugger;
                 return d;
             }
@@ -86,20 +103,22 @@
             function failure(err) {
                 return 'Error ' + err;
             }
-
-            // var deferred = $q.defer();
-            // var httpPromise = $http.get("/data/itemsearch", { params: { id: upc } });
-            // httpPromise.then(success, failure);
-
-            // function success(data) {
-            //     deferred.resolve(data);
-            // }
-
-            // function failure(err) {
-            //     console.error('Error ' + err);
-            // }
-            // return deferred.promise
         }
+
+        function AddNewProduct(formData) {
+            return $http.post('/data/addproduct', formData).then(success, failure);
+
+            function success(d) {
+                debugger;
+                return d;
+            }
+
+            function failure(err) {
+                debugger;
+                return 'Error ' + err;
+            }
+        }
+
 
     }
 })();

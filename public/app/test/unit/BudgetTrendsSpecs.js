@@ -136,7 +136,8 @@ describe("Testing BudgetTrends History", function() {
         });
 
         describe('testing data calc service', function() {
-            var calcData = [{
+
+            var Spent = [{
                     _id: "Stop N Shop",
                     itemprice: "8.98",
                     count: "2",
@@ -147,19 +148,36 @@ describe("Testing BudgetTrends History", function() {
                     count: "2",
                 },
             ];
+            var data = {
+                'AvgSpentPerStore': 1,
+                'Budgeted': 1,
+                'LowMonth': 'Aug',
+                'MostActivity': 'Walmart',
+                'OverSpent': 0,
+                'OverSpentOccurencesCount': 1,
+                'SpendingByPaymentType': 'Amex',
+                'Spent': Spent,
+                'StoresVisited': 'wlamart',
+                'TopMonth': 'sept',
+                'TopSpendingStore': 'walmart',
+                'TrendType': 1,
+                'selectedMonth': null
+
+            };
             it('MassageData should correctly return formated calculations from inputted data', function() {
                 spyOn(dataCalcService, 'getTrendCal').and.callThrough();
-                var ret = dataCalcService.getTrendCal(calcData);
+                var ret = dataCalcService.getTrendCal(data);
                 expect(dataCalcService.getTrendCal).toBeDefined();
-                expect(dataCalcService.getTrendCal).toHaveBeenCalledWith(calcData);
+                expect(dataCalcService.getTrendCal).toHaveBeenCalledWith(data);
+                expect(ret.Budgeted).toEqual(1);
             });
-            it('SumPrice should return sum total price of all items', function() {
-                spyOn(dataCalcService, 'getSum').and.callThrough();
-                var ret = dataCalcService.getSum(calcData);
-                expect(dataCalcService.getSum).toBeDefined();
-                expect(dataCalcService.getSum).toHaveBeenCalledWith(calcData);
-                expect(ret).toEqual(17.47);
-            });
+            // it('SumPrice should return sum total price of all items', function() {
+            //     spyOn(dataCalcService, 'getSum').and.callThrough();
+            //     //var ret = dataCalcService.getSum(data);
+            //     // expect(dataCalcService.getSum).toBeDefined();
+            //     // expect(dataCalcService.getSum).toHaveBeenCalledWith(data);
+            //     //expect(ret).toEqual(17.47);
+            // });
         });
 
 

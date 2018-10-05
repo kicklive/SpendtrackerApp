@@ -68,7 +68,7 @@ hr(style="height:3px;border:none;color:#333;background-color:#333;")
         .col.md-2(style="float:left;font-weight:bold") Over Budget: &nbsp; 
         .col.md-2(style='float:left;color:red') {{ts.totalspent-ts.budgetamount|currency : "$" : 2}}&nbsp;
 
-    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.OverSpent!=0")
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.OverSpent<=0")
         .col.md-6.inline(style="float:left;font-weight:bold") Over Budget For Month of {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
         .span(style='float:left;color:red') {{btc.Activity.OverSpent|currency : "$" : 2}}&nbsp;
 

@@ -1,7 +1,7 @@
 describe('Testing SpendTracker App', function() {
     var $httpBackend, $q, $state, $templateCache, $location, deferred, fakePromise, $scope, data, result, ret, $controller, createController,
         newBudgetController, compareData, postedData, statusResults, sumByKeyFilter, BudgetDetailsController, DateCountService, NewTransactionController, itemservice,
-        $localscope;
+        $localscope, ItemSearchController;
 
     var budgetServiceMock = jasmine.createSpyObj('budgetservice', ['budgetStatus', 'getBudgetList', 'saveBudget', 'CheckAndUpdate']);
     var storageserviceMock = jasmine.createSpyObj('storageservice', ['get', 'set', 'setObj', 'getObj', 'clear']);
@@ -376,9 +376,6 @@ describe('Testing SpendTracker App', function() {
             });
     });
 
-
-
-
     describe('when navigating to /PurchaseHistory', function() {
         function goTo(url) {
             $location.url(url);
@@ -389,6 +386,14 @@ describe('Testing SpendTracker App', function() {
             goTo('/PurchaseHistory');
             expect($state.current.name).toBe('purchasehistory');
         });
+    });
+
+    describe('Testing ItemSearchController', function() {
+        it('should return correct values from variables and functions', function() {
+            ItemSearchController = $controller('ItemSearchController', {});
+            expect(ItemSearchController).toBeDefined();
+        });
+
     });
 
     // describe('testing service', function() {
