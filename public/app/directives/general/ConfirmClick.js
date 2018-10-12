@@ -28,7 +28,7 @@
             //  scope.msg = attrs['confirmClick'];
             element.bind("click", function(event) {
                 if (window.confirm(scope.msg)) {
-                    $scope.$eval(clickAction);
+                    scope.$parent.$eval(clickAction);
                 }
 
             });

@@ -17,12 +17,15 @@ module.exports = function(app, config) {
     });
 
 
-    app.get("/data/getdetails/", function(req, res) {
+    app.get("/data/getdetails/", function(req, res, next) {
+        console.log("getdetails==>" + req.query.id)
         Budget.findOne({
             _id: req.query.id
         }).populate('Transactions').exec(function(err, ret) {
-            if (err)
-                res.send(err);
+            if (err) {
+                console.log("saved==>" + err.message)
+                return next();
+            }
             res.send(ret);
         });
     });
@@ -156,24 +159,24 @@ module.exports = function(app, config) {
                 return next();
             } else {
                 console.log("ret==>" + ret)
-                if (ret != null)
+                if (ret == null) {
                     id = ret._id;
-                console.log("in Product.save()==>" + upc);
-                console.log("price==>" + price);
-                prod = new Product({
-                    _id: id,
-                    ItemDescription: desc,
-                    UPC: upc,
-                    Price: price
-                });
-                prod.save(function(err, ret) {
-                    if (err) {
-                        console.log("saved==>" + err)
-                        return next();
-                    }
-                    return 'success';
-                });
+                    console.log("in Product.save()==>" + upc);
+                    console.log("price==>" + price);
+                    prod = new Product({
 
+                        ItemDescription: desc,
+                        UPC: upc,
+                        Price: price
+                    });
+                    prod.save(function(err, ret) {
+                        if (err) {
+                            console.log("saved==>" + err)
+                            return next();
+                        }
+                        return 'success';
+                    });
+                }
             }
         });
 

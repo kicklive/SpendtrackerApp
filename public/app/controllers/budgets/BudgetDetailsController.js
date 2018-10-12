@@ -48,7 +48,7 @@
 
             if (storageservice.getObj(budgId, 'empty') == 'empty') {
                 budgetservice.getBudgetDetails(budgId).then(function(data) {
-                    ////debugger;
+                    debugger;
                     $scope.data = data.data;
                     $scope.data.BudgetType = STConstants.contant[$scope.data.BudgetType];
                     $scope.budgetStatus = $scope.data.BudgetStatus;
@@ -69,7 +69,7 @@
                 });
             } else {
                 $scope.data = storageservice.getObj(budgId, 'empty');
-                ////debugger;
+                debugger;
                 //if (Math.round((new Date(fDate).getTime() - new Date($scope.data.BudgetEndDate).getTime()) / (24 * 60 * 60 * 1000)) >= 0 && $scope.data.BudgetStatus == "Open") {
                 if (DateCountService.getDays(fDate, $scope.data.BudgetEndDate) >= 0 && data.data.BudgetStatus == "Open") {
                     budgetservice.updateStatus(storageservice.get('budgetid', 'empty')).then(function(updateData) {
