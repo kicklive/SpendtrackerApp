@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular
@@ -13,17 +13,22 @@
         // Creates:
         //
         var directive = {
+            scope: {
+                msg: '@'
+            },
             link: link,
-            restrict: 'EA'
+            restrict: 'A'
+
         };
         return directive;
 
         function link(scope, element, attrs) {
-            var msg = "Are you sure you want to delete this transaction?";
             var clickAction = attrs.confirmedClick;
-            element.bind("click", function (event) {
-                if (window.confirm(msg)) {
-                    scope.$eval(clickAction);
+            debugger;
+            //  scope.msg = attrs['confirmClick'];
+            element.bind("click", function(event) {
+                if (window.confirm(scope.msg)) {
+                    $scope.$eval(clickAction);
                 }
 
             });

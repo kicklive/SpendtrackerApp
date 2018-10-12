@@ -15,34 +15,35 @@
 
             //var tranId=$scope.id;
             // $scope.id = $route.current.pathParams.budgetId;
+            $scope.isExisting = $stateParams.isExisting;
             if ($stateParams.transId) {
                 transactionservice.GetTransactionData($stateParams.transId).then(function(data) {
                     if (data.data == null) {
                         notifierService.error("There was an retrieving data. Contact Administrator.");
                     } else {
                         $scope.transdate = $filter('date')(data.data.transdate, "MM/dd/yyyy");
-                        $scope.transamt = parseFloat(data.data.itemprice).toFixed(2);
-                        $scope.upc = data.data.upc;
+                        $scope.Price = parseFloat(data.data.itemprice).toFixed(2);
+                        $scope.UPC = data.data.upc;
                         $scope.store = data.data.store;
-                        $scope.itemDescription = data.data.itemdescription;
+                        $scope.ItemDescription = data.data.itemdescription;
                     }
                 });
             }
             $scope.budgetId = $stateParams.budgetId
             $scope.ClearForm = function() {
-                $scope.transamt = '';
+                $scope.Price = '';
                 $scope.transdate = '',
-                    $scope.upc = '';
-                $scope.itemDescription = '';
+                    $scope.UPC = '';
+                $scope.ItemDescription = '';
                 $scope.store = '';
 
             }
             $scope.AddTransaction = function() {
                 $scope.newTransaction = {
-                    transAmt: $scope.transamt,
-                    upc: $scope.upc,
+                    transAmt: $scope.Price,
+                    upc: $scope.UPC,
                     transDate: $scope.transdate,
-                    itemDesc: $scope.itemDescription,
+                    itemDesc: $scope.ItemDescription,
                     store: $scope.store,
                     transId: $stateParams.transId,
                     budgetId: $stateParams.budgetId
@@ -78,8 +79,10 @@
 
             }
             $scope.DeleteTransaction = function() {
-                transactionservice.DeletTrans($stateParams.transId).then(function(ret) {
-                    if (ret.data == "success") {
+                debugger;
+                transactionservice.DeleteTrans($stateParams.transId).then(function(ret) {
+                    debugger;
+                    if (ret.status == 200 && ret.data == "success") {
                         storageservice.remove($stateParams.budgetId)
                         notifierService.notify("Transaction deleted successfully");
                         storageservice.clear();
@@ -95,8 +98,8 @@
                 if ($scope.upc != null && $scope.upc.length === 12) {
                     itemservice.GetItem($scope.upc).then(function(ret) {
                         if (ret.data != null) {
-                            $scope.itemDescription = ret.data.itemdescription;
-                            $scope.transamt = ret.data.itemprice;
+                            $scope.ItemDescription = ret.data.ItemDescription;
+                            $scope.Price = ret.data.Price;
                             $scope.disabled = true;
                         }
                     });

@@ -1,4 +1,5 @@
  var express = require('express');
+ require('extend-error');
  // var stylus=require('stylus');
  // var logger=require('morgan');
  // var bodyParser=require('body-parser');
@@ -61,5 +62,66 @@
  //if port not set, set it to 3333. Using Heroku, port 80 is used. So
  //get the environment port, or any port you set (local, unknown port)
  //var port=process.env.PORT ||3333;
+ app.use(clientErrorHandler);
+
+ //  if (app.get('env') === 'development') {
+ //      console.log("expressXX==>");
+ //      app.use(function(err, req, res, next) {
+ //          console.log("expressXX==>" + err);
+ //          res.status(err.status || 500);
+ //          res.render('error', {
+ //              message: err.message,
+ //              error: err
+ //          });
+ //      });
+
+ //  }
+
+ //  // production error handler
+ //  // no stacktraces leaked to user
+ //  app.use(function(err, req, res, next) {
+ //      console.log("expressBB==>" + err);
+ //      res.status(err.status || 500);
+ //      res.render('error', {
+ //          message: err.message,
+ //          error: {}
+ //      });
+ //  });
+
+ function clientErrorHandler(err, req, res, next) {
+     console.log("expressmsg==>" + err.code);
+     if (req.xhr) {
+         res.status(500).send({ error: 'Something failed!' });
+     } else {
+         switch (err.code) {
+             case 11000:
+                 res.status(400).send({ status: 400, message: 'Item already exists', code: 11000, type: 'internal' });
+                 break;
+             default:
+                 res.status(500).send({ status: 500, message: err.message, code: err.code, type: 'internal' });
+         }
+     }
+ }
+
+
+ //  require('extend-error');
+
+ // var ClientError = Error.extend('ClientError', 400);
+ // var HttpNotFound = ClientError.extend('HttpNotFound', 404);
+
+ // var myHttpNotFound = new HttpNotFound('my error message');
+
+ // // Output: true
+ // console.log(myHttpNotFound instanceof HttpNotFound);
+
+ // // Output: true
+ // console.log(myHttpNotFound instanceof ClientError);
+
+ // // Output:
+ // // { [HttpNotFound: my error message]
+ // //   name: 'HttpNotFound',
+ // //   code: 404,
+ // //   message: 'my error message' }
+ // console.log(myHttpNotFound);
  app.listen(config.port);
  console.log('Server started. Listning on port ' + config.port);

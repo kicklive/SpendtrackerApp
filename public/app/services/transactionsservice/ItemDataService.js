@@ -11,7 +11,10 @@
         var service = {
             GetItem: SearchForItem,
             SearchForAllProduct: GetAllProducts,
-            Save: AddNewProduct
+            Save: AddNewProduct,
+            Update: UpdateProduct,
+            SearchById: SearchProdById,
+            DeleteItem: DeleteById
         };
 
         return service;
@@ -91,7 +94,7 @@
             }
         }
 
-        function GetAllProducts(upc) {
+        function GetAllProducts() {
 
             return $http.get('/data/searchallitems').then(success, failure);
 
@@ -106,6 +109,7 @@
         }
 
         function AddNewProduct(formData) {
+            debugger;
             return $http.post('/data/addproduct', formData).then(success, failure);
 
             function success(d) {
@@ -115,7 +119,50 @@
 
             function failure(err) {
                 debugger;
-                return 'Error ' + err;
+                return err.data;
+            }
+        }
+
+        function SearchProdById(id) {
+
+            return $http.get('/data/itemsearchbyid', { params: { id: id } }).then(success, failure);
+
+            function success(d) {
+                debugger;
+                return d;
+            }
+
+            function failure(err) {
+                debugger;
+                return err.data;
+            }
+        }
+
+        function UpdateProduct(formData) {
+            return $http.put('/data/updateproduct', formData).then(success, failure);
+
+            function success(d) {
+                debugger;
+                return d;
+            }
+
+            function failure(err) {
+                debugger;
+                return err.data;
+            }
+        }
+
+        function DeleteById(id) {
+            return $http.get('/data/deleteproduct', { params: { id: id } }).then(success, failure);
+
+            function success(d) {
+                debugger;
+                return d;
+            }
+
+            function failure(err) {
+                debugger;
+                return err.data;
             }
         }
 

@@ -120,7 +120,8 @@
             $scope.CreateNewTrans = function() {
                 // $location.path('/NewTransaction/' + $stateParams.budgetId)
                 $state.go('newtransaction', {
-                    budgetId: budgId
+                    budgetId: budgId,
+                    isExisting: -1
                 })
             }
 

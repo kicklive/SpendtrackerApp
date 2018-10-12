@@ -129,7 +129,7 @@ module.exports = function(app, config) {
                 prod.save(function(err, ret) {
                     if (err) {
                         console.log("saved==>" + err)
-                        return next();
+                        return next(err);
                     }
                     res.send('ssuccess');
                 });
@@ -169,12 +169,9 @@ module.exports = function(app, config) {
                 prod.save(function(err, ret) {
                     if (err) {
                         console.log("saved==>" + err)
-                        var error = new Error("This is an error");
-                        error.code = 403;
-                        error.statusText = 'hey';
-                        return next(error);
+                        return next();
                     }
-                    return 'successx';
+                    return 'success';
                 });
 
             }
@@ -250,20 +247,20 @@ module.exports = function(app, config) {
         });
     });
 
-    app.get("/data/deletetransaction", function(req, res) {
+    app.get("/data/deletetransaction", function(req, res, next) {
         console.log("In deletetrans")
         Transactions.findByIdAndRemove({
             _id: req.query.id
         }, function(err, ret) {
             if (err) {
-                res.send(err);
                 console.log(err);
-            } else {
-                console.log("here delete success?");
-                res.send("success");
+                return next(err);
             }
+            console.log("here delete success?");
+            res.send("success");
         });
     })
+
 
     app.get("/data/itemsearch", function(req, res, next) {
         console.log(req.query.id)
@@ -290,6 +287,7 @@ module.exports = function(app, config) {
 
         });
     });
+
     app.get('/data/AllHistory', function(req, res) {
         Transactions.find({}).sort({ transdate: -1, upc: 1, store: 1 }).exec(function(err, data) {
             if (err) {
@@ -323,6 +321,70 @@ module.exports = function(app, config) {
             }
             res.json(data);
         });
+    });
+
+    app.get('/data/itemsearchbyid', function(req, res, next) {
+        console.log("productID==>" + req.query.id)
+        Product.find({
+            _id: req.query.id
+        }).exec(function(err, data) {
+            if (err) {
+                return next(err);
+            }
+            res.json(data[0]);
+        });
+    });
+
+    app.get("/data/deleteproduct", function(req, res, next) {
+        console.log("In deleteproduct")
+        Product.findByIdAndRemove({
+            _id: req.query.id
+        }, function(err, ret) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            res.send("success");
+
+        });
+    })
+
+    app.put("/data/updateproduct", function(req, res, next) {
+        console.log("In updateproduct");
+        Product.findByIdAndUpdate(req.body.id, {
+            $set: {
+                ItemDescription: req.body.ItemDescription,
+                Price: req.body.Price
+            }
+        }, {
+            new: true
+        }, function(err, ret) {
+            if (err) {
+                console.log(err);
+                return next(err);
+            }
+            res.send("success");
+        });
+    })
+
+
+    app.put("/data/updatestatus/:id", function(req, res) {
+        console.log("heeeeeereeX-->" + req.params.id);
+        NewBudget.findByIdAndUpdate(req.params.id, {
+                $set: {
+                    BudgetStatus: 'Closed'
+                }
+            }, {
+                new: true
+            },
+            function(err, ret) {
+                if (err) {
+                    res.send(err);
+                    console.log('err here')
+                }
+                res.send(ret);
+            });
+
     });
 
 

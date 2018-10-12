@@ -28,10 +28,22 @@
             notify: NotifyMsg,
             error: ErrorMsg,
             warning: WarnMsg,
-            info: InfoMsg
+            info: InfoMsg,
+            selectmsg: MsgType
         };
 
         return service;
+
+        function MsgType(errCode, msg) {
+            switch (errCode) {
+                case 11000:
+                    WarnMsg(msg);
+                    break;
+                default:
+                    ErrorMsg(msg);
+                    break;
+            }
+        }
 
         function NotifyMsg(msg) {
             toastr.success(msg);

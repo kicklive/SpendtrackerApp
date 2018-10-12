@@ -34,4 +34,5 @@ module.exports = function(app, config) {
     //this tells express that anytime a request come into the public directory that 
     //matches to a file in the public directory, go ahead and server up that file
     app.use(express.static(config.rootPath + '/public'));
+
 };

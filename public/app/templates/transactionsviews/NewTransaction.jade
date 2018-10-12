@@ -10,10 +10,10 @@
                         p(ng-show='NewTransaction.transdate.$isvalid && NewTransaction.transdate.$pristine') Date required
                     .col-md-4
                         label.labelfont.text-left.paddingleft10(for="transamt") Transaction Amount 
-                        input.form-control.col-sm-12(name="transamt", type="text", ng-model="transamt" style="width:150px" required)
+                        input.form-control.col-sm-12(name="transamt", type="text", ng-model="Price" style="width:150px" required)
                     .col-md-2
                         label.labelfont.text-left.paddingleft10(for="upc") UPC 
-                        input.form-control.col-sm-12(name="upc", type="text", ng-model="upc" ng-keyup="EvalUPC()" style="width:160px" required)
+                        input.form-control.col-sm-12(name="upc", type="text", ng-model="UPC" ng-keyup="EvalUPC()" style="width:160px" required)
              .row.align-items-start
                 .form-group
                     .col-md-12
@@ -23,15 +23,16 @@
                 .form-group
                     .col-md-12
                         label.labelfont.text-left.paddingleft10(for="itemDescription") Item Description 
-                        textarea.form-control(name="itemDescription", ng-model='itemDescription' cols="30", rows="3" style="resize:none;" ng-disabled="disabled")
+                        textarea.form-control(name="itemDescription", ng-model='ItemDescription' cols="30", rows="3" style="resize:none;" ng-disabled="disabled")
             .row&nbsp;
             .row.align-items-start
                 form-group
                         .col-md-12.col.text-right
                             a.btn.btn-primary(ng-click="AddTransaction()" ng-disabled='NewTransaction.$invalid') Submit
                             &nbsp;
-                            submit.btn.btn-primary(confirmed-click="DeleteTransaction()" confirm-click="") Delete
+                            submit.btn.btn-primary(ng-if="isExisting==1" confirmed-click="DeleteTransaction()" confirm-click="" msg="Are you sure you want to delete this transaction?") Delete
                             &nbsp;
-                            a.btn.btn-default(ng-click="ClearForm()") Cancel     
+                            a.btn.btn-default(ng-if="isExisting!=1" ng-click="ClearForm()") Cancel     
+                            &nbsp;
                             a.btn.btn-default.pull-right(ui-sref="details") Back                      
                    

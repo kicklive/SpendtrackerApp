@@ -52,7 +52,8 @@
                 url: '/Transaction',
                 params: {
                     transId: null,
-                    budgetId: null
+                    budgetId: null,
+                    isExisting: null
                 },
                 templateUrl: '/partials/transactionsviews/NewTransaction',
                 controller: 'NewTransactionController'
@@ -71,9 +72,19 @@
             })
             .state('itemsearch', {
                 url: '/SearchItem',
+                params: { showGrid: null, flag: null },
                 templateUrl: '/partials/itemsviews/searchitem',
                 controller: 'ItemSearchController',
                 controllerAs: 'isc'
+            })
+            .state('edititem', {
+                url: '/EditProduct',
+                params: {
+                    id: null
+                },
+                templateUrl: '/partials/itemsviews/edititem',
+                controller: 'ItemEditController',
+                controllerAs: 'iec'
             })
             .state('startpage', {
                 url: '/',

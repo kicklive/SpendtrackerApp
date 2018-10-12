@@ -5,9 +5,9 @@
         .module('spendtrackerapp')
         .controller('ItemSearchController', SearchItem)
 
-    SearchItem.$inject = ['itemservice', 'notifierService'];
+    SearchItem.$inject = ['itemservice', 'notifierService', '$stateParams', 'storageservice'];
 
-    function SearchItem(itemservice, notifierService) {
+    function SearchItem(itemservice, notifierService, $stateParams, storageservice) {
         /* jshint validthis:true */
         var vm = this;
 
@@ -20,6 +20,8 @@
             vm.items = null;
             vm.addProduct = false;
             vm.errMsg = '';
+
+
             vm.items = {
                 enableFiltering: false,
                 treeRowHeaderAlwaysVisible: false,
@@ -27,7 +29,11 @@
                         name: "UPC",
                         field: "UPC",
                         sort: { priority: 0, direction: "asc" },
-                        width: "20%"
+                        width: "20%",
+                        cellTemplate: '<div>' +
+                            '  <a ui-sref="edititem({id:row.entity._id})">{{COL_FIELD}}</a>' +
+                            '</div>'
+
                     },
                     { name: "Item Description", field: "ItemDescription", width: "60%" },
                     {
@@ -42,6 +48,7 @@
                     vm.gridApi = gridApi;
                 }
             };
+
 
 
 
@@ -68,21 +75,42 @@
                 }
             }
             vm.ShowAllProducts = function() {
-                itemservice.SearchForAllProduct().then(function(ret) {
-                    debugger;
-                    vm.addProduct = false;
-                    vm.items.data = ret.data;
-                    vm.count = ret.data.length;
-                });
+                var d;
+                debugger;
+                if ($stateParams.flag != 1 || vm.addProduct) {
+                    itemservice.SearchForAllProduct().then(function(ret) {
+                        d = ret;
+                        storageservice.remove('allproduct')
+                        storageservice.setObj('allproduct', ret);
+                        PopulateData(d);
+                    });
+                } else {
+                    d = storageservice.getObj('allproduct', 'empty');
+                    PopulateData(d);
+                }
+                debugger;
+
+            }
+
+            function PopulateData(d) {
+                vm.addProduct = false;
+                vm.items.data = d.data;
+                vm.count = d.data.length;
             }
             vm.AddNewProduct = function() {
                 vm.addProduct = true;
                 vm.count = 0;
+                vm.ItemDescription = '';
+                vm.Price = '';
+                vm.UPC = '';
+                vm.ItemSearch.$setPristine();
+                vm.ItemSearch.$setUntouched();
             }
             vm.SaveProduct = function() {
                 itemservice.AddProduct().then(function(ret) {
                     if (ret == 'success') {
                         vm.addProduct = true;
+
                         vm.ShowAllProducts();
                     }
                 });
@@ -99,15 +127,23 @@
                 debugger;
                 itemservice.Save(formData).then(function(ret) {
                     debugger;
-                    if (ret.data == 'success') {
+                    if (ret.status == 200) {
                         notifierService.notify('Product added successfully.');
+                        vm.ItemDescription = '';
+                        vm.Price = '';
+                        vm.UPC = '';
                         vm.ItemSearch.$setPristine();
                         vm.ItemSearch.$setUntouched();
+                        vm.addProduct = true;
                     } else {
-                        notifierService.error('There was a problem saving the product. Contact administrator.');
+                        notifierService.selectmsg(ret.code, ret.message);
                     }
-                })
+                });
+
             }
+            debugger;
+            if ($stateParams.showGrid == 1)
+                vm.ShowAllProducts();
         }
     }
 })();

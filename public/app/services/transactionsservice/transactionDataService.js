@@ -12,7 +12,7 @@
             addTransaction: AddTransaction,
             GetTransactionData: GetTransData,
             SaveTransaction: SaveModifiedTrans,
-            DeletTrans: DeleteTransaction
+            DeleteTrans: DeleteTransaction
         };
 
         return service;
@@ -94,26 +94,14 @@
             return $http.get('/data/deletetransaction/', { params: { id: tranId } }).then(success, failure);
 
             function success(data) {
+                debugger;
                 return data;
             }
 
             function failure(err) {
+                debugger;
                 return 'Error ' + err;
             }
-
-            // var deferred = $q.defer();
-            // var httpPromise = $http.get("/data/deletetransaction", { params: { id: tranId } });
-            // httpPromise.then(success, failure);
-
-            // function success(data) {
-            //     deferred.resolve(data);
-            // }
-
-            // function failure(err) {
-            //     console.error('Error ' + err);
-            // }
-            // return deferred.promise
         }
-
     }
 })();

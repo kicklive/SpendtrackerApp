@@ -16,9 +16,7 @@ describe('Testing SpendTracker App', function() {
             return storageserviceMock;
         });
 
-        $provide.factory('itemservice', function() {;
-            return itemserviceMock;
-        });
+
 
         // $provide.factory('PurchaseHistoryService', function() {;
         //     return purchaseHistoryServiceMock;
@@ -386,14 +384,6 @@ describe('Testing SpendTracker App', function() {
             goTo('/PurchaseHistory');
             expect($state.current.name).toBe('purchasehistory');
         });
-    });
-
-    describe('Testing ItemSearchController', function() {
-        it('should return correct values from variables and functions', function() {
-            ItemSearchController = $controller('ItemSearchController', {});
-            expect(ItemSearchController).toBeDefined();
-        });
-
     });
 
     // describe('testing service', function() {

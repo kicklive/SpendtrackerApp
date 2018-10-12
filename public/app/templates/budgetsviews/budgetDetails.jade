@@ -20,7 +20,7 @@
             .col-sm-6
                 b Budget Type:
             {{data.BudgetType}}
-hr            
+hr(style="height:3px;border:none;color:#333;background-color:#333;")             
 h4 Transactions
     .row(ng-hide="ShowMsg()") 
        .col-sm-12.offset-3
@@ -37,7 +37,7 @@ h4 Transactions
         b.col-sm-2.align-items-center.row-head-height-blue Store
 
     .row(ng-repeat="trans in data.Transactions")
-        a.col-sm-3.align-items-center.row-head(ng-show="ShowLink(data.BudgetStatus)" ui-sref="transaction({transId:trans._id,budgetId:data._id})" ){{trans.transdate|date:"MM/dd/yyyy"}}
+        a.col-sm-3.align-items-center.row-head(ng-show="ShowLink(data.BudgetStatus)" ui-sref="transaction({transId:trans._id,budgetId:data._id,isExisting:1})" ){{trans.transdate|date:"MM/dd/yyyy"}}
         .col-sm-3.align-items-center.row-head(ng-hide="ShowLink(data.BudgetStatus)"){{trans.transdate|date:"MM/dd/yyyy"}}
         .col-sm-2.align-items-center.row-head {{trans.upc}}
         .col-sm-2.align-items-center.row-head {{trans.itemprice|currency : "$" : 2}}
@@ -62,11 +62,10 @@ h4 Transactions
     .row&nbsp;
     .row&nbsp;
     .row&nbsp;
-        .col-sm-6.pull-right
-            .col-sm-1
-                a.btn.btn-primary.pull-right(ng-click="CreateNewTrans()" ng-show="ShowButton()") Create New Transaction
-             .col-sm-2
-                a.btn.btn-primary.pull-right(ng-click="GetDetails()" ng-show="ShowButton()") Deep Details
-            .col-sm-1
-                a.btn.btn-default.pull-right(ui-sref="listbudgets") Back 
+        .col-sm-3.pull-right
+            a.btn.btn-primary(ng-click="CreateNewTrans()" ng-show="ShowButton()") Create New Transaction
+            &nbsp;
+            a.btn.btn-default(ui-sref="listbudgets") Back 
+                
+                
 
