@@ -1,5 +1,6 @@
-var Budget = require('../models/budget.js');
-var NewBudget = require('../models/newbudget.js');
+// var Budget = require('../models/budget.js');
+// var NewBudget = require('../models/newbudget.js');
+var Budget = require('../models/newbudget.js');
 var Transactions = require('../models/transactions.js');
 var Product = require('../models/product.js');
 var nodedate = require("node-datetime");
@@ -56,22 +57,22 @@ module.exports = function(app, config) {
         console.log('startDate==>' + req.body.startdate);
         console.log('startDatex==>' + startDate);
 
-        NewBudget.create({
+        Budget.create({
                 BudgetStartDate: startDate,
                 BudgetEndDate: endDate,
                 BudgetAmount: req.body.budgetamt,
                 BudgetStatus: status,
                 BudgetType: req.body.budgetType.selectedOption.id
             },
-            function(err, newBudget) {
+            function(err, budget) {
                 if (err) {
                     res.send(err);
                 }
-                NewBudget.find(function(err, newBudgets) {
+                Budget.find(function(err, budgets) {
                     if (err) {
                         res.send(err);
                     }
-                    res.json(newBudgets);
+                    res.json(budgets);
                 });
             });
     });
@@ -90,26 +91,44 @@ module.exports = function(app, config) {
                 if (err) {
                     res.send(err);
                 }
-                console.log(NewBudget);
-                NewBudget.findOne({
+                console.log(Budget);
+                Budget.findOne({
                         _id: req.body.budgetId
                     },
                     function(err, ret) {
-                        //console.log('HEEEERREE');
+                        console.log('HEEEERREE========>' + req.body.itemDesc);
+                        console.log('HEEEERREE========>' + NewTrans.upc);
                         ret.Transactions.push(NewTrans);
                         ret.save(function(err, ret) {
                             if (err) {
                                 return next(err);
-                                // console.log('err here')
+                                console.log('err here')
                             }
+                            var prod = new Product({
+                                ItemDescription: req.body.itemDesc,
+                                UPC: req.body.upc,
+                                Price: req.body.transAmt
+                            });
+                            prod.save(function(prodSaveErr, ret) {
+                                if (prodSaveErr) {
+                                    console.log("saved==>" + prodSaveErr)
+                                    return next(prodSaveErr);
+                                }
+                                res.send('success');
+                            });
+
+
+
+
+                            // saveRet = SaveItem(req.body.upc, req.body.itemDesc, req.body.transAmt);
+                            // if (saveRet == 'success')
+                            //     res.json(NewTrans);
+                            // else
+                            //     res.send(saveRet);
                         });
                     }
                 );
-                saveRet = SaveItem(req.body.upc, req.body.itemDesc, req.body.transAmt);
-                if (saveRet == 'success')
-                    res.json(NewTrans);
-                else
-                    res.send(saveRet);
+
             });
     });
 
@@ -123,7 +142,7 @@ module.exports = function(app, config) {
             else {
                 if (ret != null)
                     id = ret._id;
-                prod = new Product({
+                var prod = new Product({
                     _id: id,
                     ItemDescription: req.body.ItemDescription,
                     UPC: req.body.UPC,
@@ -149,38 +168,40 @@ module.exports = function(app, config) {
     });
 
 
-    function SaveItem(upc, desc, price, next) {
-        console.log("upc==>" + upc);
-        var id;
-        Product.findOne({
-            UPC: upc
-        }, function(err, ret) {
-            if (err) {
-                return next();
-            } else {
-                console.log("ret==>" + ret)
-                if (ret == null) {
-                    id = ret._id;
-                    console.log("in Product.save()==>" + upc);
-                    console.log("price==>" + price);
-                    prod = new Product({
+    // function SaveItem(upc, desc, price, next) {
+    //     console.log("upc==>" + upc);
+    //     console.log("desc==>" + desc);
+    //     console.log("price==>" + price);
+    //     var id;
+    //     Product.findOne({
+    //         UPC: upc
+    //     }, function(err, ret) {
+    //         if (err) {
+    //             return next();
+    //         } else {
+    //             console.log("ret saveItem==>" + ret)
+    //             if (ret == null) {
+    //                 // id = ret._id;
+    //                 console.log("in Product.save()==>" + upc);
+    //                 console.log("price==>" + price);
+    //                 prod = new Product({
 
-                        ItemDescription: desc,
-                        UPC: upc,
-                        Price: price
-                    });
-                    prod.save(function(err, ret) {
-                        if (err) {
-                            console.log("saved==>" + err)
-                            return next();
-                        }
-                        return 'success';
-                    });
-                }
-            }
-        });
+    //                     ItemDescription: desc,
+    //                     UPC: upc,
+    //                     Price: price
+    //                 });
+    //                 prod.save(function(err, ret) {
+    //                     if (err) {
+    //                         console.log("saved==>" + err)
+    //                         return next();
+    //                     }
+    //                     return 'success';
+    //                 });
+    //             }
+    //         }
+    //     });
 
-    }
+    // }
 
     app.put("/data/updatetransaction", function(req, res) {
         console.log("updated id=" + req.body.transId)
@@ -207,7 +228,7 @@ module.exports = function(app, config) {
 
     app.put("/data/updatestatus/:id", function(req, res) {
         console.log("heeeeeereeX-->" + req.params.id);
-        NewBudget.findByIdAndUpdate(req.params.id, {
+        Budget.findByIdAndUpdate(req.params.id, {
                 $set: {
                     BudgetStatus: 'Closed'
                 }
@@ -225,7 +246,7 @@ module.exports = function(app, config) {
     });
 
     app.put("/data/updatestatusall/", function(req, res) {
-        var bulk = NewBudget.collection.initializeOrderedBulkOp();
+        var bulk = Budget.collection.initializeOrderedBulkOp();
         console.log("bulk==>" + bulk);
         var todaysDate = new Date();
 
@@ -273,8 +294,6 @@ module.exports = function(app, config) {
             if (err) {
                 console.log('error===>' + err.message)
                 err.httpStatusCode = 500; //change to another number
-                //er
-                //res.send(err);
                 return next(err);
             }
             res.json(data);
@@ -373,7 +392,7 @@ module.exports = function(app, config) {
 
     app.put("/data/updatestatus/:id", function(req, res) {
         console.log("heeeeeereeX-->" + req.params.id);
-        NewBudget.findByIdAndUpdate(req.params.id, {
+        Budget.findByIdAndUpdate(req.params.id, {
                 $set: {
                     BudgetStatus: 'Closed'
                 }

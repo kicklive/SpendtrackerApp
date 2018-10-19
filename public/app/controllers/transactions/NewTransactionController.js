@@ -95,8 +95,10 @@
                 })
             }
             $scope.EvalUPC = function() {
-                if ($scope.upc != null && $scope.upc.length === 12) {
-                    itemservice.GetItem($scope.upc).then(function(ret) {
+                if ($scope.UPC != null && $scope.UPC.length === 12) {
+                    debugger;
+                    itemservice.GetItem($scope.UPC).then(function(ret) {
+
                         if (ret.data != null) {
                             $scope.ItemDescription = ret.data.ItemDescription;
                             $scope.Price = ret.data.Price;
