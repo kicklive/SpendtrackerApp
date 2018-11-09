@@ -94,12 +94,12 @@
             return $http.get('/data/deletetransaction/', { params: { id: tranId } }).then(success, failure);
 
             function success(data) {
-                debugger;
+                //debugger;
                 return data;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return 'Error ' + err;
             }
         }

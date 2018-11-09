@@ -14,7 +14,7 @@
         activate();
 
         function activate() {
-            debugger;
+            //debugger;
             vm.Item;
             vm.count = 0;
             vm.items = null;
@@ -56,7 +56,7 @@
             vm.SearchForItem = function() {
                 if (vm.searchUPC != null && vm.searchUPC.length === 12) {
                     itemservice.GetItem(vm.searchUPC).then(function(ret) {
-                        debugger;
+                        //debugger;
                         if (ret.status == 200) {
                             vm.errMsg = '';
                             if (ret.data != null) {
@@ -76,7 +76,7 @@
             }
             vm.ShowAllProducts = function() {
                 var d;
-                debugger;
+                //debugger;
                 if ($stateParams.flag != 1 || vm.addProduct) {
                     itemservice.SearchForAllProduct().then(function(ret) {
                         d = ret;
@@ -88,7 +88,7 @@
                     d = storageservice.getObj('allproduct', 'empty');
                     PopulateData(d);
                 }
-                debugger;
+                //debugger;
 
             }
 
@@ -119,29 +119,29 @@
                 return vm.addProduct;
             }
             vm.Save = function() {
-                var formData = {
-                    'UPC': vm.UPC,
-                    'ItemDescription': vm.ItemDescription,
-                    'Price': vm.Price
-                }
-                debugger;
-                itemservice.Save(formData).then(function(ret) {
-                    debugger;
-                    if (ret.status == 200) {
-                        notifierService.notify('Product added successfully.');
-                        vm.ItemDescription = '';
-                        vm.Price = '';
-                        vm.UPC = '';
-                        vm.ItemSearch.$setPristine();
-                        vm.ItemSearch.$setUntouched();
-                        vm.addProduct = true;
-                    } else {
-                        notifierService.selectmsg(ret.code, ret.message);
-                    }
-                });
+                    var formData = {
+                            'UPC': vm.UPC,
+                            'ItemDescription': vm.ItemDescription,
+                            'Price': vm.Price
+                        }
+                        //debugger;
+                    itemservice.Save(formData).then(function(ret) {
+                        //debugger;
+                        if (ret.status == 200) {
+                            notifierService.notify('Product added successfully.');
+                            vm.ItemDescription = '';
+                            vm.Price = '';
+                            vm.UPC = '';
+                            vm.ItemSearch.$setPristine();
+                            vm.ItemSearch.$setUntouched();
+                            vm.addProduct = true;
+                        } else {
+                            notifierService.selectmsg(ret.code, ret.message);
+                        }
+                    });
 
-            }
-            debugger;
+                }
+                //debugger;
             if ($stateParams.showGrid == 1)
                 vm.ShowAllProducts();
         }

@@ -8,11 +8,11 @@ var nodedate = require("node-datetime");
 module.exports = function(app, config) {
     app.get("/data/budgetlist", function(req, res) {
         console.log('heree');
-        ////debugger;
+        //debugger;
         Budget.find(function(err, ret) {
             if (err)
                 res.send(err);
-            ////debugger;
+            //debugger;
             res.send(ret);
         });
     });
@@ -44,7 +44,7 @@ module.exports = function(app, config) {
 
 
     app.post("/data/SaveBudget", function(req, res) {
-        ////debugger;
+        //debugger;
         var startDate = new Date(req.body.startdate);
         var endDate = new Date(req.body.enddate);
         var status;

@@ -121,7 +121,7 @@ describe("Testing Item Search ", function() {
 
         it('should save new product (Save)', function() {
             $httpBackend.when('POST', '/data/addproduct', function(d) {
-                debugger;
+                //debugger;
                 jsonData = JSON.parse(d);
                 expect(jsonData[1].ItemDescription).toBe('Milk');
                 expect(jsonData[1].Price).toBe('4.89');
@@ -141,7 +141,7 @@ describe("Testing Item Search ", function() {
                 return true;
             }).respond(200, updatedData);
             itemService.Update(updatedData).then(function(d) {
-                debugger;
+                //debugger;
                 results = d.data;
                 expect(results.Price).toEqual('2.19');
             });
@@ -155,7 +155,7 @@ describe("Testing Item Search ", function() {
         //         return true;
         //     }).respond(200, updatedData);
         //     itemService.DeleteItem(updatedData).then(function(d) {
-        //         debugger;
+        //         //debugger;
         //         results = d.data;
         //         expect(results.Price).toBeUndefined();
         //     });
@@ -163,7 +163,7 @@ describe("Testing Item Search ", function() {
         // });
         it('should return all product (SearchForAllProduct)', function() {
             itemService.SearchForAllProduct().then(function(d) {
-                debugger;
+                //debugger;
                 expect(d.data.data[1].ItemDescription).toBe('Milk');
                 expect(d.data.data[1].Price).toBe('4.89');
                 expect(d.data.data[1].UPC).toBe('123456789013');
@@ -173,7 +173,7 @@ describe("Testing Item Search ", function() {
 
         it('should return product by upc (GetItem)', function() {
             itemService.GetItem().then(function(d) {
-                debugger;
+                //debugger;
                 expect(
                     $filter("filter")(d.data.data, { UPC: '123456789012' }, true)[0].ItemDescription
                 ).toEqual("Bread");
@@ -183,7 +183,7 @@ describe("Testing Item Search ", function() {
 
         it('should return product by id (SearchById)', function() {
             itemService.SearchById().then(function(d) {
-                debugger;
+                //debugger;
                 expect(
                     $filter("filter")(d.data.data, { _id: 1 }, true)[0].ItemDescription
                 ).toEqual("Bread");

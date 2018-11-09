@@ -25,12 +25,12 @@
             return $http.get('/data/budgetlist').then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return 'Error ' + err;
             }
             // var deferred = $q.defer();
@@ -71,12 +71,12 @@
             return $http.get("/data/getdetails/", { params: { id: budgetId } }).then(success, failure);
 
             function success(data) {
-                debugger;
+                //debugger;
                 return data;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return 'Error ' + err;
             }
 

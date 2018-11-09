@@ -20,7 +20,7 @@
         return service;
 
         function MassageDataForTrends(data, trendType, selectedMonth) {
-            debugger;
+            //debugger;
             var tmpAmt = ''
             var topSpendingString = '';
             var lowSpendingString = '';
@@ -29,30 +29,30 @@
 
             var topSpendingMonth, topSpendingAmount, lowpSpendingMonth, lowSpendingAmount,
                 payType, amtByPayType, payTypeString, mostActivityStore, mostActivityCount, mostActivityString;
-            debugger;
+            //debugger;
 
 
 
-            debugger;
+            //debugger;
             if (typeof(data.TopMonth) != 'undefined') {
                 for (var i = 0, len = data.TopMonth.length; i < len; i++) {
                     if (tmpAmt == '' || tmpAmt == data.TopMonth[i].total) {
                         topMonth[i] = { 'month': $filter('MonthFltr')(data.TopMonth[i].month), 'amount': $filter('currency')(data.TopMonth[i].total, '$', '2') };
                         tmpAmt = data.TopMonth[i].total
                     }
-                    debugger;
+                    //debugger;
                 }
             }
 
             if (typeof(data.LowMonth) != 'undefined') {
                 tmpAmt = '';
-                debugger;
+                //debugger;
                 for (var i = 0, len = data.LowMonth.length; i < len; i++) {
                     if (tmpAmt == '' || tmpAmt == data.LowMonth[i].total) {
                         lowMonth[i] = { 'month': $filter('MonthFltr')(data.LowMonth[i].month), 'amount': $filter('currency')(data.LowMonth[i].total, '$', '2') };
                         tmpAmt = data.LowMonth[i].total
                     }
-                    debugger;
+                    //debugger;
                 }
             }
 
@@ -66,7 +66,7 @@
                     }
                 }
             }
-            debugger;
+            //debugger;
             totalOverSpent = 0
             if (data.Spent.length == 1)
                 spent = data.Spent[0];
@@ -93,14 +93,14 @@
         function SumPrice(d) {
             var ret = 0;
             for (var i = 0, len = d.length; i < len; i++) {
-                debugger;
+                //debugger;
                 ret = ret + Number(d[i].itemprice);
             }
             return ret;
         }
 
         function CreateReturnObject(t, data, selectedMonth) {
-            debugger;
+            //debugger;
             var retObj = {};
             if (t === 1) {
                 retObj = {

@@ -51,7 +51,7 @@
                 });
             };
             vm.GetTrendsByMonth = function() {
-                debugger;
+                //debugger;
                 var month = vm.month;
                 BudgetTrendsService.GetTrendsByMonoth(month).then(function(ret, err) {
                     debugger

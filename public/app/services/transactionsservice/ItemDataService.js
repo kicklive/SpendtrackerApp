@@ -84,12 +84,12 @@
             return $http.get('/data/itemsearch', { params: { id: upc } }).then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return err.status;
             }
         }
@@ -99,7 +99,7 @@
             return $http.get('/data/searchallitems').then(success, failure);
 
             function success(d) {
-                ////debugger;
+                //debugger;
                 return d;
             }
 
@@ -109,16 +109,16 @@
         }
 
         function AddNewProduct(formData) {
-            debugger;
+            //debugger;
             return $http.post('/data/addproduct', formData).then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return err.data;
             }
         }
@@ -128,12 +128,12 @@
             return $http.get('/data/itemsearchbyid', { params: { id: id } }).then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return err.data;
             }
         }
@@ -142,12 +142,12 @@
             return $http.put('/data/updateproduct', formData).then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return err.data;
             }
         }
@@ -156,12 +156,12 @@
             return $http.get('/data/deleteproduct', { params: { id: id } }).then(success, failure);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return err.data;
             }
         }

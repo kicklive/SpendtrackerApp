@@ -20,7 +20,7 @@
             return $http.get('/data/AllHistory').then(success, failure).catch(angular.noop);
 
             function success(d) {
-                ////debugger;
+                //debugger;
                 return d.data;
             }
 
@@ -35,12 +35,12 @@
             return $http.get('/data/HistoryByUPC', { params: { upc: upc } }).then(success, failure).catch(angular.noop);
 
             function success(d) {
-                debugger;
+                //debugger;
                 return d.data;
             }
 
             function failure(err) {
-                debugger;
+                //debugger;
                 return 'There was an retrieving data. Contact Administrator.' + err;
             }
 
@@ -50,7 +50,7 @@
             return $http.get('/data/HistoryByDateRange', { params: { startdate: startdate, enddate: enddate } }).then(success, failure).catch(angular.noop);
 
             function success(d) {
-                ////debugger;
+                //debugger;
                 return d.data;
             }
 

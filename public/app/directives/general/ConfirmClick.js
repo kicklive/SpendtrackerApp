@@ -24,7 +24,7 @@
 
         function link(scope, element, attrs) {
             var clickAction = attrs.confirmedClick;
-            debugger;
+            //debugger;
             //  scope.msg = attrs['confirmClick'];
             element.bind("click", function(event) {
                 if (window.confirm(scope.msg)) {

@@ -19,9 +19,9 @@
             vm.errmsg = '';
             vm.errorIndicator = 0;
             vm.flag = 1;
-            debugger;
+            //debugger;
             itemservice.SearchById(vm._id).then(function(ret) {
-                debugger;
+                //debugger;
                 if (ret.status == 200) {
                     vm.Item = ret.data;
                 } else {
@@ -31,14 +31,14 @@
 
             vm.SaveEditedItem = function() {
                 var formData = {
-                    'id': vm._id,
-                    'UPC': vm.Item.UPC,
-                    'ItemDescription': vm.Item.ItemDescription,
-                    'Price': vm.Item.Price
-                }
-                debugger;
+                        'id': vm._id,
+                        'UPC': vm.Item.UPC,
+                        'ItemDescription': vm.Item.ItemDescription,
+                        'Price': vm.Item.Price
+                    }
+                    //debugger;
                 itemservice.Update(formData).then(function(ret) {
-                    debugger;
+                    //debugger;
                     vm.flag = -1;
                     if (ret.status == 200) {
                         notifierService.notify('Product updated successfully.');

@@ -97,7 +97,7 @@
                         //debugger;
                         storageservice.clear();
                         budgetservice.budgetStatus().then(function(ret) {
-                            ////debugger;
+                            //debugger;
                             if (ret === 'success') {
                                 storageservice.set('status', new Date());
                             }
@@ -130,7 +130,7 @@
 
     function extendExceptionHandler($delegate, notifierService) {
         return function(exception, cause) {
-            debugger;
+            //debugger;
             $delegate(exception, cause);
             var errorData = {
                 exception: exception,

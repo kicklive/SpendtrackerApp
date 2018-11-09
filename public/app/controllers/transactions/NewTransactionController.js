@@ -79,9 +79,9 @@
 
             }
             $scope.DeleteTransaction = function() {
-                debugger;
+                //debugger;
                 transactionservice.DeleteTrans($stateParams.transId).then(function(ret) {
-                    debugger;
+                    //debugger;
                     if (ret.status == 200 && ret.data == "success") {
                         storageservice.remove($stateParams.budgetId)
                         notifierService.notify("Transaction deleted successfully");
@@ -96,7 +96,7 @@
             }
             $scope.EvalUPC = function() {
                 if ($scope.UPC != null && $scope.UPC.length === 12) {
-                    debugger;
+                    //debugger;
                     itemservice.GetItem($scope.UPC).then(function(ret) {
 
                         if (ret.data != null) {
