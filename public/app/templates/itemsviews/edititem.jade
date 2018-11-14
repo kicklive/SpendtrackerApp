@@ -1,0 +1,27 @@
+.container100
+    form.form-vertical(name="iec.ItemSearch" novalidate ng-submit='submitForm()')
+        hr(style="height:3px;border:none;color:#333;background-color:#333;")  
+        .div(ng-if="iec.errorIndicator==1")   
+            .row
+                {{iec.errMsg}}
+        .div(ng-if="iec.errorIndicator==0" style="width:50%;display: block;margin: 0 auto;")                
+            .row(style="height:50px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item UPC
+                .col-md-9
+                    input.form-control(type="text" id="upc" name="upc" ng-model="iec.Item.UPC" required style="width:200px" placeholder="UPC" maxlength="12" numbers-only="numbers-only") 
+            .row(style="height:68px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item Description
+                .col-md-9 
+                    textarea.form-control(name="itemDescription", ng-model='iec.Item.ItemDescription' style="resize:none;" ng-disabled="disabled" placeholder="Description" required)
+            .row(style="height:50px")
+                .col-md-3.inline(style="float:left;font-weight:bold") Item Price
+                .col-md-9
+                    input.form-control(type="text" id="price" name="price" ng-model="iec.Item.Price" required style="width:100px" placeholder="Price" decimal-numbers="decimal-numbers") 
+            .row(style="height:50px")
+            .row(style="width:50%;display: block;margin: 0 auto;")
+                a.btn.btn-primary(ng-click="iec.SaveEditedItem()" ng-disabled='iec.ItemSearch.$invalid') Save
+                &nbsp;
+                //- a.btn.btn-default(ng-click="iec.Delete()") Delete
+                a.btn.btn-primary(confirmed-click="iec.Delete()" confirm-click="" msg="Are you sure you want to delete this product?" ng-disabled='iec.ItemSearch.$invalid') Delete
+                &nbsp;
+                a.btn.btn-default(ng-click="iec.GoBack()") Back

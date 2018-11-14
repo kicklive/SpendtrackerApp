@@ -1,0 +1,24 @@
+.container.container100
+    fieldset
+        legend
+            .row
+                .col-sm-3.align-items-center.row-head-height-gray Start Date
+                .col-sm-2.align-items-center.row-head-height-gray End Date
+                .col-sm-3.align-items-center.row-head-height-gray Days Left In Budget
+                .col-sm-2.align-items-center.row-head-height-gray Budget Amount
+                .col-sm-1.align-items-center.row-head-height-gray Status
+                .col-sm-1.align-items-center.row-head-height-gray 
+            
+                .row.rowspace25(ng-repeat="budget in budgets")   
+                    .col-sm-3.font10.paddingleft35  {{budget.BudgetStartDate|date:"MM/dd/yyyy"}}
+                    .col-sm-2.font10 {{budget.BudgetEndDate|date:"MM/dd/yyyy"}}
+                    .col-sm-3.font10.paddingleft70 {{findDiff(budget)}}
+                    .col-sm-2.font10.paddingleft35 {{budget.BudgetAmount|currency : "$" : 2}}
+                    .col-sm-1.font10.paddingleft10 {{budget.BudgetStatus}}
+                    a.col-sm-1.font10(ng-show="ShowLink(budget.BudgetStatus)" ui-sref="details({budgetId:budget._id})") Details
+                    a.col-sm-1.font10(ng-hide="ShowLink(budget.BudgetStatus)") 
+    .row.rowspace10
+                     a.btn.btn-primary.pull-right(ui-sref="newbudget") Create New Budget
+
+       
+               

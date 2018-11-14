@@ -1,0 +1,121 @@
+.container100
+    form.form-vertical(name="BudgetTrends" novalidate ng-submit='submitForm()')
+     .row&nbsp;
+            .row.align-items-start
+                .div(style="width:80%;display: block;margin: 0 auto;")
+                    .form-group
+                        .col-md-1
+                            H4 Trends:
+                        .col-md-3
+                            label.labelfont.text-left.radio.inline(for="allhistory" style="padding-left:50px") All To Present 
+                                input(type="radio" id="allhihstory" name="trends" ng-model="btc.rdoTrends" value="all" required) 
+                        .col-md-2
+                            label.labelfont.radio.inline(for="bymonth") By Month
+                                input(type="radio" id="bymonth" name="trends" value='bymonth' ng-model="btc.rdoTrends")
+                        .div
+                            .col-md-2
+                                select(monthpkr ng-model="btc.month" ng-required="btc.rdoTrends=='bymonth'" style='position:absolute;top:10px')
+                              
+                                  
+                       .col-md-3
+                           a.btn.btn-primary(ng-click="btc.Search()" ng-disabled='BudgetTrends.$invalid') Search
+       
+hr(style="height:3px;border:none;color:#333;background-color:#333;")  
+.div(ng-if="btc.Activity.Budgeted[0].totalbudget==0" ng-cloak)
+    {{"There is no budget or transactions available."}}
+
+.div(ng-if="btc.Activity.Budgeted[0].totalbudget!=0" style="width:100%;display: block;margin: 0 auto;" ng-show="!btc.ShowMessage" ng-cloak)
+    .row(ng-if="btc.Activity.TrendType == 0 && btc.Activity.Budgeted.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Total Budget Amount Year To Date: &nbsp;
+        {{btc.Activity.Budgeted[0].totalbudget|currency : "$" : 2}}
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.Budgeted.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Total Budget Amount In {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
+        {{btc.Activity.Budgeted[0].totalbudget|currency : "$" : 2}}
+
+    .row(ng-if="btc.Activity.TrendType == 0 && btc.Activity.Spent.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Total Spent Year To Date: &nbsp;
+        {{btc.Activity.Spent[0].totalspent|currency : "$" : 2}}
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.Spent.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Total Spent Year To Date: &nbsp;
+        {{btc.Activity.Spent[0].totalspent|currency : "$" : 2}}
+     .row(ng-if="btc.Activity.Spent.length == 0 && btc.Activity.Budgeted.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") &nbsp;
+        {{"There is no transaction data available."}}
+
+    .row(ng-if="btc.Activity.TrendType == 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Top spending month: &nbsp;
+    .row(ng-if="btc.Activity.TrendType == 0" ng-repeat="tm in btc.Activity.TopMonth" style="margin: 0 auto ;") 
+        .col.md-2(style='float:left') {{tm.month}}&nbsp;
+        .col.md-2(style="float:left") {{"--->"}} &nbsp; 
+        .col.md-2(style='float:left') {{tm.amount}}&nbsp;
+
+    .row(ng-if="btc.Activity.TrendType == 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Lowest spending month: &nbsp;
+    .row(ng-if="btc.Activity.TrendType == 0" ng-repeat="lm in btc.Activity.LowMonth" style="margin: 0 auto ;") 
+        .col.md-2(style='float:left') {{lm.month}},&nbsp;
+        .col.md-2(style="float:left") {{"--->"}} &nbsp; 
+        .col.md-2(style='float:left') {{lm.amount}}&nbsp;
+
+    .row(ng-if="btc.Activity.TrendType == 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Number Of Times Over Budget: &nbsp;
+        {{btc.Activity.OverSpentOccurencesCount}}
+
+    .row(ng-if="btc.Activity.OverSpentOccurencesCount > 0 && btc.Activity.TrendType==0" ng-repeat="ts in btc.Activity.OverSpent" style="margin: 0 auto ;") 
+        .col.md-2(style="float:left;font-weight:bold") Budget Period: &nbsp; 
+        .col.md-2(style='float:left') {{ts.budgetstartdate|date:'MM/dd/yyyy'}} to {{ts.budgetenddate|date:'MM/dd/yyyy'}};&nbsp;
+        .col.md-2(style="float:left;font-weight:bold") Budget Amount: &nbsp; 
+        .col.md-2(style='float:left') {{ts.budgetamount|currency : "$" : 2}};&nbsp;
+        .col.md-2(style="float:left;font-weight:bold") Over Budget: &nbsp; 
+        .col.md-2(style='float:left;color:red') {{ts.totalspent-ts.budgetamount|currency : "$" : 2}}&nbsp;
+
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.OverSpent<=0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Over Budget For Month of {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
+        .span(style='float:left;color:red') {{btc.Activity.OverSpent|currency : "$" : 2}}&nbsp;
+
+    .row(ng-if="btc.Activity.MostActivity.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Stores Visited: &nbsp;
+        {{btc.Activity.StoresVisited.length}}
+    .row(ng-if="btc.Activity.StoresVisited.length > 0" ng-repeat="sv in btc.Activity.StoresVisited" style="margin: 0 auto ;") 
+        .col.md-2(style='float:left') {{sv.store}}
+
+
+    .row(ng-if="btc.Activity.TrendType == 0 && btc.Activity.TopSpendingStore.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Store Most Money Spent: &nbsp;
+        {{btc.Activity.TopSpendingStore[0].store}}, {{btc.Activity.TopSpendingStore[0].totalspent|currency : "$" : 2}}
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.TopSpendingStore.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Store Most Money Spent In {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
+        {{btc.Activity.TopSpendingStore[0].store}}, {{btc.Activity.TopSpendingStore[0].totalspent|currency : "$" : 2}}
+
+    .row(ng-if="btc.Activity.TrendType == 0 && btc.Activity.SpendingByPaymentType.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Spending By Payment Type: &nbsp;
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.SpendingByPaymentType.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Spending By Payment Type In {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
+    .row(ng-repeat="pt in btc.Activity.SpendingByPaymentType" style="margin: 0 auto ;") 
+        .col.md-2(style="float:left;font-weight:bold") Payment Type: &nbsp; 
+        .col.md-2(style='float:left') {{pt.BudgetType|PaymentTypeFltr}},&nbsp;
+        .col.md-2(style="float:left;font-weight:bold") Amount: &nbsp; 
+        .col.md-2(style='float:left') {{pt.total|currency : "$" : 2}}&nbsp;
+
+
+    .row(ng-if="btc.Activity.MostActivity.length > 0")
+        .col.md-6.inline(style="float:left;font-weight:bold") Store(s) with most activity: &nbsp;
+    .row(ng-repeat="mstAct in btc.Activity.MostActivity" style="margin: 0 auto ;") 
+        .col.md-2(style="float:left;font-weight:bold") Store: &nbsp; 
+        .col.md-2(style='float:left') {{mstAct.store}},&nbsp;
+        .col.md-2(style="float:left;font-weight:bold") Number of visits: &nbsp; 
+        .col.md-2(style='float:left') {{mstAct.count}}&nbsp;
+   
+   
+    .row(ng-if="btc.Activity.TrendType == 0 && btc.Activity.AvgSpentPerStore.length > 0")
+        .col.md-11.inline(style="float:left;font-weight:bold") Average Spent per visit: &nbsp;
+    .row(ng-if="btc.Activity.TrendType == 1 && btc.Activity.AvgSpentPerStore.length > 0")
+        .col.md-11.inline(style="float:left;font-weight:bold") Average Spent per visit In {{btc.Activity.SelectedMonth|MonthFltr}}: &nbsp;
+    .row(ng-repeat="avgSpent in btc.Activity.AvgSpentPerStore" style="margin: 0 auto ;") 
+        .col.md-2(style="float:left;font-weight:bold") Store: &nbsp; 
+        .col.md-2(style='float:left') {{avgSpent.store}},&nbsp;
+        .col.md-2(style="float:left;font-weight:bold") Total Spent: &nbsp; 
+        .col.md-2(style='float:left') {{avgSpent.totalspent|currency : "$" : 2}}&nbsp;    
+        .col.md-1(style="float:left;font-weight:bold") Avg Spent per visit: &nbsp; 
+        .col.md-1(style='float:left') {{avgSpent.avgspentpervist|currency : "$" : 2}}&nbsp;
+        .col.md-1(style="float:left;font-weight:bold") Number of Visitst: &nbsp; 
+        .col.md-1(style='float:left') {{avgSpent.numvisits}}&nbsp;        

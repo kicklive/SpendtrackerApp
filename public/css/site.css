@@ -1,0 +1,97 @@
+body {
+  padding-top: 10px;
+}
+.navbar-header a.navbar-brand {
+  margin-bottom: -20px;
+}
+.navbar-header a.navbar-brand h6 {
+  color: #ccc;
+}
+footer {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 70%;
+}
+.container,
+.container50 {
+  width: 60%;
+}
+.container100 {
+  width: 100%;
+}
+.container90 {
+  width: 90%;
+}
+.container80 {
+  width: 80%;
+}
+.add100,
+.well50 {
+  width: 60%;
+  padding-top: 100px;
+}
+p {
+  border-top: 1px solid #d7e0e2;
+}
+.row-head-height-gray {
+  height: 20px;
+  background-color: #d0d0d0;
+  font-size: 10pt;
+  vertical-align: middle;
+  padding: top right bottom left 0px;
+}
+.row-head-height-blue {
+  height: 20px;
+  background-color: LightBlue;
+  font-size: 10pt;
+  vertical-align: bottom;
+  padding-top: 3px;
+}
+.row-head {
+  height: 20px;
+  font-size: 10pt;
+  vertical-align: middle;
+  padding-top: 15px;
+}
+.rowspace25 {
+  height: 25px;
+}
+.rowspace10 {
+  height: 10px;
+  padding: 0px;
+}
+.font10 {
+  font-size: 10pt;
+}
+.paddingleft35 {
+  padding-left: 35px;
+}
+.paddingleft70 {
+  padding-left: 70px;
+}
+.paddingleft65 {
+  padding-left: 68px;
+}
+.paddingleft10 {
+  padding-left: 15px;
+}
+.labelfont {
+  font-size: 10pt;
+}
+.cellspacing5 {
+  border-spacing: 50px;
+}
+.colorblue {
+  background-color: #00f;
+  display: inline-block;
+}
+.colorred {
+  background-color: #f00;
+}
+.paddingright30 {
+  padding-right: 50px;
+}
+.customhr {
+  height: 2px;
+  color: #008000;
+}
